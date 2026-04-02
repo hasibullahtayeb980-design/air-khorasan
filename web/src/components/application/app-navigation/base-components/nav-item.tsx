@@ -3,8 +3,9 @@ import { ChevronDown, Share04 } from "@untitledui/icons";
 import { Link as AriaLink } from "react-aria-components";
 import { Badge } from "@/components/base/badges/badges";
 import { cx, sortCx } from "@/utils/cx";
+import { NavLink } from "react-router";
 
-const styles = sortCx({
+export const styles = sortCx({
     root: "group relative flex max-h-9 w-full cursor-pointer items-center rounded-md bg-primary outline-focus-ring transition duration-100 ease-linear select-none hover:bg-primary_hover focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2",
     rootSelected: "bg-secondary hover:bg-secondary_hover",
 });
@@ -83,34 +84,42 @@ export const NavItemBase = ({ current, type, badge, href, icon: Icon, children, 
 
     if (type === "collapsible-child") {
         return (
-            <AriaLink
-                href={href!}
-                target={isExternal ? "_blank" : "_self"}
-                rel="noopener noreferrer"
-                className={cx("py-2 pr-3 pl-10", styles.root, current && styles.rootSelected)}
-                onClick={onClick}
-                aria-current={current ? "page" : undefined}
-            >
-                {labelElement}
-                {externalIcon}
-                {badgeElement}
-            </AriaLink>
+            <NavLink to={href!}>
+                {({ isActive }) => (
+                    <AriaLink
+                        href={href!}
+                        target={isExternal ? "_blank" : "_self"}
+                        rel="noopener noreferrer"
+                        className={cx("py-2 pr-3 pl-10", styles.root, isActive && styles.rootSelected)}
+                        onClick={onClick}
+                        aria-current={isActive ? "page" : undefined}
+                    >
+                        {labelElement}
+                        {externalIcon}
+                        {badgeElement}
+                    </AriaLink>
+                )}
+            </NavLink>
         );
     }
 
     return (
-        <AriaLink
-            href={href!}
-            target={isExternal ? "_blank" : "_self"}
-            rel="noopener noreferrer"
-            className={cx("group/item p-2", styles.root, current && styles.rootSelected)}
-            onClick={onClick}
-            aria-current={current ? "page" : undefined}
-        >
-            {iconElement}
-            {labelElement}
-            {externalIcon}
-            {badgeElement}
-        </AriaLink>
+        <NavLink to={href!} className={({ isActive }) => (isActive ? styles.rootSelected : "")}>
+            {({ isActive }) => (
+                <AriaLink
+                    href={href!}
+                    target={isExternal ? "_blank" : "_self"}
+                    rel="noopener noreferrer"
+                    className={cx("group/item p-2", styles.root, isActive && styles.rootSelected)}
+                    onClick={onClick}
+                    aria-current={isActive ? "page" : undefined}
+                >
+                    {iconElement}
+                    {labelElement}
+                    {externalIcon}
+                    {badgeElement}
+                </AriaLink>
+            )}
+        </NavLink>
     );
 };

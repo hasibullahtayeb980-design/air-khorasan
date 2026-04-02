@@ -14,7 +14,7 @@ final class CustomerController extends AbstractController
     #[Route('/api/customers', methods: ['GET'])]
     public function index(EntityManagerInterface $em): JsonResponse
     {
-        $customers = $em->getRepository(Customer::class)->findAll();
+        $customers = $em->getRepository(Customer::class)->findBy([], limit: 10);
         return $this->json($customers);
     }
 }

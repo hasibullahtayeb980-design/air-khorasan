@@ -9,9 +9,10 @@ interface SidebarNavigationSectionDividersProps {
     activeUrl?: string;
     /** List of items to display. */
     items: (NavItemType | NavItemDividerType)[];
+    displayAccountCard?: boolean;
 }
  
-export const SidebarNavigationSectionDividers = ({ activeUrl, items }: SidebarNavigationSectionDividersProps) => {
+export const SidebarNavigationSectionDividers = ({ activeUrl, items, displayAccountCard }: SidebarNavigationSectionDividersProps) => {
     const MAIN_SIDEBAR_WIDTH = 292;
  
     const content = (
@@ -29,9 +30,11 @@ export const SidebarNavigationSectionDividers = ({ activeUrl, items }: SidebarNa
  
             <NavList activeUrl={activeUrl} items={items} className="mt-5" />
  
-            <div className="mt-auto flex flex-col gap-5 px-2 py-4 lg:gap-6 lg:px-4 lg:py-4">
-                <NavAccountCard />
-            </div>
+                <div className="mt-auto flex flex-col gap-5 px-2 py-4 lg:gap-6 lg:px-4 lg:py-4">
+                    {displayAccountCard && (
+                        <NavAccountCard />
+                    )}
+                </div>
         </aside>
     );
  

@@ -13,7 +13,7 @@ import { cx } from "@/utils/cx";
 export const MobileNavigationHeader = ({ children }: PropsWithChildren) => {
     return (
         <AriaDialogTrigger>
-            <header className="flex h-14 items-center justify-between border-b border-secondary bg-primary p-3 pl-4 lg:hidden">
+            <header className="dark-mode flex h-14 items-center justify-between border-b border-secondary bg-primary p-3 pl-4 lg:hidden">
                 <UntitledLogo className="h-6" />
 
                 <AriaButton
