@@ -22,8 +22,8 @@ const navItems: (NavItemType | NavItemDividerType)[] = [
         href: "/tickets",
         items: [
             { label: "View all", badge: 189, href: "/tickets/view-all" },
-            { label: "Changed", badge: 18, href: "/tickets/changes" },
-            { label: "Cancellations", badge: 16, href: "/tickets/cancellations" },
+            { label: "Changed", badge: 18, href: "/tickets/changed" },
+            { label: "Cancellations", badge: 16, href: "/tickets/cancelled" },
         ],
     },
     { divider: true },
