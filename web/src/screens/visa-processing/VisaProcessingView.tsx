@@ -8,41 +8,46 @@ import { BadgeWithDot } from "@/components/base/badges/badges";
 import { ButtonUtility } from "@/components/base/buttons/button-utility";
 import { DropdownIconSimple } from "@/components/base/dropdown/dropdown-icon-simple";
 
-export enum TicketStatus {
-    Booked,
-    Changed,
-    Cancelled,
+export enum VisaType {
+    Tourist,
+    Business,
+    Study,
 }
 
-export interface Ticket {
+export enum VisaStatus {
+    Processing,
+    Approved,
+    Rejected,
+}
+
+export interface VisaProcessingEntry {
     id: string;
-    ticketNumber: string;
-    status: TicketStatus;
+    visaType: VisaType;
     customerId: string;
     customerFullName: string;
-    airline: string;
-    fromCity: string;
-    toCity: string;
-    departureDate: string;
-    returnDate: string;
-    price: number;
-    createdAt: string;
+    country: string;
     avatarUrl: string;
+    applicationDate: string;
+    status: VisaStatus;
+    fee: number;
+    companyCost: number;
+    profit: number;
+    createdAt: string;
 }
 
-interface TicketsViewProps {
-    tickets: Ticket[];
-    ticketsLength: number;
+interface VisaProcessingViewProps {
+    visaProcessingData: VisaProcessingEntry[];
+    visaProcessingDataLength: number;
 }
  
-export const TicketsView: React.FC<TicketsViewProps> = ({ tickets, ticketsLength }) => {
+export const VisaProcessingView: React.FC<VisaProcessingViewProps> = ({ visaProcessingData, visaProcessingDataLength }) => {
     const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
         column: "status",
         direction: "ascending",
     });
  
     const sortedItems = useMemo(() => {
-        return tickets.sort((a, b) => {
+        return visaProcessingData.sort((a, b) => {
             const first = a[sortDescriptor.column as keyof typeof a];
             const second = b[sortDescriptor.column as keyof typeof b];
  
@@ -67,8 +72,8 @@ export const TicketsView: React.FC<TicketsViewProps> = ({ tickets, ticketsLength
     return (
         <TableCard.Root className="h-screen flex flex-col">
             <TableCard.Header
-                title="Tickets"
-                badge={ticketsLength}
+                title="Visa Processing"
+                badge={visaProcessingDataLength}
                 contentTrailing={
                     <div className="absolute top-5 right-4 md:right-6">
                         <DropdownIconSimple />
@@ -76,17 +81,17 @@ export const TicketsView: React.FC<TicketsViewProps> = ({ tickets, ticketsLength
                 }
             />
             <div className="flex-1 overflow-y-auto">
-                <Table aria-label="Tickets" selectionMode="multiple" sortDescriptor={sortDescriptor} onSortChange={setSortDescriptor}>
+                <Table aria-label="Visa Processing" selectionMode="multiple" sortDescriptor={sortDescriptor} onSortChange={setSortDescriptor}>
                     <Table.Header>
-                        <Table.Head id="id" label="Ticket ID" isRowHeader allowsSorting className="w-full max-w-1/4" />
+                        <Table.Head id="id" label="Visa Processing ID" isRowHeader allowsSorting className="w-full max-w-1/4" />
                         <Table.Head id="customer" label="Customer" allowsSorting />
-                        <Table.Head id="airline" label="Airline" allowsSorting tooltip="This is a tooltip" />
-                        <Table.Head id="from-city" label="Departure City" allowsSorting tooltip="This is a tooltip" />
-                        <Table.Head id="to-city" label="Destination City" allowsSorting tooltip="This is a tooltip" />
-                        <Table.Head id="departure-date" label="Departure Date" allowsSorting tooltip="This is a tooltip" />
-                        <Table.Head id="return-date" label="Return Date" allowsSorting tooltip="This is a tooltip" />
-                        <Table.Head id="price" label="Price" allowsSorting tooltip="This is a tooltip" />
-                        <Table.Head id="created_at" label="Created At" allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="country" label="Country" allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="applicationDate" label="Application Date" allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="status" label="Status" allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="fee" label="Fee" allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="companyCost" label="Company Cost" allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="profit" label="Profit" allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="createdAt" label="Created At" allowsSorting tooltip="This is a tooltip" />
                         <Table.Head id="actions" />
                     </Table.Header>
     
@@ -94,7 +99,7 @@ export const TicketsView: React.FC<TicketsViewProps> = ({ tickets, ticketsLength
                         {(item) => (
                             <Table.Row id={item.id}>
                                 <Table.Cell>
-                                    <BadgeWithDot size="sm" color={item.status === TicketStatus.Booked ? "success" : item.status === TicketStatus.Changed ? "warning" : "error"} type="modern">
+                                    <BadgeWithDot size="sm" color={item.status === VisaStatus.Approved ? "success" : item.status === VisaStatus.Rejected ? "error" : "warning"} type="modern">
                                         {item.id.split('-')[0]}
                                     </BadgeWithDot>
                                 </Table.Cell>
@@ -107,12 +112,12 @@ export const TicketsView: React.FC<TicketsViewProps> = ({ tickets, ticketsLength
                                         </div>
                                     </div>
                                 </Table.Cell>
-                                <Table.Cell className="whitespace-nowrap">{item.airline}</Table.Cell>
-                                <Table.Cell className="whitespace-nowrap">{item.fromCity}</Table.Cell>
-                                <Table.Cell className="whitespace-nowrap">{item.toCity}</Table.Cell>
-                                <Table.Cell className="whitespace-nowrap">{new Date(item.departureDate).toLocaleDateString()}</Table.Cell>
-                                <Table.Cell className="whitespace-nowrap">{new Date(item.returnDate).toLocaleDateString()}</Table.Cell>
-                                <Table.Cell className="whitespace-nowrap">{item.price}</Table.Cell>
+                                <Table.Cell className="whitespace-nowrap">{item.country}</Table.Cell>
+                                <Table.Cell className="whitespace-nowrap">{item.applicationDate}</Table.Cell>
+                                <Table.Cell className="whitespace-nowrap">{item.status}</Table.Cell>
+                                <Table.Cell className="whitespace-nowrap">{item.fee}</Table.Cell>
+                                <Table.Cell className="whitespace-nowrap">{item.companyCost}</Table.Cell>
+                                <Table.Cell className="whitespace-nowrap">{item.profit}</Table.Cell>
                                 <Table.Cell className="whitespace-nowrap">{new Date(item.createdAt).toLocaleDateString()}</Table.Cell>
                                 <Table.Cell className="px-4">
                                     <div className="flex justify-end gap-0.5">

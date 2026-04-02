@@ -5,10 +5,10 @@ import { CustomersScreen } from "./screens/customers/CustomersScreen";
 import { TicketsScreen } from "./screens/tickets/TicketsScreen";
 import { TicketsChangedScreen } from "./screens/tickets/TicketsChangedScreen";
 import { TicketsCancelledScreen } from "./screens/tickets/TicketsCancelledScreen";
+import { VisaProcessingScreen } from "./screens/visa-processing/VisaProcessingScreen";
+import { CommissionsScreen } from "./screens/commissions/CommissionsScreen";
 
-const VisaProcessingScreen = () => <div>Visa Processing</div>;
 const ExpensesScreen = () => <div>Expenses</div>;
-const ComissionsScreen = () => <div>Commissions</div>;
 
 export const App = () => {
     return (
@@ -21,7 +21,7 @@ export const App = () => {
                 <Route path="/tickets/cancelled" element={<TicketsCancelledScreen />} />
                 <Route path="/visa-processing" element={<VisaProcessingScreen />} />
                 <Route path="/expenses" element={<ExpensesScreen />} />
-                <Route path="/commissions" element={<ComissionsScreen />} />
+                <Route path="/commissions" element={<CommissionsScreen />} />
             </Route>
         </Routes>
     );
