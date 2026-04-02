@@ -16,7 +16,6 @@ class AppFixtures extends Fixture
 
         for ($i = 0; $i < 100; $i++) {
             $customer = new Customer();
-            $customer->setId(Uuid::v4());
             $customer->setFullName($faker->name);
             $customer->setPhone($faker->phoneNumber);
             $customer->setEmail($faker->email);

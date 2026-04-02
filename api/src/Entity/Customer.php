@@ -10,11 +10,11 @@ use Symfony\Component\Uid\Uuid;
 class Customer
 {
     #[ORM\Id]
-    #[ORM\Column(type: 'uuid', unique: true)]
-    private ?Uuid $id = null;
+    #[ORM\Column(unique: true)]
+    private ?string $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $full_name = null;
+    #[ORM\Column(name: "full_name", length: 255)]
+    private ?string $fullName = null;
 
     #[ORM\Column(length: 255)]
     private ?string $phone = null;
@@ -22,18 +22,19 @@ class Customer
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
-    #[ORM\Column]
-    private ?int $passport_number = null;
+    #[ORM\Column(name: "passport_number")]
+    private ?int $passportNumber = null;
 
-    #[ORM\Column]
-    private ?int $tazkira_number = null;
+    #[ORM\Column(name: "tazkira_number")]
+    private ?int $tazkiraNumber = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $created_at = null;
+    #[ORM\Column(name: "created_at")]
+    private ?\DateTimeImmutable $createdAt = null;
 
     public function __construct()
     {
-        $this->id = Uuid::v4();
+        $this->id = Uuid::v4()->toString();
+        $this->createdAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?string
@@ -41,22 +42,20 @@ class Customer
         return $this->id;
     }
 
-    public function setId(Uuid $id): static
+    public function setId(string $id): static
     {
         $this->id = $id;
-
         return $this;
     }
 
     public function getFullName(): ?string
     {
-        return $this->full_name;
+        return $this->fullName;
     }
 
     public function setFullName(string $full_name): static
     {
-        $this->full_name = $full_name;
-
+        $this->fullName = $full_name;
         return $this;
     }
 
@@ -68,7 +67,6 @@ class Customer
     public function setPhone(string $phone): static
     {
         $this->phone = $phone;
-
         return $this;
     }
 
@@ -80,43 +78,39 @@ class Customer
     public function setEmail(string $email): static
     {
         $this->email = $email;
-
         return $this;
     }
 
     public function getPassportNumber(): ?int
     {
-        return $this->passport_number;
+        return $this->passportNumber;
     }
 
-    public function setPassportNumber(int $passport_number): static
+    public function setPassportNumber(int $passportNumber): static
     {
-        $this->passport_number = $passport_number;
-
+        $this->passportNumber = $passportNumber;
         return $this;
     }
 
     public function getTazkiraNumber(): ?int
     {
-        return $this->tazkira_number;
+        return $this->tazkiraNumber;
     }
 
-    public function setTazkiraNumber(int $tazkira_number): static
+    public function setTazkiraNumber(int $tazkiraNumber): static
     {
-        $this->tazkira_number = $tazkira_number;
-
+        $this->tazkiraNumber = $tazkiraNumber;
         return $this;
     }
 
     public function getCreatedAt(): ?\DateTimeImmutable
     {
-        return $this->created_at;
+        return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $created_at): static
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
-        $this->created_at = $created_at;
-
+        $this->createdAt = $createdAt;
         return $this;
     }
 }
