@@ -8,13 +8,13 @@ import { BadgeWithDot } from "@/components/base/badges/badges";
 import { ButtonUtility } from "@/components/base/buttons/button-utility";
 import { DropdownIconSimple } from "@/components/base/dropdown/dropdown-icon-simple";
 
-enum TicketStatus {
+export enum TicketStatus {
     Booked,
     Changed,
     Cancelled,
 }
 
-interface Ticket {
+export interface Ticket {
     id: string;
     ticketNumber: string;
     status: TicketStatus;
@@ -75,7 +75,7 @@ export const TicketsView: React.FC<TicketsViewProps> = ({ tickets, ticketsLength
                     </div>
                 }
             />
-            <Table aria-label="Team members" selectionMode="multiple" sortDescriptor={sortDescriptor} onSortChange={setSortDescriptor}>
+            <Table aria-label="Tickets" selectionMode="multiple" sortDescriptor={sortDescriptor} onSortChange={setSortDescriptor}>
                 <Table.Header>
                     <Table.Head id="id" label="Ticket ID" isRowHeader allowsSorting className="w-full max-w-1/4" />
                     <Table.Head id="customer" label="Customer" allowsSorting />
@@ -125,6 +125,9 @@ export const TicketsView: React.FC<TicketsViewProps> = ({ tickets, ticketsLength
             </Table>
  
             <PaginationPageMinimalCenter page={1} total={10} className="px-4 py-3 md:px-6 md:pt-3 md:pb-4" />
+
+            <div className="flex items-center justify-center overflow-hidden px-24 py-30">
+            </div>
         </TableCard.Root>
     );
 };

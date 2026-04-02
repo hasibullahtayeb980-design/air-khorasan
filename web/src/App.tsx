@@ -3,9 +3,9 @@ import { DashboardScreen } from "./screens/DashboardScreen";
 import { Layout } from "./screens/Layout";
 import { CustomersScreen } from "./screens/customers/CustomersScreen";
 import { TicketsScreen } from "./screens/tickets/TicketsScreen";
+import { TicketsChangedScreen } from "./screens/tickets/TicketsChangedScreen";
+import { TicketsCancelledScreen } from "./screens/tickets/TicketsCancelledScreen";
 
-const TicketsChangedScreen = () => <div>Tickets Changed</div>;
-const TicketsCancelledScreen = () => <div>Tickets Cancelled</div>;
 const VisaProcessingScreen = () => <div>Visa Processing</div>;
 const ExpensesScreen = () => <div>Expenses</div>;
 const ComissionsScreen = () => <div>Commissions</div>;

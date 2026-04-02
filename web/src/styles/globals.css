@@ -35,6 +35,7 @@ body {
     font-variant-ligatures: contextual;
     -webkit-font-kerning: normal;
     font-kerning: normal;
+    height: 100%;
 }
 
 /* Hide the default expand arrow on Safari.  */
