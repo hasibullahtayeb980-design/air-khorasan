@@ -3,8 +3,8 @@ import { DashboardScreen } from "./screens/dashboard/DashboardScreen";
 import { Layout } from "./screens/Layout";
 import { CustomersScreen } from "./screens/customers/CustomersScreen";
 import { TicketsScreen } from "./screens/tickets/TicketsScreen";
-import { TicketsChangedScreen } from "./screens/tickets/TicketsChangedScreen";
-import { TicketsCancelledScreen } from "./screens/tickets/TicketsCancelledScreen";
+import { TicketsChangedScreen } from "./screens/tickets/tickets-changed/TicketsChangedScreen";
+import { TicketsCancelledScreen } from "./screens/tickets/tickets-cancelled/TicketsCancelledScreen";
 import { VisaProcessingScreen } from "./screens/visa-processing/VisaProcessingScreen";
 import { CommissionsScreen } from "./screens/commissions/CommissionsScreen";
 import {

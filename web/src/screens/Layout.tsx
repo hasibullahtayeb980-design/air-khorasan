@@ -62,7 +62,7 @@ export const Layout = () => {
         queryFn: fetchDashboard,
     });
 
-    const navItems = getNavItems(
+    let navItems = getNavItems(
         data?.totalCustomers || 0,
         data?.totalTickets || 0,
         data?.totalTicketChanges || 0,
@@ -70,7 +70,7 @@ export const Layout = () => {
     );
 
     if (isLoading) {
-        return <LoadingView />
+        navItems = getNavItems(0, 0, 0, 0);
     }
 
     if (error) {
