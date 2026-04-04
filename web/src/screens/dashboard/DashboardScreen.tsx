@@ -30,7 +30,11 @@ export const DashboardScreen = () => {
     });
 
     if (isLoading) {
-        return <LoadingIndicator type="line-simple" size="md" label="Loading..." />;
+        return (
+            <div className="flex items-center justify-center h-screen">
+                <LoadingIndicator type="line-simple" size="md" label="Loading..." />
+            </div>
+        );
     }
 
     if (error) {
