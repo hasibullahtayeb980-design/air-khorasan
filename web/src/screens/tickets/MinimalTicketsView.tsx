@@ -49,7 +49,7 @@ export const MinimalTicketsView: React.FC<MinimalTicketsViewProps> = ({ tickets,
         <TableCard.Root className="flex flex-col w-full">
             <TableCard.Header title={title} />
             <div className="flex-1 overflow-y-auto">
-                <Table aria-label="Tickets" selectionMode="multiple" sortDescriptor={sortDescriptor} onSortChange={setSortDescriptor}>
+                <Table aria-label="Tickets" sortDescriptor={sortDescriptor} onSortChange={setSortDescriptor}>
                     <Table.Header>
                         <Table.Head id="id" label="Ticket ID" isRowHeader allowsSorting className="w-full max-w-1/4" />
                         <Table.Head id="customer" label="Customer" allowsSorting />

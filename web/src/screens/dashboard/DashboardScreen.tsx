@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { LoadingIndicator } from "@/components/application/loading-indicator/loading-indicator";
 import { DashboardView } from "./DashboardView";
 
-const fetchDashboard = async () => {
+export const fetchDashboard = async () => {
     const response = await fetch("https://127.0.0.1:8000/api/dashboard");
 
     if (!response.ok) {
@@ -20,6 +20,9 @@ const fetchDashboard = async () => {
         latestTicketCancellations: data.latest_ticket_cancellations,
         totalCustomers: data.total_customers,
         changeInPercentage: data.change_in_percentage,
+        totalTickets: data.total_tickets,
+        totalTicketChanges: data.total_ticket_changes,
+        totalTicketCancellations: data.total_ticket_cancellations,
     };
 };
 

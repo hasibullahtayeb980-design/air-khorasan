@@ -19,14 +19,14 @@ class AppFixtures extends Fixture
     {
         $faker = \Faker\Factory::create();
 
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < 2398; $i++) {
             $customer = new Customer();
             $customer->setFullName($faker->name);
             $customer->setPhone($faker->phoneNumber);
             $customer->setEmail($faker->email);
             $customer->setPassportNumber($faker->numberBetween(1000000, 9999999));
             $customer->setTazkiraNumber($faker->numberBetween(1000000, 9999999));
-            $customer->setAvatarImageUrl($faker->imageUrl(200, 200, 'people', true));
+            $customer->setAvatarImageUrl("https://mockmind-api.uifaces.co/content/human/{$faker->numberBetween(0, 200)}.jpg");
             $customer->setCreatedAt(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-12 months', 'now')));
             $manager->persist($customer);
         }

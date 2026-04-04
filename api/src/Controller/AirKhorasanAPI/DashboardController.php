@@ -59,6 +59,9 @@ final class DashboardController extends AbstractController
         $changeInPercentage = $previousMonth > 0 ? (($thisMonth - $previousMonth) / $previousMonth) * 100 : 0;
 
         $totalCustomers = $em->getRepository(Customer::class)->count([]);
+        $totalTickets = $em->getRepository(Ticket::class)->count([]);
+        $totalTicketChanges = $em->getRepository(TicketChange::class)->count([]);
+        $totalTicketCancellations = $em->getRepository(TicketCancellation::class)->count([]);
 
         return $this->json([
             'new_customers' => $newCustomers,
@@ -66,6 +69,9 @@ final class DashboardController extends AbstractController
             'change_in_percentage' => $changeInPercentage,
             'latest_ticket_changes' => $latestTicketChangeDTOCollection,
             'latest_ticket_cancellations' => $latestTicketCancellationDTOCollection,
+            'total_ticket_changes' => $totalTicketChanges,
+            'total_ticket_cancellations' => $totalTicketCancellations,
+            'total_tickets' => $totalTickets,
         ]);
     }
 }
