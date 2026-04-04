@@ -37,8 +37,8 @@ class AppFixtures extends Fixture
         $manager->flush();
 
         $customers = $manager->getRepository(Customer::class)->findAll();
+        $numberOfTickets = $faker->numberBetween(100, 500);
 
-        $numberOfTickets = $faker->numberBetween(50, 100);
         for ($i = 0; $i < $numberOfTickets; $i++) {
             $ticket = new Ticket();
             $ticket->setCustomer($customers[array_rand($customers)]);
