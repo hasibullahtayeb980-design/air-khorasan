@@ -31,6 +31,11 @@ final class TicketController extends AbstractController
             $ticketsDTOCollection[] = $ticketDTO;
         }
 
-        return $this->json($ticketsDTOCollection);
+        return $this->json([
+            'items' => $ticketsDTOCollection,
+            'total' => $tickets['total'],
+            'page' => $page,
+            'pages' => $tickets['pages']
+        ]);
     }
 }

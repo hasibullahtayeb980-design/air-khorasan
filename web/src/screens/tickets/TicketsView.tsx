@@ -27,15 +27,17 @@ export interface Ticket {
     returnDate: string;
     price: number;
     createdAt: string;
-    avatarUrl: string;
+    customerAvatarImageUrl: string;
 }
 
 interface TicketsViewProps {
+    totalTickets: number;
+    page: number;
+    totalPages: number;
     tickets: Ticket[];
-    ticketsLength: number;
 }
  
-export const TicketsView: React.FC<TicketsViewProps> = ({ tickets, ticketsLength }) => {
+export const TicketsView: React.FC<TicketsViewProps> = ({ tickets, totalTickets, page, totalPages }) => {
     const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
         column: "status",
         direction: "ascending",
@@ -68,7 +70,7 @@ export const TicketsView: React.FC<TicketsViewProps> = ({ tickets, ticketsLength
         <TableCard.Root className="h-screen flex flex-col">
             <TableCard.Header
                 title="Tickets"
-                badge={ticketsLength}
+                badge={totalTickets}
                 contentTrailing={
                     <div className="absolute top-5 right-4 md:right-6">
                         <DropdownIconSimple />
@@ -95,15 +97,15 @@ export const TicketsView: React.FC<TicketsViewProps> = ({ tickets, ticketsLength
                             <Table.Row id={item.id}>
                                 <Table.Cell>
                                     <BadgeWithDot size="sm" color={item.status === TicketStatus.Booked ? "success" : item.status === TicketStatus.Changed ? "warning" : "error"} type="modern">
-                                        {item.id.split('-')[0]}
+                                        {item.id}
                                     </BadgeWithDot>
                                 </Table.Cell>
                                 <Table.Cell>
                                     <div className="flex items-center gap-3">
-                                        <Avatar src={item.avatarUrl} alt={item.customerFullName} size="md" />
+                                        <Avatar src={item.customerAvatarImageUrl} alt={item.customerFullName} size="md" />
                                         <div className="whitespace-nowrap">
                                             <p className="text-sm font-medium text-primary">{item.customerFullName}</p>
-                                            <p className="text-sm text-tertiary">{item.customerId.split('-')[0]}</p>
+                                            <p className="text-sm text-tertiary">{item.customerId}</p>
                                         </div>
                                     </div>
                                 </Table.Cell>
@@ -112,7 +114,7 @@ export const TicketsView: React.FC<TicketsViewProps> = ({ tickets, ticketsLength
                                 <Table.Cell className="whitespace-nowrap">{item.toCity}</Table.Cell>
                                 <Table.Cell className="whitespace-nowrap">{new Date(item.departureDate).toLocaleDateString()}</Table.Cell>
                                 <Table.Cell className="whitespace-nowrap">{new Date(item.returnDate).toLocaleDateString()}</Table.Cell>
-                                <Table.Cell className="whitespace-nowrap">{item.price}</Table.Cell>
+                                <Table.Cell className="whitespace-nowrap">$ {item.price}</Table.Cell>
                                 <Table.Cell className="whitespace-nowrap">{new Date(item.createdAt).toLocaleDateString()}</Table.Cell>
                                 <Table.Cell className="px-4">
                                     <div className="flex justify-end gap-0.5">
