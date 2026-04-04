@@ -46,6 +46,9 @@ class Customer
     #[ORM\OneToMany(targetEntity: Visa::class, mappedBy: 'customer', orphanRemoval: true)]
     private Collection $visas;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $avatarImageUrl = null;
+
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable();
@@ -194,6 +197,18 @@ class Customer
                 $visa->setCustomer(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAvatarImageUrl(): ?string
+    {
+        return $this->avatarImageUrl;
+    }
+
+    public function setAvatarImageUrl(?string $avatarImageUrl): static
+    {
+        $this->avatarImageUrl = $avatarImageUrl;
 
         return $this;
     }

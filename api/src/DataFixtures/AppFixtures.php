@@ -26,6 +26,7 @@ class AppFixtures extends Fixture
             $customer->setEmail($faker->email);
             $customer->setPassportNumber($faker->numberBetween(1000000, 9999999));
             $customer->setTazkiraNumber($faker->numberBetween(1000000, 9999999));
+            $customer->setAvatarImageUrl($faker->imageUrl(200, 200, 'people', true));
             $customer->setCreatedAt(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-12 months', 'now')));
             $manager->persist($customer);
         }

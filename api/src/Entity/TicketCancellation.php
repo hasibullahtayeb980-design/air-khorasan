@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\TicketCancellationRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\MaxDepth;
 
 #[ORM\Entity(repositoryClass: TicketCancellationRepository::class)]
 class TicketCancellation
@@ -15,6 +16,7 @@ class TicketCancellation
 
     #[ORM\OneToOne(inversedBy: 'ticketCancellation', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
+    #[MaxDepth(1)]
     private ?Ticket $ticket = null;
 
     #[ORM\Column(name: 'cancellation_date')]

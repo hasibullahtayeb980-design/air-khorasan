@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use DateTimeImmutable;
+use Symfony\Component\Serializer\Attribute\MaxDepth;
 
 #[ORM\Entity(repositoryClass: TicketRepository::class)]
 class Ticket
@@ -18,6 +19,7 @@ class Ticket
 
     #[ORM\ManyToOne(inversedBy: 'tickets')]
     #[ORM\JoinColumn(name: 'customer_id', nullable: false)]
+    #[MaxDepth(1)]
     private ?Customer $customer = null;
 
     #[ORM\Column(name: 'ticket_number')]

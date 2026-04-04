@@ -8,13 +8,15 @@ import { BadgeWithDot } from "@/components/base/badges/badges";
 import { ButtonUtility } from "@/components/base/buttons/button-utility";
 import { DropdownIconSimple } from "@/components/base/dropdown/dropdown-icon-simple";
 import { TicketStatus, type Ticket } from "./TicketsView";
+import type { LatestTicketCancellationInterface, LatestTicketChangeInterface } from "../dashboard/DashboardView";
 
 interface MinimalTicketsViewProps {
     title: string;
-    tickets: Ticket[];
+    tickets: LatestTicketChangeInterface[] | LatestTicketCancellationInterface[];
+    ticketsStatus: TicketStatus;
 }
  
-export const MinimalTicketsView: React.FC<MinimalTicketsViewProps> = ({ tickets, title }) => {
+export const MinimalTicketsView: React.FC<MinimalTicketsViewProps> = ({ tickets, title, ticketsStatus }) => {
     const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
         column: "status",
         direction: "ascending",
@@ -57,16 +59,16 @@ export const MinimalTicketsView: React.FC<MinimalTicketsViewProps> = ({ tickets,
                         {(item) => (
                             <Table.Row id={item.id}>
                                 <Table.Cell>
-                                    <BadgeWithDot size="sm" color={item.status === TicketStatus.Booked ? "success" : item.status === TicketStatus.Changed ? "warning" : "error"} type="modern">
-                                        {item.id.split('-')[0]}
+                                    <BadgeWithDot size="sm" color={ticketsStatus === TicketStatus.Booked ? "success" : ticketsStatus === TicketStatus.Changed ? "warning" : "error"} type="modern">
+                                        {item.id}
                                     </BadgeWithDot>
                                 </Table.Cell>
                                 <Table.Cell>
                                     <div className="flex items-center gap-3">
-                                        <Avatar src={item.avatarUrl} alt={item.customerFullName} size="md" />
+                                        <Avatar src={item.customerAvatarImageUrl} alt={item.customerFullName} size="md" />
                                         <div className="whitespace-nowrap">
                                             <p className="text-sm font-medium text-primary">{item.customerFullName}</p>
-                                            <p className="text-sm text-tertiary">{item.customerId.split('-')[0]}</p>
+                                            <p className="text-sm text-tertiary">{item.customerId}</p>
                                         </div>
                                     </div>
                                 </Table.Cell>

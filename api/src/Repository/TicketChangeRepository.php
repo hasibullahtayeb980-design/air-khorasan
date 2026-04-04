@@ -16,6 +16,14 @@ class TicketChangeRepository extends ServiceEntityRepository
         parent::__construct($registry, TicketChange::class);
     }
 
+    public function findLatest() {
+        return $this->createQueryBuilder('t')
+            ->orderBy('t.createdAt', 'DESC')
+            ->setMaxResults(5)
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return TicketChange[] Returns an array of TicketChange objects
     //     */

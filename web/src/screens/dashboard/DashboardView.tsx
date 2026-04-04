@@ -56,15 +56,53 @@ const lineData = [
         A: 820,
     },
 ];
+
+interface NewCustomersInterface {
+    monthYear: string;
+    newCustomers: number;
+}
+
+export interface LatestTicketChangeInterface {
+    id: number;
+    ticketId: number;
+    customerId: number;
+    customerFullName: string;
+    customerAvatarImageUrl: string;
+}
+
+export interface LatestTicketCancellationInterface {
+    id: number;
+    ticketId: number;
+    customerId: number;
+    customerFullName: string;
+    customerAvatarImageUrl: string;
+}
+
+interface DashboardViewProps {
+    newCustomers: NewCustomersInterface[];
+    latestTicketChanges: LatestTicketChangeInterface[];
+    latestTicketCancellations: LatestTicketChangeInterface[];
+    totalCustomers: number;
+    changeInPercentage: number;
+}
  
-export const DashboardView = () => {
+export const DashboardView: React.FC<DashboardViewProps> = ({
+    newCustomers,
+    latestTicketChanges,
+    latestTicketCancellations,
+    totalCustomers,
+    changeInPercentage,
+}) => {
     const isDesktop = useBreakpoint("lg");
  
     const colors: Record<string, string> = {
-        A: "text-utility-brand-600",
-        B: "text-utility-brand-400",
-        C: "text-utility-brand-700",
+        newCustomers: "text-utility-brand-600",
     };
+
+    const newCustomersData = newCustomers.map((item) => ({
+        date: new Date(item.monthYear),
+        newCustomers: item.newCustomers,
+    }));
  
     return (
         <main>
@@ -73,10 +111,10 @@ export const DashboardView = () => {
                 <div className="flex flex-col gap-2">
                     <dt className="text-sm font-medium text-tertiary">Total customers</dt>
                     <dd className="flex items-start gap-2">
-                        <span className="text-display-sm font-semibold text-primary">2,389</span>
+                        <span className="text-display-sm font-semibold text-primary">{totalCustomers}</span>
                         <div className="flex items-center gap-1">
                             <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" className="stroke-[3px] size-4 text-fg-success-secondary"><path d="m22 7-7.869 7.869c-.396.396-.594.594-.822.668a1 1 0 0 1-.618 0c-.228-.074-.426-.272-.822-.668L9.13 12.13c-.396-.396-.594-.594-.822-.668a1 1 0 0 0-.618 0c-.228.074-.426.272-.822.668L2 17M22 7h-7m7 0v7"></path></svg>
-                            <span className="text-sm font-medium text-success-primary">9.2%</span>
+                            <span className="text-sm font-medium text-success-primary">{`${changeInPercentage.toFixed(1)}%`}</span>
                         </div>
                     </dd>
                 </div>
@@ -84,7 +122,7 @@ export const DashboardView = () => {
             <div className="flex h-60 flex-col gap-2 px-8 pt-8">
                 <ResponsiveContainer initialDimension={{ width: 1, height: 1 }} className="h-full">
                     <AreaChart
-                        data={lineData}
+                        data={newCustomersData}
                         className="text-tertiary [&_.recharts-text]:text-xs"
                         margin={{
                             top: isDesktop ? 12 : 6,
@@ -144,8 +182,8 @@ export const DashboardView = () => {
 
                         <Area
                             isAnimationActive={false}
-                            className={cx(colors["A"], "[&_.recharts-area-area]:translate-y-1.5 [&_.recharts-area-area]:[clip-path:inset(0_0_6px_0)]")}
-                            dataKey="A"
+                            className={cx(colors["newCustomers"], "[&_.recharts-area-area]:translate-y-1.5 [&_.recharts-area-area]:[clip-path:inset(0_0_6px_0)]")}
+                            dataKey="newCustomers"
                             name="New customers"
                             type="monotone"
                             stroke="currentColor"
@@ -160,8 +198,16 @@ export const DashboardView = () => {
                 </ResponsiveContainer>
             </div>
             <div className="flex flex-col w-full md:flex-row mt-8">
-                <MinimalTicketsView tickets={tickets.filter(ticket => ticket.status === TicketStatus.Changed).slice(0, 5)} title="Recently Changed Tickets" />
-                <MinimalTicketsView tickets={tickets.filter(ticket => ticket.status === TicketStatus.Cancelled).slice(0, 5)} title="Recently Cancelled Tickets" />
+                <MinimalTicketsView
+                    tickets={latestTicketChanges}
+                    title="Recently Changed Tickets"
+                    ticketsStatus={TicketStatus.Changed}
+                />
+                <MinimalTicketsView
+                    tickets={latestTicketCancellations}
+                    title="Recently Cancelled Tickets"
+                    ticketsStatus={TicketStatus.Cancelled}
+                />
             </div>
         </main>
     );

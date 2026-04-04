@@ -16,6 +16,14 @@ class TicketCancellationRepository extends ServiceEntityRepository
         parent::__construct($registry, TicketCancellation::class);
     }
 
+    public function findLatest() {
+        return $this->createQueryBuilder('t')
+            ->orderBy('t.cancellationDate', 'DESC')
+            ->setMaxResults(5)
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return TicketCancellation[] Returns an array of TicketCancellation objects
     //     */

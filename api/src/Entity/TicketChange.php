@@ -6,6 +6,7 @@ use App\Repository\TicketChangeRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Query\Expr\Func;
 use DateTimeImmutable;
+use Symfony\Component\Serializer\Attribute\MaxDepth;
 
 #[ORM\Entity(repositoryClass: TicketChangeRepository::class)]
 class TicketChange
@@ -17,6 +18,7 @@ class TicketChange
 
     #[ORM\ManyToOne(inversedBy: 'ticketChanges')]
     #[ORM\JoinColumn(nullable: false)]
+    #[MaxDepth(1)]
     private ?Ticket $ticket = null;
 
     #[ORM\Column(name: 'change_type')]
