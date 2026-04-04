@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Edit01, Trash01 } from "@untitledui/icons";
+import { Edit01, Trash01, UploadCloud02, UserPlus01 } from "@untitledui/icons";
 import type { SortDescriptor } from "react-aria-components";
 import { PaginationPageMinimalCenter } from "@/components/application/pagination/pagination";
 import { Table, TableCard } from "@/components/application/table/table";
@@ -7,6 +7,8 @@ import { Avatar } from "@/components/base/avatar/avatar";
 import { Badge, BadgeWithDot } from "@/components/base/badges/badges";
 import { ButtonUtility } from "@/components/base/buttons/button-utility";
 import { DropdownIconSimple } from "@/components/base/dropdown/dropdown-icon-simple";
+import { Button } from "@/components/base/buttons/button";
+import { CustomerFormView } from "./CustomerFormView";
 
 interface Customer {
     id: string;
@@ -28,6 +30,8 @@ export const CustomersView: React.FC<CustomersViewProps> = ({ customersLength, c
         column: "status",
         direction: "ascending",
     });
+
+    const [newCustomerFormVisible, setNewCustomerFormVisible] = useState(false);
  
     const sortedItems = useMemo(() => {
         return customers.sort((a, b) => {
@@ -51,68 +55,91 @@ export const CustomersView: React.FC<CustomersViewProps> = ({ customersLength, c
             return 0;
         });
     }, [sortDescriptor]);
+
+    const displayNewCustomerForm = () => {
+        setNewCustomerFormVisible(true);
+    }
+
+    const onNewCustomerFormCancelClick = () => {
+        setNewCustomerFormVisible(false);
+    }
  
     return (
-        <TableCard.Root>
-            <TableCard.Header
-                title="Customers"
-                badge={`${customersLength}`}
-                contentTrailing={
-                    <div className="absolute top-5 right-4 md:right-6">
-                        <DropdownIconSimple />
-                    </div>
-                }
-            />
+        <div>
+            {newCustomerFormVisible && (
+                <CustomerFormView onCancelClick={onNewCustomerFormCancelClick} onSubmitClick={() => null} isVisible={newCustomerFormVisible} />
+            )}
+            
+            <TableCard.Root>
+                <TableCard.Header
+                    title="Customers"
+                    badge={`${customersLength}`}
+                    contentTrailing={
+                        <div>
+                            <div className="absolute top-5 right-4 md:right-6">
+                                <DropdownIconSimple />
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <Button onClick={displayNewCustomerForm} size="sm" iconLeading={UserPlus01}>
+                                    Add Customer
+                                </Button>
+                            </div>
+                        </div>
+                    }
+                />
 
-            <Table aria-label="Customers" selectionMode="multiple" sortDescriptor={sortDescriptor} onSortChange={setSortDescriptor}>
-                <Table.Header>
-                    <Table.Head id="full_name" label="Full Name" isRowHeader allowsSorting className="w-full max-w-1/4" />
-                    <Table.Head id="phone" label="Phone" allowsSorting />
-                    <Table.Head id="email" label="Email address" allowsSorting className="md:hidden xl:table-cell" />
-                    <Table.Head id="passport_number" label="Passport Number" allowsSorting tooltip="This is a tooltip" />
-                    <Table.Head id="tazkira_number" label="Tazkira Number" />
-                    <Table.Head id="actions" />
-                </Table.Header>
- 
-                <Table.Body items={sortedItems}>
-                    {(item) => (
-                        <Table.Row id={item.id}>
-                            <Table.Cell>
-                                <div className="flex items-center gap-3">
-                                    <Avatar src={item.avatarUrl} alt={item.full_name} size="md" />
-                                    <div className="whitespace-nowrap">
-                                        <p className="text-sm font-medium text-primary">{item.full_name}</p>
-                                        <p className="text-sm text-tertiary">{item.id.split('-')[0]}</p>
-                                    </div>
-                                </div>
-                            </Table.Cell>
-                            <Table.Cell>
-                                <BadgeWithDot size="sm" color={"success"} type="modern">
-                                    {item.phone}
-                                </BadgeWithDot>
-                            </Table.Cell>
-                            <Table.Cell className="whitespace-nowrap md:hidden xl:table-cell">{item.email}</Table.Cell>
-                            <Table.Cell className="whitespace-nowrap">{item.tazkira_number}</Table.Cell>
-                            <Table.Cell>
-                                <div className="flex gap-1">
-                                    <Badge color="purple" size="sm">
-                                        {item.passport_number}
-                                    </Badge>
-                                </div>
-                            </Table.Cell>
-                            <Table.Cell className="px-4">
-                                <div className="flex justify-end gap-0.5">
-                                    <ButtonUtility size="xs" color="tertiary" tooltip="Delete" icon={Trash01} />
-                                    <ButtonUtility size="xs" color="tertiary" tooltip="Edit" icon={Edit01} />
-                                </div>
-                            </Table.Cell>
-                        </Table.Row>
-                    )}
-                </Table.Body>
-            </Table>
- 
-            <PaginationPageMinimalCenter page={1} total={10} className="px-4 py-3 md:px-6 md:pt-3 md:pb-4" />
-        </TableCard.Root>
+                <div className="flex-1 overflow-y-auto">
+                    <Table aria-label="Customers" selectionMode="multiple" sortDescriptor={sortDescriptor} onSortChange={setSortDescriptor}>
+                        <Table.Header>
+                            <Table.Head id="full_name" label="Full Name" isRowHeader allowsSorting className="w-full max-w-1/4" />
+                            <Table.Head id="phone" label="Phone" allowsSorting />
+                            <Table.Head id="email" label="Email address" allowsSorting className="md:hidden xl:table-cell" />
+                            <Table.Head id="passport_number" label="Passport Number" allowsSorting tooltip="This is a tooltip" />
+                            <Table.Head id="tazkira_number" label="Tazkira Number" />
+                            <Table.Head id="actions" />
+                        </Table.Header>
+        
+                        <Table.Body items={sortedItems}>
+                            {(item) => (
+                                <Table.Row id={item.id}>
+                                    <Table.Cell>
+                                        <div className="flex items-center gap-3">
+                                            <Avatar src={item.avatarUrl} alt={item.full_name} size="md" />
+                                            <div className="whitespace-nowrap">
+                                                <p className="text-sm font-medium text-primary">{item.full_name}</p>
+                                                <p className="text-sm text-tertiary">{item.id.split('-')[0]}</p>
+                                            </div>
+                                        </div>
+                                    </Table.Cell>
+                                    <Table.Cell>
+                                        <BadgeWithDot size="sm" color={"success"} type="modern">
+                                            {item.phone}
+                                        </BadgeWithDot>
+                                    </Table.Cell>
+                                    <Table.Cell className="whitespace-nowrap md:hidden xl:table-cell">{item.email}</Table.Cell>
+                                    <Table.Cell className="whitespace-nowrap">{item.tazkira_number}</Table.Cell>
+                                    <Table.Cell>
+                                        <div className="flex gap-1">
+                                            <Badge color="purple" size="sm">
+                                                {item.passport_number}
+                                            </Badge>
+                                        </div>
+                                    </Table.Cell>
+                                    <Table.Cell className="px-4">
+                                        <div className="flex justify-end gap-0.5">
+                                            <ButtonUtility size="xs" color="tertiary" tooltip="Delete" icon={Trash01} />
+                                            <ButtonUtility size="xs" color="tertiary" tooltip="Edit" icon={Edit01} />
+                                        </div>
+                                    </Table.Cell>
+                                </Table.Row>
+                            )}
+                        </Table.Body>
+                    </Table>
+                </div>
+    
+                <PaginationPageMinimalCenter page={1} total={10} className="px-4 py-3 md:px-6 md:pt-3 md:pb-4" />
+            </TableCard.Root>
+        </div>
     );
 };
 

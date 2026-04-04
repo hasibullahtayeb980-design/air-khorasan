@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router";
-import { DashboardScreen } from "./screens/DashboardScreen";
+import { DashboardScreen } from "./screens/dashboard/DashboardScreen";
 import { Layout } from "./screens/Layout";
 import { CustomersScreen } from "./screens/customers/CustomersScreen";
 import { TicketsScreen } from "./screens/tickets/TicketsScreen";

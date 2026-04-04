@@ -36,6 +36,7 @@ body {
     -webkit-font-kerning: normal;
     font-kerning: normal;
     height: 100%;
+    background-color: var(--color-neutral-950);
 }
 
 /* Hide the default expand arrow on Safari.  */
