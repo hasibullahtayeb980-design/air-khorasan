@@ -3,17 +3,20 @@
 namespace App\Entity;
 
 use App\Repository\CustomerRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Uid\Uuid;
+use DateTimeImmutable;
 
 #[ORM\Entity(repositoryClass: CustomerRepository::class)]
 class Customer
 {
     #[ORM\Id]
-    #[ORM\Column(unique: true)]
-    private ?string $id = null;
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
-    #[ORM\Column(name: "full_name", length: 255)]
+    #[ORM\Column(name: 'full_name', length: 255)]
     private ?string $fullName = null;
 
     #[ORM\Column(length: 255)]
@@ -22,29 +25,44 @@ class Customer
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
-    #[ORM\Column(name: "passport_number")]
+    #[ORM\Column(name: 'passport_number')]
     private ?int $passportNumber = null;
 
-    #[ORM\Column(name: "tazkira_number")]
+    #[ORM\Column(name: 'tazkira_number')]
     private ?int $tazkiraNumber = null;
 
-    #[ORM\Column(name: "created_at")]
+    #[ORM\Column(name: 'created_at')]
     private ?\DateTimeImmutable $createdAt = null;
+
+    /**
+     * @var Collection<int, Ticket>
+     */
+    #[ORM\OneToMany(targetEntity: Ticket::class, mappedBy: 'customer')]
+    private Collection $tickets;
+
+    /**
+     * @var Collection<int, Visa>
+     */
+    #[ORM\OneToMany(targetEntity: Visa::class, mappedBy: 'customer', orphanRemoval: true)]
+    private Collection $visas;
 
     public function __construct()
     {
-        $this->id = Uuid::v4()->toString();
-        $this->createdAt = new \DateTimeImmutable();
+        $this->createdAt = new DateTimeImmutable();
+
+        $this->tickets = new ArrayCollection();
+        $this->visas = new ArrayCollection();
     }
 
-    public function getId(): ?string
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function setId(string $id): static
+    public function setId(int $id): static
     {
         $this->id = $id;
+
         return $this;
     }
 
@@ -53,9 +71,10 @@ class Customer
         return $this->fullName;
     }
 
-    public function setFullName(string $full_name): static
+    public function setFullName(string $fullName): static
     {
-        $this->fullName = $full_name;
+        $this->fullName = $fullName;
+
         return $this;
     }
 
@@ -67,6 +86,7 @@ class Customer
     public function setPhone(string $phone): static
     {
         $this->phone = $phone;
+
         return $this;
     }
 
@@ -78,6 +98,7 @@ class Customer
     public function setEmail(string $email): static
     {
         $this->email = $email;
+
         return $this;
     }
 
@@ -89,6 +110,7 @@ class Customer
     public function setPassportNumber(int $passportNumber): static
     {
         $this->passportNumber = $passportNumber;
+
         return $this;
     }
 
@@ -100,6 +122,7 @@ class Customer
     public function setTazkiraNumber(int $tazkiraNumber): static
     {
         $this->tazkiraNumber = $tazkiraNumber;
+
         return $this;
     }
 
@@ -111,6 +134,67 @@ class Customer
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Ticket>
+     */
+    public function getTickets(): Collection
+    {
+        return $this->tickets;
+    }
+
+    public function addTicket(Ticket $ticket): static
+    {
+        if (!$this->tickets->contains($ticket)) {
+            $this->tickets->add($ticket);
+            $ticket->setCustomer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTicket(Ticket $ticket): static
+    {
+        if ($this->tickets->removeElement($ticket)) {
+            // set the owning side to null (unless already changed)
+            if ($ticket->getCustomer() === $this) {
+                $ticket->setCustomer(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Visa>
+     */
+    public function getVisas(): Collection
+    {
+        return $this->visas;
+    }
+
+    public function addVisa(Visa $visa): static
+    {
+        if (!$this->visas->contains($visa)) {
+            $this->visas->add($visa);
+            $visa->setCustomer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVisa(Visa $visa): static
+    {
+        if ($this->visas->removeElement($visa)) {
+            // set the owning side to null (unless already changed)
+            if ($visa->getCustomer() === $this) {
+                $visa->setCustomer(null);
+            }
+        }
+
         return $this;
     }
 }

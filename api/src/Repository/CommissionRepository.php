@@ -2,31 +2,22 @@
 
 namespace App\Repository;
 
-use App\Entity\Customer;
+use App\Entity\Commission;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Customer>
+ * @extends ServiceEntityRepository<Commission>
  */
-class CustomerRepository extends ServiceEntityRepository
+class CommissionRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Customer::class);
-    }
-
-    public function findNewCustomers() {
-        return $this->createQueryBuilder('a')
-            ->select("DATE_FORMAT(a.createdAt, '%Y-%m') AS month_year", 'COUNT(a.id) AS new_customers')
-            ->groupBy('month_year')
-            ->orderBy('month_year')
-            ->getQuery()
-            ->getResult();
+        parent::__construct($registry, Commission::class);
     }
 
     //    /**
-    //     * @return Customer[] Returns an array of Customer objects
+    //     * @return Commission[] Returns an array of Commission objects
     //     */
     //    public function findByExampleField($value): array
     //    {
@@ -40,7 +31,7 @@ class CustomerRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Customer
+    //    public function findOneBySomeField($value): ?Commission
     //    {
     //        return $this->createQueryBuilder('c')
     //            ->andWhere('c.exampleField = :val')
