@@ -12,20 +12,27 @@ import { CustomerFormView } from "./CustomerFormView";
 
 interface Customer {
     id: string;
-    full_name: string;
+    fullName: string;
     phone: string;
     email: string;
-    passport_number: string;
-    tazkira_number: string;
-    avatarUrl: string;
+    passportNumber: string;
+    tazkiraNumber: string;
+    avatarImageUrl: string;
 }
 
 interface CustomersViewProps {
-    customersLength: number;
+    totalCustomers: number;
+    page: number;
+    totalPages: number;
     customers: Customer[];
 }
  
-export const CustomersView: React.FC<CustomersViewProps> = ({ customersLength, customers }) => {
+export const CustomersView: React.FC<CustomersViewProps> = ({ 
+    totalCustomers,
+    page,
+    totalPages,
+    customers
+}) => {
     const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
         column: "status",
         direction: "ascending",
@@ -73,7 +80,7 @@ export const CustomersView: React.FC<CustomersViewProps> = ({ customersLength, c
             <TableCard.Root>
                 <TableCard.Header
                     title="Customers"
-                    badge={`${customersLength}`}
+                    badge={`${totalCustomers}`}
                     contentTrailing={
                         <div>
                             <div className="absolute top-5 right-4 md:right-6">
@@ -104,10 +111,10 @@ export const CustomersView: React.FC<CustomersViewProps> = ({ customersLength, c
                                 <Table.Row id={item.id}>
                                     <Table.Cell>
                                         <div className="flex items-center gap-3">
-                                            <Avatar src={item.avatarUrl} alt={item.full_name} size="md" />
+                                            <Avatar src={item.avatarImageUrl} alt={item.fullName} size="md" />
                                             <div className="whitespace-nowrap">
-                                                <p className="text-sm font-medium text-primary">{item.full_name}</p>
-                                                <p className="text-sm text-tertiary">{item.id.split('-')[0]}</p>
+                                                <p className="text-sm font-medium text-primary">{item.fullName}</p>
+                                                <p className="text-sm text-tertiary">{item.id}</p>
                                             </div>
                                         </div>
                                     </Table.Cell>
@@ -117,11 +124,11 @@ export const CustomersView: React.FC<CustomersViewProps> = ({ customersLength, c
                                         </BadgeWithDot>
                                     </Table.Cell>
                                     <Table.Cell className="whitespace-nowrap md:hidden xl:table-cell">{item.email}</Table.Cell>
-                                    <Table.Cell className="whitespace-nowrap">{item.tazkira_number}</Table.Cell>
+                                    <Table.Cell className="whitespace-nowrap">{item.tazkiraNumber}</Table.Cell>
                                     <Table.Cell>
                                         <div className="flex gap-1">
                                             <Badge color="purple" size="sm">
-                                                {item.passport_number}
+                                                {item.passportNumber}
                                             </Badge>
                                         </div>
                                     </Table.Cell>
@@ -137,7 +144,7 @@ export const CustomersView: React.FC<CustomersViewProps> = ({ customersLength, c
                     </Table>
                 </div>
     
-                <PaginationPageMinimalCenter page={1} total={10} className="px-4 py-3 md:px-6 md:pt-3 md:pb-4" />
+                <PaginationPageMinimalCenter page={page} total={totalPages} className="px-4 py-3 md:px-6 md:pt-3 md:pb-4" />
             </TableCard.Root>
         </div>
     );

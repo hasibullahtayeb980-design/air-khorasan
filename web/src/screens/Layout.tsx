@@ -5,6 +5,7 @@ import { BarChartSquare02, CreditCard02, CurrencyDollarCircle, FileCheck02, Mess
 import { Outlet } from 'react-router-dom';
 import { fetchDashboard } from './dashboard/DashboardScreen';
 import { LoadingIndicator } from "@/components/application/loading-indicator/loading-indicator";
+import { LoadingView } from './LoadingView';
 
 const getNavItems = (
     totalCustomers: number,
@@ -69,11 +70,7 @@ export const Layout = () => {
     );
 
     if (isLoading) {
-        return (
-            <div className="flex items-center justify-center h-screen">
-                <LoadingIndicator type="line-simple" size="md" label="Loading..." />
-            </div>
-        );
+        return <LoadingView />
     }
 
     if (error) {

@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { LoadingIndicator } from "@/components/application/loading-indicator/loading-indicator";
 import { DashboardView } from "./DashboardView";
+import { LoadingView } from "../LoadingView";
 
 export const fetchDashboard = async () => {
     const response = await fetch("https://127.0.0.1:8000/api/dashboard");
@@ -33,11 +34,7 @@ export const DashboardScreen = () => {
     });
 
     if (isLoading) {
-        return (
-            <div className="flex items-center justify-center h-screen">
-                <LoadingIndicator type="line-simple" size="md" label="Loading..." />
-            </div>
-        );
+        return <LoadingView />;
     }
 
     if (error) {

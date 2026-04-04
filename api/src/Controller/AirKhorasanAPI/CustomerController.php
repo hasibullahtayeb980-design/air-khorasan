@@ -19,7 +19,7 @@ final class CustomerController extends AbstractController
         $page = $request->query->getInt('page', 1);
         $limit = $request->query->getInt('limit', 10);
 
-        $customers = $em->getRepository(Customer::class)->getPaginatedCustomers($page, $limit);
+        $customers = $em->getRepository(Customer::class)->findPaginated($page, $limit);
         return $this->json($customers);
     }
 
