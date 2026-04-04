@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { BarChartSquare02, CreditCard02, CurrencyDollarCircle, FileCheck02, MessageChatCircle, Users01 } from '@untitledui/icons';
 import { Outlet } from 'react-router-dom';
 import { fetchDashboard } from './dashboard/DashboardScreen';
+import { LoadingIndicator } from "@/components/application/loading-indicator/loading-indicator";
 
 const getNavItems = (
     totalCustomers: number,
@@ -68,7 +69,11 @@ export const Layout = () => {
     );
 
     if (isLoading) {
-        return null;
+        return (
+            <div className="flex items-center justify-center h-screen">
+                <LoadingIndicator type="line-simple" size="md" label="Loading..." />
+            </div>
+        );
     }
 
     if (error) {
