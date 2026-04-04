@@ -10,6 +10,9 @@ use App\Entity\Customer;
 use App\Entity\Ticket;
 use App\Entity\TicketChange;
 use App\Entity\TicketCancellation;
+use App\Entity\Visa;
+use App\Entity\Commission;
+use App\Entity\Expense;
 use App\Repository\TicketRepository;
 use DateTime;
 
@@ -35,7 +38,8 @@ class AppFixtures extends Fixture
 
         $customers = $manager->getRepository(Customer::class)->findAll();
 
-        for ($i = 0; $i < 50; $i++) {
+        $numberOfTickets = $faker->numberBetween(50, 100);
+        for ($i = 0; $i < $numberOfTickets; $i++) {
             $ticket = new Ticket();
             $ticket->setCustomer($customers[array_rand($customers)]);
             $ticket->setTicketNumber($faker->numberBetween(100000, 999999));
@@ -50,9 +54,11 @@ class AppFixtures extends Fixture
         }
 
         $manager->flush();
-        $tickets = $manager->getRepository(Ticket::class)->findAll();
 
-        for ($i = 0; $i < 20; $i++) {
+        $tickets = $manager->getRepository(Ticket::class)->findAll();
+        $numberOfTicketsChanged = $faker->numberBetween(10, 40);
+
+        for ($i = 0; $i < $numberOfTicketsChanged; $i++) {
             $ticket = $tickets[array_rand($tickets)];
             $ticketChange = new TicketChange();
             $ticketChange->setTicket($ticket);
@@ -63,9 +69,55 @@ class AppFixtures extends Fixture
             $manager->persist($ticketChange);
         }
 
+        $visas = [];
+
+        for ($i = 0; $i < $faker->numberBetween(100, 200); $i++) {
+            $fee = $faker->numberBetween(100, 1000);
+            $companyCost = $faker->numberBetween(10, 50);
+            
+            $visa = new Visa();
+            $visa->setCustomer($customers[array_rand($customers)]);
+            $visa->setCountry($faker->country);
+            $visa->setVisaType($faker->numberBetween(0, 2));
+            $visa->setApplicationDate($faker->dateTimeBetween('-1 year', 'now'));
+            $visa->setStatus($faker->numberBetween(0, 2));
+            $visa->setFee($fee);
+            $visa->setCompanyCost($companyCost);
+            $visa->setProfit($fee - $companyCost);
+
+            $manager->persist($visa);
+            $visas[] = $visa;
+        }
+
         $manager->flush();
 
-        for ($i = 0; $i < 20; $i++) {
+        for ($i = 0; $i < $faker->numberBetween(100, 200); $i++) {
+            $commission = new Commission();
+            $commission->setPartnerCompany($faker->company());
+            $commission->addVisa($visas[array_rand($visas)]);
+            $commission->setAmount($faker->numberBetween(10, 500));
+            $commission->setDate($faker->dateTimeBetween('-1 year', 'now'));
+
+            $manager->persist($commission);
+        }
+
+        $manager->flush();
+
+        for ($i = 0; $i < $faker->numberBetween(100, 200); $i++) {
+            $expense = new Expense();
+            $expense->setTitle($faker->sentence(3));
+            $expense->setAmount($faker->numberBetween(10, 500));
+            $expense->setCategory($faker->numberBetween(0, 3));
+            $expense->setDate($faker->dateTimeBetween('-1 year', 'now'));
+            $expense->setDescription($faker->sentence());
+
+            $manager->persist($expense);
+        }
+
+        $manager->flush();
+        $numberOfTicketsCancelled = $faker->numberBetween(10, 40);
+
+        for ($i = 0; $i < $numberOfTicketsCancelled; $i++) {
             $ticket = array_pop($tickets);
             $refundAmount = $faker->numberBetween(0, $ticket->getPrice());
 
