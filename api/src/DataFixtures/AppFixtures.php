@@ -71,7 +71,7 @@ class AppFixtures extends Fixture
 
         $visas = [];
 
-        for ($i = 0; $i < $faker->numberBetween(100, 200); $i++) {
+        for ($i = 0; $i < $faker->numberBetween(300, 500); $i++) {
             $fee = $faker->numberBetween(100, 1000);
             $companyCost = $faker->numberBetween(10, 50);
             
@@ -94,7 +94,7 @@ class AppFixtures extends Fixture
         for ($i = 0; $i < $faker->numberBetween(100, 200); $i++) {
             $commission = new Commission();
             $commission->setPartnerCompany($faker->company());
-            $commission->addVisa($visas[array_rand($visas)]);
+            $commission->setVisa(array_pop($visas));
             $commission->setAmount($faker->numberBetween(10, 500));
             $commission->setDate($faker->dateTimeBetween('-1 year', 'now'));
 

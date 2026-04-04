@@ -18,22 +18,14 @@ class Commission
     #[ORM\Column(name: 'partner_company', length: 255)]
     private ?string $partnerCompany = null;
 
-    /**
-     * @var Collection<int, Visa>
-     */
-    #[ORM\OneToMany(targetEntity: Visa::class, mappedBy: 'commission')]
-    private Collection $visa;
+    #[ORM\OneToOne(inversedBy: 'commission', cascade: ['persist', 'remove'])]
+    private ?Visa $visa = null;
 
     #[ORM\Column]
     private ?int $amount = null;
 
     #[ORM\Column]
     private ?\DateTime $date = null;
-
-    public function __construct()
-    {
-        $this->visa = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -59,33 +51,14 @@ class Commission
         return $this;
     }
 
-    /**
-     * @return Collection<int, Visa>
-     */
-    public function getVisa(): Collection
+    public function getVisa(): ?Visa
     {
         return $this->visa;
     }
 
-    public function addVisa(Visa $visa): static
+    public function setVisa(Visa $visa): static
     {
-        if (!$this->visa->contains($visa)) {
-            $this->visa->add($visa);
-            $visa->setCommission($this);
-        }
-
-        return $this;
-    }
-
-    public function removeVisa(Visa $visa): static
-    {
-        if ($this->visa->removeElement($visa)) {
-            // set the owning side to null (unless already changed)
-            if ($visa->getCommission() === $this) {
-                $visa->setCommission(null);
-            }
-        }
-
+        $this->visa = $visa;
         return $this;
     }
 
