@@ -1,37 +1,30 @@
 import React from 'react';
 import { CustomersView } from './CustomersView';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { keepPreviousData, queryOptions, useQuery, useQueryClient } from '@tanstack/react-query';
 import { LoadingView } from '../LoadingView';
 import { QUERY_CUSTOMERS_KEY } from '@/services/queries';
 import { akClient } from '@/services';
 
+const customersQueryOptions = (pageNumber: number) => 
+  queryOptions({
+    queryKey: [QUERY_CUSTOMERS_KEY, pageNumber],
+    queryFn: () => akClient.fetchCustomers(pageNumber),
+  });
+
 export const CustomersScreen = () => {
-  const [page, setPage] = React.useState(1);
+  const [page, setPage] = React.useState<number>(1);
 
     const queryClient = useQueryClient();
 
     const { data, isLoading, error } = useQuery({
-        queryKey: [QUERY_CUSTOMERS_KEY, page],
-        queryFn: () => akClient.fetchCustomers(page),
+        ...customersQueryOptions(page),
+        placeholderData: keepPreviousData,
     });
 
+    console.log(data);
+
     const handlePageChange = (page: number) => {
-      if (!data) return;
-
-      const minLimit = (data.page - 1) >= 0;
-      const maxLimit = (data.page + 1) <= data.pages;
-
-      if (minLimit && maxLimit) {
         setPage(page);
-      }
-    }
-
-    const handlePreviousPageClick = () => {
-      if (!data) return;
-
-      if ((data.page - 1) >= 0) {
-        setPage(old => old - 1);
-      }
     }
 
     if (isLoading) {
@@ -45,7 +38,7 @@ export const CustomersScreen = () => {
     return (
         <CustomersView
             customers={data?.items || []}
-            page={data?.page || 1}
+            page={page}
             totalPages={data?.pages || 1}
             totalCustomers={data?.total || 0}
             onPageChange={handlePageChange}

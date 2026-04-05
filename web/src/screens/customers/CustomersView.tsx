@@ -54,7 +54,7 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
  
             return 0;
         });
-    }, [sortDescriptor]);
+    }, [sortDescriptor, customers]);
 
     const displayNewCustomerForm = () => {
         setNewCustomerFormVisible(true);
