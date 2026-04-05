@@ -1,0 +1,10 @@
+root = true
+
+# 4 space indentation
+[web/**.{ts,tsx,js,jsx}]
+indent_style = space
+indent_size = 2
+
+# Tab indentation (no size specified)
+[api/**.php]
+indent_style = tab

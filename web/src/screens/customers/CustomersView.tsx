@@ -8,30 +8,23 @@ import { Badge, BadgeWithDot } from "@/components/base/badges/badges";
 import { ButtonUtility } from "@/components/base/buttons/button-utility";
 import { DropdownIconSimple } from "@/components/base/dropdown/dropdown-icon-simple";
 import { Button } from "@/components/base/buttons/button";
-import { CustomerFormView } from "./CustomerFormView";
-
-interface Customer {
-    id: string;
-    fullName: string;
-    phone: string;
-    email: string;
-    passportNumber: string;
-    tazkiraNumber: string;
-    avatarImageUrl: string;
-}
+import { NewCustomerModal } from "./new-customer/NewCustomerModal";
+import type { Customer } from "@/services/AKClient";
 
 interface CustomersViewProps {
     totalCustomers: number;
     page: number;
     totalPages: number;
     customers: Customer[];
+    onPageChange: (page: number) => void;
 }
  
 export const CustomersView: React.FC<CustomersViewProps> = ({ 
     totalCustomers,
     page,
     totalPages,
-    customers
+    customers,
+    onPageChange
 }) => {
     const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
         column: "status",
@@ -74,7 +67,11 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
     return (
         <div>
             {newCustomerFormVisible && (
-                <CustomerFormView onCancelClick={onNewCustomerFormCancelClick} onSubmitClick={() => null} isVisible={newCustomerFormVisible} />
+                <NewCustomerModal
+                    onCancel={onNewCustomerFormCancelClick}
+                    onSuccess={() => null}
+                    visible={newCustomerFormVisible}
+                />
             )}
             
             <TableCard.Root>
@@ -144,7 +141,12 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
                     </Table>
                 </div>
     
-                <PaginationPageMinimalCenter page={page} total={totalPages} className="px-4 py-3 md:px-6 md:pt-3 md:pb-4" />
+                <PaginationPageMinimalCenter
+                  page={page}
+                  total={totalPages}
+                  onPageChange={onPageChange}
+                  className="px-4 py-3 md:px-6 md:pt-3 md:pb-4"
+                />
             </TableCard.Root>
         </div>
     );

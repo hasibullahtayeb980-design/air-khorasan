@@ -1,24 +1,38 @@
 import React from 'react';
 import { CustomersView } from './CustomersView';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { LoadingView } from '../LoadingView';
-
-export const fetchCustomers = async () => {
-    const response = await fetch("https://127.0.0.1:8000/api/customers");
-
-    if (!response.ok) {
-        throw new Error("Failed to fetch customers data");
-    }
-
-    const data = await response.json();
-    return data;
-};
+import { QUERY_CUSTOMERS_KEY } from '@/services/queries';
+import { akClient } from '@/services';
 
 export const CustomersScreen = () => {
+  const [page, setPage] = React.useState(1);
+
+    const queryClient = useQueryClient();
+
     const { data, isLoading, error } = useQuery({
-        queryKey: ['CUSTOMERS'],
-        queryFn: fetchCustomers,
+        queryKey: [QUERY_CUSTOMERS_KEY, page],
+        queryFn: () => akClient.fetchCustomers(page),
     });
+
+    const handlePageChange = (page: number) => {
+      if (!data) return;
+
+      const minLimit = (data.page - 1) >= 0;
+      const maxLimit = (data.page + 1) <= data.pages;
+
+      if (minLimit && maxLimit) {
+        setPage(page);
+      }
+    }
+
+    const handlePreviousPageClick = () => {
+      if (!data) return;
+
+      if ((data.page - 1) >= 0) {
+        setPage(old => old - 1);
+      }
+    }
 
     if (isLoading) {
         return <LoadingView />;
@@ -34,6 +48,7 @@ export const CustomersScreen = () => {
             page={data?.page || 1}
             totalPages={data?.pages || 1}
             totalCustomers={data?.total || 0}
+            onPageChange={handlePageChange}
         />
     );
 };
