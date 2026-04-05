@@ -1,9 +1,9 @@
 import { Area, AreaChart, CartesianGrid, Label, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { ChartLegendContent, ChartTooltipContent } from "@/components/application/charts/charts-base";
+import { ChartTooltipContent } from "@/components/application/charts/charts-base";
 import { useBreakpoint } from "@/hooks/use-breakpoint";
 import { cx } from "@/utils/cx";
-import { TicketStatus, TicketsView } from "../tickets/TicketsView";
 import { MinimalTicketsView } from "../tickets/MinimalTicketsView";
+import { TicketStatus } from "@/services/AKClient";
  
 const lineData = [
     {

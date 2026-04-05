@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CustomersView } from './CustomersView';
 import { keepPreviousData, queryOptions, useQuery, useQueryClient } from '@tanstack/react-query';
 import { LoadingView } from '../LoadingView';
@@ -12,7 +12,7 @@ const customersQueryOptions = (page: number) => queryOptions({
 });
 
 export const CustomersScreen = () => {
-  const [page, setPage] = React.useState<number>(1);
+  const [page, setPage] = useState<number>(1);
   const queryClient = useQueryClient();
 
   useEffect(() => {

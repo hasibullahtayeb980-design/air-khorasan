@@ -1,39 +1,45 @@
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, queryOptions, useQuery, useQueryClient } from "@tanstack/react-query";
 import { LoadingView } from "../../LoadingView";
-import { TicketStatus, TicketsView } from "../TicketsView";
 import { TicketsChangedView } from "./TicketsChangedView";
+import { akClient } from "@/services";
+import { QUERY_TICKETS_CHANGED_KEY } from "@/services/queries";
+import { useEffect, useState } from "react";
 
-export const fetchTicketsChanged = async () => {
-    const response = await fetch("https://127.0.0.1:8000/api/tickets?status=1");
-
-    if (!response.ok) {
-        throw new Error("Failed to fetch tickets changed data");
-    }
-
-    const data = await response.json();
-    return data;
-};
+const ticketsChangedQueryOptions = (page: number) => queryOptions({
+  queryKey: [QUERY_TICKETS_CHANGED_KEY, page],
+  queryFn: () => akClient.fetchTicketsChanged(page),
+  placeholderData: keepPreviousData,
+});
 
 export const TicketsChangedScreen = () => {
-    const { data, isLoading, error } = useQuery({
-        queryKey: ['TICKETS_CHANGED'],
-        queryFn: fetchTicketsChanged,
-    });
+  const [page, setPage] = useState<number>(1);
+  const queryClient = useQueryClient();
 
-    if (isLoading) {
-        return <LoadingView />;
-    }
+  useEffect(() => {
+    queryClient.prefetchQuery(ticketsChangedQueryOptions(page + 1))
+  }, [page]);
 
-    if (error) {
-        return <div className="text-red-500">Error loading customers data: {(error as Error).message}</div>;
-    }
+  const { data, isLoading, error } = useQuery(ticketsChangedQueryOptions(page));
 
-    return (
-        <TicketsChangedView
-            ticketsChanged={data?.items || []}
-            totalTicketsChanged={data?.total || 0}
-            page={data?.page || 1}
-            totalPages={data?.pages || 1}
-        />
-    );
+  const handlePageChange = (page: number) => {
+    setPage(page);
+  }
+
+  if (isLoading) {
+      return <LoadingView />;
+  }
+
+  if (error) {
+      return <div className="text-red-500">Error loading customers data: {(error as Error).message}</div>;
+  }
+
+  return (
+      <TicketsChangedView
+          ticketsChanged={data?.items || []}
+          totalTicketsChanged={data?.total || 0}
+          page={page}
+          totalPages={data?.pages || 1}
+          onPageChange={handlePageChange}
+      />
+  );
 }

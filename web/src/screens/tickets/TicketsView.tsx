@@ -7,37 +7,24 @@ import { Avatar } from "@/components/base/avatar/avatar";
 import { BadgeWithDot } from "@/components/base/badges/badges";
 import { ButtonUtility } from "@/components/base/buttons/button-utility";
 import { DropdownIconSimple } from "@/components/base/dropdown/dropdown-icon-simple";
-
-export enum TicketStatus {
-    Booked,
-    Changed,
-    Cancelled,
-}
-
-export interface Ticket {
-    id: string;
-    ticketNumber: string;
-    status: TicketStatus;
-    customerId: string;
-    customerFullName: string;
-    airline: string;
-    fromCity: string;
-    toCity: string;
-    departureDate: string;
-    returnDate: string;
-    price: number;
-    createdAt: string;
-    customerAvatarImageUrl: string;
-}
+import type { Ticket } from "@/services/AKClient";
+import { TicketStatus } from "@/services/AKClient";
 
 interface TicketsViewProps {
     totalTickets: number;
     page: number;
     totalPages: number;
     tickets: Ticket[];
+    onPageChange: (page: number) => void;
 }
  
-export const TicketsView: React.FC<TicketsViewProps> = ({ tickets, totalTickets, page, totalPages }) => {
+export const TicketsView: React.FC<TicketsViewProps> = ({
+  tickets,
+  totalTickets,
+  page,
+  totalPages,
+  onPageChange,
+}) => {
     const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
         column: "status",
         direction: "ascending",
@@ -64,7 +51,7 @@ export const TicketsView: React.FC<TicketsViewProps> = ({ tickets, totalTickets,
  
             return 0;
         });
-    }, [sortDescriptor]);
+    }, [sortDescriptor, page]);
 
     return (
         <TableCard.Root className="h-screen flex flex-col">
@@ -127,7 +114,7 @@ export const TicketsView: React.FC<TicketsViewProps> = ({ tickets, totalTickets,
                     </Table.Body>
                 </Table>
             </div>
-            <PaginationPageMinimalCenter page={1} total={10} className="px-4 py-3 md:px-6 md:pt-3 md:pb-4" />
+            <PaginationPageMinimalCenter page={page} total={totalPages} onPageChange={onPageChange} className="px-4 py-3 md:px-6 md:pt-3 md:pb-4" />
         </TableCard.Root>
     );
 };

@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { LoadingIndicator } from "@/components/application/loading-indicator/loading-indicator";
 import { DashboardView } from "./DashboardView";
 import { LoadingView } from "../LoadingView";
 

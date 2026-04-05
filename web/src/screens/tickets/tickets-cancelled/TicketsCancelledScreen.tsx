@@ -1,38 +1,44 @@
 import { LoadingView } from "@/screens/LoadingView";
-import { TicketStatus, TicketsView } from "../TicketsView";
 import { TicketsCancelledView } from "./TicketsCancelledView";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, queryOptions, useQuery, useQueryClient } from "@tanstack/react-query";
+import { QUERY_CUSTOMERS_KEY } from "@/services/queries";
+import { akClient } from "@/services";
+import { useEffect, useState } from "react";
 
-export const fetchTicketsCancelled = async () => {
-    const response = await fetch("https://127.0.0.1:8000/api/tickets?status=2");
-
-    if (!response.ok) {
-        throw new Error("Failed to fetch tickets cancelled data");
-    }
-
-    const data = await response.json();
-    return data;
-};
+const ticketsCancelledQueryOptions = (page: number) => queryOptions({
+  queryKey: [QUERY_CUSTOMERS_KEY, page],
+  queryFn: () => akClient.fetchTicketsCancelled(page),
+  placeholderData: keepPreviousData,
+});
 
 export const TicketsCancelledScreen = () => {
-    const { data, isLoading, error } = useQuery({
-        queryKey: ['TICKETS_CANCELLED'],
-        queryFn: fetchTicketsCancelled,
-    });
+  const [page, setPage] = useState<number>(1);
+  const queryClient = useQueryClient();
 
-    if (isLoading) {
-        return <LoadingView />;
-    }
+  useEffect(() => {
+    queryClient.prefetchQuery(ticketsCancelledQueryOptions(page + 1))
+  }, [page]);
 
-    if (error) {
-        return <div className="text-red-500">Error loading customers data: {(error as Error).message}</div>;
-    }
-    return (
-        <TicketsCancelledView
-            ticketsCancelled={data?.items || []}
-            totalTicketsCancelled={data?.total || 0}
-            page={data?.page || 1}
-            totalPages={data?.pages || 1}
-        />
-    );
+  const { data, isLoading, error } = useQuery(ticketsCancelledQueryOptions(page));
+
+  const handlePageChange = (page: number) => {
+    setPage(page);
+  }
+
+  if (isLoading) {
+      return <LoadingView />;
+  }
+
+  if (error) {
+      return <div className="text-red-500">Error loading customers data: {(error as Error).message}</div>;
+  }
+  return (
+    <TicketsCancelledView
+      ticketsCancelled={data?.items || []}
+      totalTicketsCancelled={data?.total || 0}
+      page={page}
+      totalPages={data?.pages || 1}
+      onPageChange={handlePageChange}
+    />
+  );
 }

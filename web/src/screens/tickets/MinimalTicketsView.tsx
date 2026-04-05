@@ -1,14 +1,10 @@
 import React, { useMemo, useState } from "react";
-import { Edit01, Trash01 } from "@untitledui/icons";
 import type { SortDescriptor } from "react-aria-components";
-import { PaginationPageMinimalCenter } from "@/components/application/pagination/pagination";
 import { Table, TableCard } from "@/components/application/table/table";
 import { Avatar } from "@/components/base/avatar/avatar";
 import { BadgeWithDot } from "@/components/base/badges/badges";
-import { ButtonUtility } from "@/components/base/buttons/button-utility";
-import { DropdownIconSimple } from "@/components/base/dropdown/dropdown-icon-simple";
-import { TicketStatus, type Ticket } from "./TicketsView";
 import type { LatestTicketCancellationInterface, LatestTicketChangeInterface } from "../dashboard/DashboardView";
+import { TicketStatus } from "@/services/AKClient";
 
 interface MinimalTicketsViewProps {
     title: string;

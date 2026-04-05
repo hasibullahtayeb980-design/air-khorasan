@@ -27,14 +27,82 @@ export interface Customer {
   createdAt: string;
 }
 
+export enum TicketStatus {
+  Booked,
+  Changed,
+  Cancelled,
+}
+
+export interface Ticket {
+  id: number;
+  ticketNumber: number;
+  customerId: number;
+  customerFullName: string;
+  customerAvatarImageUrl: string;
+  airline: string;
+  fromCity: string;
+  toCity: string;
+  departureDate: string;
+  returnDate: string;
+  price: number;
+  status: TicketStatus;
+  createdAt: string;
+}
+
+export enum TicketChangeType {
+    Extension,
+    DateChange
+}
+
+export interface TicketChange {
+  id: number;
+  ticketId: number;
+  customerId: number;
+  customerFullName: string;
+  customerAvatarImageUrl: string;
+  changeType: TicketChangeType;
+  oldDate: string;
+  newDate: string;
+  fee: number;
+  createdAt: string;
+}
+
+export interface TicketCancelled {
+  id: number;
+  ticketId: number;
+  customerId: number;
+  customerFullName: string;
+  customerAvatarImageUrl: string;
+  cancellationDate: string;
+  refundAmount: number;
+  penalty: number;
+}
+
 export class AKClient {
   fetchCustomers = async (page?: number | null): Promise<PaginatedResponse<Customer> | null> => {
     const endpoint = `customers`;
     const response = await this.fetchPaginated<Customer>(endpoint, page);
 
-    if (response === null) {
-      return null;
-    }
+    return response;
+  };
+
+  fetchTickets = async (page?: number | null): Promise<PaginatedResponse<Ticket> | null> => {
+    const endpoint = `tickets`;
+    const response = await this.fetchPaginated<Ticket>(endpoint, page);
+
+    return response;
+  };
+
+  fetchTicketsChanged = async (page?: number | null): Promise<PaginatedResponse<TicketChange> | null> => {
+    const endpoint = `tickets?status=${TicketStatus.Changed}`;
+    const response = await this.fetchPaginated<TicketChange>(endpoint, page);
+
+    return response;
+  };
+
+  fetchTicketsCancelled = async (page?: number | null): Promise<PaginatedResponse<TicketCancelled> | null> => {
+    const endpoint = `tickets?status=${TicketStatus.Cancelled}`;
+    const response = await this.fetchPaginated<TicketCancelled>(endpoint, page);
 
     return response;
   };

@@ -7,32 +7,17 @@ import { Avatar } from "@/components/base/avatar/avatar";
 import { BadgeWithDot } from "@/components/base/badges/badges";
 import { ButtonUtility } from "@/components/base/buttons/button-utility";
 import { DropdownIconSimple } from "@/components/base/dropdown/dropdown-icon-simple";
-
-export enum TicketStatus {
-    Booked,
-    Changed,
-    Cancelled,
-}
-
-export interface TicketCancelled {
-    id: number;
-    ticketId: number;
-    customerId: string;
-    customerFullName: string;
-    customerAvatarImageUrl: string;
-    cancellationDate: string;
-    refundAmount: number;
-    penalty: number;
-}
+import type { TicketCancelled } from "@/services/AKClient";
 
 interface TicketsViewProps {
-    totalTicketsCancelled: number;
-    page: number;
-    totalPages: number;
-    ticketsCancelled: TicketCancelled[];
+  totalTicketsCancelled: number;
+  page: number;
+  totalPages: number;
+  ticketsCancelled: TicketCancelled[];
+  onPageChange: (page: number) => void;
 }
  
-export const TicketsCancelledView: React.FC<TicketsViewProps> = ({ ticketsCancelled, totalTicketsCancelled, page, totalPages }) => {
+export const TicketsCancelledView: React.FC<TicketsViewProps> = ({ ticketsCancelled, totalTicketsCancelled, page, totalPages, onPageChange }) => {
     const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
         column: "status",
         direction: "ascending",
@@ -59,7 +44,7 @@ export const TicketsCancelledView: React.FC<TicketsViewProps> = ({ ticketsCancel
  
             return 0;
         });
-    }, [sortDescriptor]);
+    }, [sortDescriptor, page]);
 
     return (
         <TableCard.Root className="h-screen flex flex-col">
@@ -114,7 +99,7 @@ export const TicketsCancelledView: React.FC<TicketsViewProps> = ({ ticketsCancel
                     </Table.Body>
                 </Table>
             </div>
-            <PaginationPageMinimalCenter page={page} total={totalPages} className="px-4 py-3 md:px-6 md:pt-3 md:pb-4" />
+            <PaginationPageMinimalCenter page={page} total={totalPages} onPageChange={onPageChange} className="px-4 py-3 md:px-6 md:pt-3 md:pb-4" />
         </TableCard.Root>
     );
 };
