@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import visaProcessingData from "./visa-processing-data.json";
 import { VisaProcessingView } from "./VisaProcessingView";
 import { LoadingView } from "../LoadingView";
 

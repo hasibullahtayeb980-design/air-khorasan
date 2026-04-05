@@ -1,5 +1,4 @@
 import { Area, AreaChart, CartesianGrid, Label, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import tickets from "../tickets/tickets.json";
 import { ChartLegendContent, ChartTooltipContent } from "@/components/application/charts/charts-base";
 import { useBreakpoint } from "@/hooks/use-breakpoint";
 import { cx } from "@/utils/cx";

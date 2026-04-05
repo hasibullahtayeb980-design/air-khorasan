@@ -1,0 +1,113 @@
+import React, { useMemo, useState } from "react";
+import { Edit01, Trash01 } from "@untitledui/icons";
+import type { SortDescriptor } from "react-aria-components";
+import { PaginationPageMinimalCenter } from "@/components/application/pagination/pagination";
+import { Table, TableCard } from "@/components/application/table/table";
+import { Badge, BadgeWithDot } from "@/components/base/badges/badges";
+import { ButtonUtility } from "@/components/base/buttons/button-utility";
+import { DropdownIconSimple } from "@/components/base/dropdown/dropdown-icon-simple";
+
+export enum ExpenseCategory {
+    Rent,
+    Salary,
+    Internet,
+    Other
+}
+
+export interface Expense {
+    id: string;
+    title: string;
+    amount: number;
+    category: ExpenseCategory;
+    date: string;
+    description: string;
+}
+
+interface ExpensesViewProps {
+    expenses: Expense[];
+    totalExpenses: number;
+    page: number;
+    totalPages: number;
+}
+ 
+export const ExpensesView: React.FC<ExpensesViewProps> = ({ expenses, totalExpenses, page, totalPages }) => {
+    const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
+        column: "status",
+        direction: "ascending",
+    });
+ 
+    const sortedItems = useMemo(() => {
+        return expenses.sort((a, b) => {
+            const first = a[sortDescriptor.column as keyof typeof a];
+            const second = b[sortDescriptor.column as keyof typeof b];
+ 
+            // Compare numbers or booleans
+            if ((typeof first === "number" && typeof second === "number") || (typeof first === "boolean" && typeof second === "boolean")) {
+                return sortDescriptor.direction === "descending" ? second - first : first - second;
+            }
+ 
+            // Compare strings
+            if (typeof first === "string" && typeof second === "string") {
+                let cmp = first.localeCompare(second);
+                if (sortDescriptor.direction === "descending") {
+                    cmp *= -1;
+                }
+                return cmp;
+            }
+ 
+            return 0;
+        });
+    }, [sortDescriptor]);
+
+    return (
+        <TableCard.Root className="h-screen flex flex-col">
+            <TableCard.Header
+                title="Expenses"
+                badge={totalExpenses}
+                contentTrailing={
+                    <div className="absolute top-5 right-4 md:right-6">
+                        <DropdownIconSimple />
+                    </div>
+                }
+            />
+            <div className="flex-1 overflow-y-auto">
+                <Table aria-label="Expenses" selectionMode="multiple" sortDescriptor={sortDescriptor} onSortChange={setSortDescriptor}>
+                    <Table.Header>
+                        <Table.Head id="id" label="Expense ID" isRowHeader allowsSorting className="w-full max-w-1/4" />
+                        <Table.Head id="title" label="Title" allowsSorting />
+                        <Table.Head id="amount" label="Amount" allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="category" label="Category" allowsSorting />
+                        <Table.Head id="date" label="Date" allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="description" label="Description" allowsSorting />
+                        <Table.Head id="actions" />
+                    </Table.Header>
+    
+                    <Table.Body items={sortedItems}>
+                        {(item) => (
+                            <Table.Row id={item.id}>
+                                <Table.Cell>
+                                    <Badge size="sm" type="modern">
+                                        {item.id}
+                                    </Badge>
+                                </Table.Cell>
+                                <Table.Cell className="whitespace-nowrap">{item.title}</Table.Cell>
+                                <Table.Cell className="whitespace-nowrap">{item.amount}</Table.Cell>
+                                <Table.Cell className="whitespace-nowrap">{item.category === ExpenseCategory.Rent ? "Rent" : item.category === ExpenseCategory.Salary ? "Salary" : item.category === ExpenseCategory.Internet ? "Internet" : "Other"}</Table.Cell>
+                                <Table.Cell className="whitespace-nowrap">{new Date(item.date).toLocaleDateString()}</Table.Cell>
+                                <Table.Cell className="whitespace-nowrap">{item.description}</Table.Cell>
+                                <Table.Cell className="px-4">
+                                    <div className="flex justify-end gap-0.5">
+                                        <ButtonUtility size="xs" color="tertiary" tooltip="Delete" icon={Trash01} />
+                                        <ButtonUtility size="xs" color="tertiary" tooltip="Edit" icon={Edit01} />
+                                    </div>
+                                </Table.Cell>
+                            </Table.Row>
+                        )}
+                    </Table.Body>
+                </Table>
+            </div>
+            <PaginationPageMinimalCenter page={page} total={totalPages} className="px-4 py-3 md:px-6 md:pt-3 md:pb-4" />
+        </TableCard.Root>
+    );
+};
+

@@ -11,8 +11,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query';
-
-const ExpensesScreen = () => <div>Expenses</div>;
+import { ExpensesScreen } from "./screens/expenses/ExpensesScreen";
 
 export const App = () => {
     const queryClient = new QueryClient();

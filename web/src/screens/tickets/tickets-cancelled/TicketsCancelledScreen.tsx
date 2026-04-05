@@ -1,5 +1,4 @@
 import { LoadingView } from "@/screens/LoadingView";
-import tickets from "../tickets.json";
 import { TicketStatus, TicketsView } from "../TicketsView";
 import { TicketsCancelledView } from "./TicketsCancelledView";
 import { useQuery } from "@tanstack/react-query";

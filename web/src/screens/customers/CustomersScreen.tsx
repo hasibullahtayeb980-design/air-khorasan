@@ -1,5 +1,4 @@
 import React from 'react';
-import customers from "./customers.json";
 import { CustomersView } from './CustomersView';
 import { useQuery } from '@tanstack/react-query';
 import { LoadingView } from '../LoadingView';

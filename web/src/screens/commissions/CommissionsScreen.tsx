@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import commissions from "./commissions.json";
 import { CommissionsView } from "./CommissionsView";
 import { LoadingView } from "../LoadingView";
 
