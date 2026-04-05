@@ -119,6 +119,22 @@ export interface Visa {
   profit: number;
 }
 
+export enum ExpenseCategory {
+    Rent,
+    Salary,
+    Internet,
+    Other
+}
+
+export interface Expense {
+  id: number;
+  title: string;
+  amount: number;
+  category: ExpenseCategory;
+  date: string;
+  description: string;
+}
+
 interface DashboardResponse {
   new_customers: {
     month_year: string;
@@ -172,6 +188,13 @@ export class AKClient {
   fetchVisas = async (page?: number | null): Promise<PaginatedResponse<Visa> | null> => {
     const endpoint = `visas`;
     const response = await this.fetchPaginated<Visa>(endpoint, page);
+
+    return response;
+  };
+
+  fetchExpenses = async (page?: number | null): Promise<PaginatedResponse<Expense> | null> => {
+    const endpoint = `expenses`;
+    const response = await this.fetchPaginated<Expense>(endpoint, page);
 
     return response;
   };

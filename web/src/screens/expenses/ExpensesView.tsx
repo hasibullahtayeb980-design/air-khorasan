@@ -6,31 +6,17 @@ import { Table, TableCard } from "@/components/application/table/table";
 import { Badge, BadgeWithDot } from "@/components/base/badges/badges";
 import { ButtonUtility } from "@/components/base/buttons/button-utility";
 import { DropdownIconSimple } from "@/components/base/dropdown/dropdown-icon-simple";
-
-export enum ExpenseCategory {
-    Rent,
-    Salary,
-    Internet,
-    Other
-}
-
-export interface Expense {
-    id: string;
-    title: string;
-    amount: number;
-    category: ExpenseCategory;
-    date: string;
-    description: string;
-}
+import { ExpenseCategory, type Expense } from "@/services/AKClient";
 
 interface ExpensesViewProps {
     expenses: Expense[];
     totalExpenses: number;
     page: number;
     totalPages: number;
+    onPageChange: (page: number) => void;
 }
  
-export const ExpensesView: React.FC<ExpensesViewProps> = ({ expenses, totalExpenses, page, totalPages }) => {
+export const ExpensesView: React.FC<ExpensesViewProps> = ({ expenses, totalExpenses, page, totalPages, onPageChange }) => {
     const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
         column: "status",
         direction: "ascending",
@@ -57,7 +43,7 @@ export const ExpensesView: React.FC<ExpensesViewProps> = ({ expenses, totalExpen
  
             return 0;
         });
-    }, [sortDescriptor]);
+    }, [sortDescriptor, page]);
 
     return (
         <TableCard.Root className="h-screen flex flex-col">
@@ -106,7 +92,7 @@ export const ExpensesView: React.FC<ExpensesViewProps> = ({ expenses, totalExpen
                     </Table.Body>
                 </Table>
             </div>
-            <PaginationPageMinimalCenter page={page} total={totalPages} className="px-4 py-3 md:px-6 md:pt-3 md:pb-4" />
+            <PaginationPageMinimalCenter page={page} total={totalPages} onPageChange={onPageChange} className="px-4 py-3 md:px-6 md:pt-3 md:pb-4" />
         </TableCard.Root>
     );
 };

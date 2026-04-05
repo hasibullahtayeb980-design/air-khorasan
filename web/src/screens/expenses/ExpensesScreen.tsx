@@ -1,23 +1,28 @@
-import { useQuery } from "@tanstack/react-query";
+import { queryOptions, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ExpensesView } from "./ExpensesView";
 import { LoadingView } from "../LoadingView";
+import { QUERY_EXPENSES_KEY } from "@/services/queries";
+import { akClient } from "@/services";
+import { useEffect, useState } from "react";
 
-export const fetchExpenses = async () => {
-    const response = await fetch("https://127.0.0.1:8000/api/expenses");
-
-    if (!response.ok) {
-        throw new Error("Failed to fetch expenses data");
-    }
-
-    const data = await response.json();
-    return data;
-};
+const expensesQueryOptions = (page: number) => queryOptions({
+  queryKey: [QUERY_EXPENSES_KEY, page],
+  queryFn: () => akClient.fetchExpenses(page),
+})
 
 export const ExpensesScreen = () => {
-    const { data, isLoading, error } = useQuery({
-        queryKey: ['EXPENSES'],
-        queryFn: fetchExpenses,
-    });
+    const [page, setPage] = useState<number>(1);
+    const queryClient = useQueryClient();
+
+    useEffect(() => {
+      queryClient.prefetchQuery(expensesQueryOptions(page + 1))
+    }, [page]);
+
+    const { data, isLoading, error } = useQuery(expensesQueryOptions(page));
+
+    const handlePageChange = (page: number) => {
+      setPage(page);
+    }
 
     if (isLoading) {
         return <LoadingView />;
@@ -31,8 +36,9 @@ export const ExpensesScreen = () => {
         <ExpensesView
             expenses={data?.items || []}
             totalExpenses={data?.total || 0}
-            page={data?.page || 1}
+            page={page}
             totalPages={data?.pages || 1}
+            onPageChange={handlePageChange}
         />
     );
 };
