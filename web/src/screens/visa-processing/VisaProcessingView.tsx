@@ -7,42 +7,17 @@ import { Avatar } from "@/components/base/avatar/avatar";
 import { BadgeWithDot } from "@/components/base/badges/badges";
 import { ButtonUtility } from "@/components/base/buttons/button-utility";
 import { DropdownIconSimple } from "@/components/base/dropdown/dropdown-icon-simple";
-
-export enum VisaType {
-    Tourist,
-    Business,
-    Study,
-}
-
-export enum VisaStatus {
-    Processing,
-    Approved,
-    Rejected,
-}
-
-export interface VisaProcessingEntry {
-    id: number;
-    commissionId: number;
-    customerId: number;
-    customerFullName: string;
-    customerAvatarImageUrl: string;
-    country: string;
-    visaType: VisaType;
-    applicationDate: string;
-    status: VisaStatus;
-    fee: number;
-    companyCost: number;
-    profit: number;
-}
+import { VisaStatus, VisaType, type Visa } from "@/services/AKClient";
 
 interface VisaProcessingViewProps {
-    visas: VisaProcessingEntry[];
-    totalVisas: number;
-    page: number;
-    totalPages: number;
+  visas: Visa[];
+  totalVisas: number;
+  page: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
 }
  
-export const VisaProcessingView: React.FC<VisaProcessingViewProps> = ({ visas, totalVisas, page, totalPages }) => {
+export const VisaProcessingView: React.FC<VisaProcessingViewProps> = ({ visas, totalVisas, page, totalPages, onPageChange }) => {
     const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
         column: "status",
         direction: "ascending",
@@ -69,7 +44,7 @@ export const VisaProcessingView: React.FC<VisaProcessingViewProps> = ({ visas, t
  
             return 0;
         });
-    }, [sortDescriptor]);
+    }, [sortDescriptor, page]);
 
     return (
         <TableCard.Root className="h-screen flex flex-col">
@@ -130,7 +105,7 @@ export const VisaProcessingView: React.FC<VisaProcessingViewProps> = ({ visas, t
                     </Table.Body>
                 </Table>
             </div>
-            <PaginationPageMinimalCenter page={page} total={totalPages} className="px-4 py-3 md:px-6 md:pt-3 md:pb-4" />
+            <PaginationPageMinimalCenter page={page} total={totalPages} onPageChange={onPageChange} className="px-4 py-3 md:px-6 md:pt-3 md:pb-4" />
         </TableCard.Root>
     );
 };

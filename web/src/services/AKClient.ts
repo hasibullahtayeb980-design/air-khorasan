@@ -92,6 +92,33 @@ interface Dashboard {
   totalTicketCancellations: number;
 }
 
+export enum VisaType {
+    Tourist,
+    Business,
+    Study,
+}
+
+export enum VisaStatus {
+    Processing,
+    Approved,
+    Rejected,
+}
+
+export interface Visa {
+  id: number;
+  commissionId: number;
+  customerId: number;
+  customerFullName: string;
+  customerAvatarImageUrl: string;
+  country: string;
+  visaType: VisaType;
+  applicationDate: string;
+  status: VisaStatus;
+  fee: number;
+  companyCost: number;
+  profit: number;
+}
+
 interface DashboardResponse {
   new_customers: {
     month_year: string;
@@ -138,6 +165,13 @@ export class AKClient {
   fetchTicketsCancelled = async (page?: number | null): Promise<PaginatedResponse<TicketCancelled> | null> => {
     const endpoint = `tickets?status=${TicketStatus.Cancelled}`;
     const response = await this.fetchPaginated<TicketCancelled>(endpoint, page);
+
+    return response;
+  };
+
+  fetchVisas = async (page?: number | null): Promise<PaginatedResponse<Visa> | null> => {
+    const endpoint = `visas`;
+    const response = await this.fetchPaginated<Visa>(endpoint, page);
 
     return response;
   };
