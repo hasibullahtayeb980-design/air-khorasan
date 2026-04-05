@@ -21,33 +21,35 @@ export enum VisaStatus {
 }
 
 export interface VisaProcessingEntry {
-    id: string;
-    visaType: VisaType;
-    customerId: string;
+    id: number;
+    commissionId: number;
+    customerId: number;
     customerFullName: string;
+    customerAvatarImageUrl: string;
     country: string;
-    avatarUrl: string;
+    visaType: VisaType;
     applicationDate: string;
     status: VisaStatus;
     fee: number;
     companyCost: number;
     profit: number;
-    createdAt: string;
 }
 
 interface VisaProcessingViewProps {
-    visaProcessingData: VisaProcessingEntry[];
-    visaProcessingDataLength: number;
+    visas: VisaProcessingEntry[];
+    totalVisas: number;
+    page: number;
+    totalPages: number;
 }
  
-export const VisaProcessingView: React.FC<VisaProcessingViewProps> = ({ visaProcessingData, visaProcessingDataLength }) => {
+export const VisaProcessingView: React.FC<VisaProcessingViewProps> = ({ visas, totalVisas, page, totalPages }) => {
     const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
         column: "status",
         direction: "ascending",
     });
  
     const sortedItems = useMemo(() => {
-        return visaProcessingData.sort((a, b) => {
+        return visas.sort((a, b) => {
             const first = a[sortDescriptor.column as keyof typeof a];
             const second = b[sortDescriptor.column as keyof typeof b];
  
@@ -73,7 +75,7 @@ export const VisaProcessingView: React.FC<VisaProcessingViewProps> = ({ visaProc
         <TableCard.Root className="h-screen flex flex-col">
             <TableCard.Header
                 title="Visa Processing"
-                badge={visaProcessingDataLength}
+                badge={totalVisas}
                 contentTrailing={
                     <div className="absolute top-5 right-4 md:right-6">
                         <DropdownIconSimple />
@@ -86,12 +88,11 @@ export const VisaProcessingView: React.FC<VisaProcessingViewProps> = ({ visaProc
                         <Table.Head id="id" label="Visa Processing ID" isRowHeader allowsSorting className="w-full max-w-1/4" />
                         <Table.Head id="customer" label="Customer" allowsSorting />
                         <Table.Head id="country" label="Country" allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="visaType" label="Visa Type" allowsSorting tooltip="This is a tooltip" />
                         <Table.Head id="applicationDate" label="Application Date" allowsSorting tooltip="This is a tooltip" />
-                        <Table.Head id="status" label="Status" allowsSorting tooltip="This is a tooltip" />
                         <Table.Head id="fee" label="Fee" allowsSorting tooltip="This is a tooltip" />
                         <Table.Head id="companyCost" label="Company Cost" allowsSorting tooltip="This is a tooltip" />
                         <Table.Head id="profit" label="Profit" allowsSorting tooltip="This is a tooltip" />
-                        <Table.Head id="createdAt" label="Created At" allowsSorting tooltip="This is a tooltip" />
                         <Table.Head id="actions" />
                     </Table.Header>
     
@@ -100,25 +101,24 @@ export const VisaProcessingView: React.FC<VisaProcessingViewProps> = ({ visaProc
                             <Table.Row id={item.id}>
                                 <Table.Cell>
                                     <BadgeWithDot size="sm" color={item.status === VisaStatus.Approved ? "success" : item.status === VisaStatus.Rejected ? "error" : "warning"} type="modern">
-                                        {item.id.split('-')[0]}
+                                        {item.id}
                                     </BadgeWithDot>
                                 </Table.Cell>
                                 <Table.Cell>
                                     <div className="flex items-center gap-3">
-                                        <Avatar src={item.avatarUrl} alt={item.customerFullName} size="md" />
+                                        <Avatar src={item.customerAvatarImageUrl} alt={item.customerFullName} size="md" />
                                         <div className="whitespace-nowrap">
                                             <p className="text-sm font-medium text-primary">{item.customerFullName}</p>
-                                            <p className="text-sm text-tertiary">{item.customerId.split('-')[0]}</p>
+                                            <p className="text-sm text-tertiary">{item.customerId}</p>
                                         </div>
                                     </div>
                                 </Table.Cell>
                                 <Table.Cell className="whitespace-nowrap">{item.country}</Table.Cell>
-                                <Table.Cell className="whitespace-nowrap">{item.applicationDate}</Table.Cell>
-                                <Table.Cell className="whitespace-nowrap">{item.status}</Table.Cell>
+                                <Table.Cell className="whitespace-nowrap">{item.visaType === VisaType.Tourist ? "Tourist" : item.visaType === VisaType.Business ? "Business" : "Study"}</Table.Cell>
+                                <Table.Cell className="whitespace-nowrap">{new Date(item.applicationDate).toLocaleDateString()}</Table.Cell>
                                 <Table.Cell className="whitespace-nowrap">{item.fee}</Table.Cell>
                                 <Table.Cell className="whitespace-nowrap">{item.companyCost}</Table.Cell>
                                 <Table.Cell className="whitespace-nowrap">{item.profit}</Table.Cell>
-                                <Table.Cell className="whitespace-nowrap">{new Date(item.createdAt).toLocaleDateString()}</Table.Cell>
                                 <Table.Cell className="px-4">
                                     <div className="flex justify-end gap-0.5">
                                         <ButtonUtility size="xs" color="tertiary" tooltip="Delete" icon={Trash01} />
@@ -130,7 +130,7 @@ export const VisaProcessingView: React.FC<VisaProcessingViewProps> = ({ visaProc
                     </Table.Body>
                 </Table>
             </div>
-            <PaginationPageMinimalCenter page={1} total={10} className="px-4 py-3 md:px-6 md:pt-3 md:pb-4" />
+            <PaginationPageMinimalCenter page={page} total={totalPages} className="px-4 py-3 md:px-6 md:pt-3 md:pb-4" />
         </TableCard.Root>
     );
 };
