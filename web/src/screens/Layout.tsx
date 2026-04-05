@@ -1,11 +1,10 @@
 import type { NavItemDividerType, NavItemType } from '@/components/application/app-navigation/config';
 import { SidebarNavigationSectionDividers } from '@/components/application/app-navigation/sidebar-navigation/sidebar-section-dividers';
+import { akClient } from '@/services';
+import { QUERY_DASHBOARD_KEY } from '@/services/queries';
 import { useQuery } from '@tanstack/react-query';
 import { BarChartSquare02, CreditCard02, CurrencyDollarCircle, FileCheck02, MessageChatCircle, Users01 } from '@untitledui/icons';
 import { Outlet } from 'react-router-dom';
-import { fetchDashboard } from './dashboard/DashboardScreen';
-import { LoadingIndicator } from "@/components/application/loading-indicator/loading-indicator";
-import { LoadingView } from './LoadingView';
 
 const getNavItems = (
     totalCustomers: number,
@@ -58,8 +57,8 @@ const getNavItems = (
 
 export const Layout = () => {
     const { data, isLoading, error } = useQuery({
-        queryKey: ['DASHBOARD'],
-        queryFn: fetchDashboard,
+        queryKey: [QUERY_DASHBOARD_KEY],
+        queryFn: akClient.fetchDashboard,
     });
 
     let navItems = getNavItems(

@@ -78,7 +78,42 @@ export interface TicketCancelled {
   penalty: number;
 }
 
+interface Dashboard {
+  newCustomers: {
+    monthYear: string,
+    newCustomers: number,
+  }[];
+  latestTicketChanges: TicketChange[];
+  latestTicketCancellations: TicketCancelled[];
+  totalCustomers: number;
+  changeInPercentage: number;
+  totalTickets: number;
+  totalTicketChanges: number;
+  totalTicketCancellations: number;
+}
+
+interface DashboardResponse {
+  new_customers: {
+    month_year: string;
+    new_customers: number;
+  }[];
+  latest_ticket_changes: TicketChange[],
+  latest_ticket_cancellations: TicketCancelled[],
+  total_customers: number,
+  change_in_percentage: number,
+  total_tickets: number,
+  total_ticket_changes: number,
+  total_ticket_cancellations: number,
+}
+
 export class AKClient {
+  fetchDashboard = async (): Promise<Dashboard> => {
+    const endpoint = `dashboard`;
+    const response = await this.get<DashboardResponse>(endpoint);
+
+    return this.processDashboardResponse(response);
+  };
+
   fetchCustomers = async (page?: number | null): Promise<PaginatedResponse<Customer> | null> => {
     const endpoint = `customers`;
     const response = await this.fetchPaginated<Customer>(endpoint, page);
@@ -107,6 +142,20 @@ export class AKClient {
     return response;
   };
 
+  private processDashboardResponse = (response: DashboardResponse): Dashboard => ({
+    newCustomers: response.new_customers.map((item: any) => ({
+        monthYear: `${item.month_year}-01T00:00:00`,
+        newCustomers: item.new_customers,
+    })),
+    latestTicketChanges: response.latest_ticket_changes,
+    latestTicketCancellations: response.latest_ticket_cancellations,
+    totalCustomers: response.total_customers,
+    changeInPercentage: response.change_in_percentage,
+    totalTickets: response.total_tickets,
+    totalTicketChanges: response.total_ticket_changes,
+    totalTicketCancellations: response.total_ticket_cancellations,
+  });
+
   private fetchPaginated = async<Type>(
     endpoint: string,
     page?: number | null
@@ -121,7 +170,7 @@ export class AKClient {
     return this.get(paginatedEndpoint);
   };
 
-  private get = async (endpoint: string): Promise<any> => {
+  private get = async<Type> (endpoint: string): Promise<Type> => {
     return this.request(endpoint, HttpMethod.GET);
   };
 

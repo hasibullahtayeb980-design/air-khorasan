@@ -3,84 +3,17 @@ import { ChartTooltipContent } from "@/components/application/charts/charts-base
 import { useBreakpoint } from "@/hooks/use-breakpoint";
 import { cx } from "@/utils/cx";
 import { MinimalTicketsView } from "../tickets/MinimalTicketsView";
-import { TicketStatus } from "@/services/AKClient";
- 
-const lineData = [
-    {
-        date: new Date(2025, 0, 1),
-        A: 600,
-    },
-    {
-        date: new Date(2025, 1, 1),
-        A: 620,
-    },
-    {
-        date: new Date(2025, 2, 1),
-        A: 630,
-    },
-    {
-        date: new Date(2025, 3, 1),
-        A: 650,
-    },
-    {
-        date: new Date(2025, 4, 1),
-        A: 600,
-    },
-    {
-        date: new Date(2025, 5, 1),
-        A: 650,
-    },
-    {
-        date: new Date(2025, 6, 1),
-        A: 620,
-    },
-    {
-        date: new Date(2025, 7, 1),
-        A: 750,
-    },
-    {
-        date: new Date(2025, 8, 1),
-        A: 780,
-    },
-    {
-        date: new Date(2025, 9, 1),
-        A: 750,
-    },
-    {
-        date: new Date(2025, 10, 1),
-        A: 780,
-    },
-    {
-        date: new Date(2025, 11, 1),
-        A: 820,
-    },
-];
+import { TicketStatus, type TicketCancelled, type TicketChange } from "@/services/AKClient";
 
 interface NewCustomersInterface {
-    monthYear: string;
-    newCustomers: number;
-}
-
-export interface LatestTicketChangeInterface {
-    id: number;
-    ticketId: number;
-    customerId: number;
-    customerFullName: string;
-    customerAvatarImageUrl: string;
-}
-
-export interface LatestTicketCancellationInterface {
-    id: number;
-    ticketId: number;
-    customerId: number;
-    customerFullName: string;
-    customerAvatarImageUrl: string;
+  monthYear: string;
+  newCustomers: number;
 }
 
 interface DashboardViewProps {
     newCustomers: NewCustomersInterface[];
-    latestTicketChanges: LatestTicketChangeInterface[];
-    latestTicketCancellations: LatestTicketChangeInterface[];
+    latestTicketChanges: TicketChange[];
+    latestTicketCancellations: TicketCancelled[];
     totalCustomers: number;
     changeInPercentage: number;
 }
