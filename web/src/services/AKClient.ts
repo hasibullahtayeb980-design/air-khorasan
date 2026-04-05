@@ -135,6 +135,14 @@ export interface Expense {
   description: string;
 }
 
+export interface Commission {
+  id: number;
+  partnerCompany: string;
+  visaId: number;
+  amount: number;
+  date: string;
+}
+
 interface DashboardResponse {
   new_customers: {
     month_year: string;
@@ -195,6 +203,13 @@ export class AKClient {
   fetchExpenses = async (page?: number | null): Promise<PaginatedResponse<Expense> | null> => {
     const endpoint = `expenses`;
     const response = await this.fetchPaginated<Expense>(endpoint, page);
+
+    return response;
+  };
+
+  fetchCommissions = async (page?: number | null): Promise<PaginatedResponse<Commission> | null> => {
+    const endpoint = `commissions`;
+    const response = await this.fetchPaginated<Commission>(endpoint, page);
 
     return response;
   };

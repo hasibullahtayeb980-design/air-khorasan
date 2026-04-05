@@ -1,23 +1,29 @@
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, queryOptions, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CommissionsView } from "./CommissionsView";
 import { LoadingView } from "../LoadingView";
+import { QUERY_COMMISSIONS_KEY } from "@/services/queries";
+import { akClient } from "@/services";
+import { useEffect, useState } from "react";
 
-export const fetchCommissions = async () => {
-    const response = await fetch("https://127.0.0.1:8000/api/commissions");
-
-    if (!response.ok) {
-        throw new Error("Failed to fetch commissions data");
-    }
-
-    const data = await response.json();
-    return data;
-};
+const commissionsQueryOptions = (page: number) => queryOptions({
+  queryKey: [QUERY_COMMISSIONS_KEY, page],
+  queryFn: () => akClient.fetchCommissions(page),
+  placeholderData: keepPreviousData,
+});
 
 export const CommissionsScreen = () => {
-    const { data, isLoading, error } = useQuery({
-        queryKey: ['COMMISSIONS'],
-        queryFn: fetchCommissions,
-    });
+  const [page, setPage] = useState<number>(1);
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    queryClient.prefetchQuery(commissionsQueryOptions(page + 1))
+  }, [page])
+
+    const { data, isLoading, error } = useQuery(commissionsQueryOptions(page));
+
+  const handlePageChange = (page: number) => {
+    setPage(page);
+  }
 
     if (isLoading) {
         return <LoadingView />;
@@ -31,8 +37,9 @@ export const CommissionsScreen = () => {
         <CommissionsView
             commissions={data?.items || []}
             totalCommissions={data?.total || 0}
-            page={data?.page || 1}
+            page={page}
             totalPages={data?.pages || 1}
+            onPageChange={handlePageChange}
         />
     );
 };

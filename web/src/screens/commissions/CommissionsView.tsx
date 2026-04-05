@@ -6,23 +6,17 @@ import { Table, TableCard } from "@/components/application/table/table";
 import { Badge, BadgeWithDot } from "@/components/base/badges/badges";
 import { ButtonUtility } from "@/components/base/buttons/button-utility";
 import { DropdownIconSimple } from "@/components/base/dropdown/dropdown-icon-simple";
-
-export interface Commission {
-    id: string;
-    partnerCompany: string;
-    visaId: string;
-    amount: number;
-    date: string;
-}
+import type { Commission } from "@/services/AKClient";
 
 interface CommissionsViewProps {
     commissions: Commission[];
     totalCommissions: number;
     page: number;
     totalPages: number;
+    onPageChange: (page: number) => void;
 }
  
-export const CommissionsView: React.FC<CommissionsViewProps> = ({ commissions, totalCommissions, page, totalPages }) => {
+export const CommissionsView: React.FC<CommissionsViewProps> = ({ commissions, totalCommissions, page, totalPages, onPageChange }) => {
     const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
         column: "status",
         direction: "ascending",
@@ -49,7 +43,7 @@ export const CommissionsView: React.FC<CommissionsViewProps> = ({ commissions, t
  
             return 0;
         });
-    }, [sortDescriptor]);
+    }, [sortDescriptor, page]);
 
     return (
         <TableCard.Root className="h-screen flex flex-col">
@@ -96,7 +90,7 @@ export const CommissionsView: React.FC<CommissionsViewProps> = ({ commissions, t
                     </Table.Body>
                 </Table>
             </div>
-            <PaginationPageMinimalCenter page={page} total={totalPages} className="px-4 py-3 md:px-6 md:pt-3 md:pb-4" />
+            <PaginationPageMinimalCenter page={page} total={totalPages} onPageChange={onPageChange} className="px-4 py-3 md:px-6 md:pt-3 md:pb-4" />
         </TableCard.Root>
     );
 };

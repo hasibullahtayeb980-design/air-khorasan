@@ -1,4 +1,4 @@
-import { queryOptions, useQuery, useQueryClient } from "@tanstack/react-query";
+import { keepPreviousData, queryOptions, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ExpensesView } from "./ExpensesView";
 import { LoadingView } from "../LoadingView";
 import { QUERY_EXPENSES_KEY } from "@/services/queries";
@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 const expensesQueryOptions = (page: number) => queryOptions({
   queryKey: [QUERY_EXPENSES_KEY, page],
   queryFn: () => akClient.fetchExpenses(page),
+  placeholderData: keepPreviousData,
 })
 
 export const ExpensesScreen = () => {

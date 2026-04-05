@@ -1,4 +1,4 @@
-import { queryOptions, useQuery, useQueryClient } from "@tanstack/react-query";
+import { keepPreviousData, queryOptions, useQuery, useQueryClient } from "@tanstack/react-query";
 import { VisaProcessingView } from "./VisaProcessingView";
 import { LoadingView } from "../LoadingView";
 import { QUERY_VISAS_KEY } from "@/services/queries";
@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 const visaQueryOptions = (page: number) => queryOptions({
   queryKey: [QUERY_VISAS_KEY, page],
   queryFn: () => akClient.fetchVisas(page),
+  placeholderData: keepPreviousData,
 });
 
 export const VisaProcessingScreen = () => {
