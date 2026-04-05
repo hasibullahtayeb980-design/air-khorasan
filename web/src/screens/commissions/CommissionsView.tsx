@@ -17,10 +17,12 @@ export interface Commission {
 
 interface CommissionsViewProps {
     commissions: Commission[];
-    commissionsLength: number;
+    totalCommissions: number;
+    page: number;
+    totalPages: number;
 }
  
-export const CommissionsView: React.FC<CommissionsViewProps> = ({ commissions, commissionsLength }) => {
+export const CommissionsView: React.FC<CommissionsViewProps> = ({ commissions, totalCommissions, page, totalPages }) => {
     const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
         column: "status",
         direction: "ascending",
@@ -53,7 +55,7 @@ export const CommissionsView: React.FC<CommissionsViewProps> = ({ commissions, c
         <TableCard.Root className="h-screen flex flex-col">
             <TableCard.Header
                 title="Commissions"
-                badge={commissionsLength}
+                badge={totalCommissions}
                 contentTrailing={
                     <div className="absolute top-5 right-4 md:right-6">
                         <DropdownIconSimple />
@@ -76,11 +78,11 @@ export const CommissionsView: React.FC<CommissionsViewProps> = ({ commissions, c
                             <Table.Row id={item.id}>
                                 <Table.Cell>
                                     <Badge size="sm" type="modern">
-                                        {item.id.split('-')[0]}
+                                        {item.id}
                                     </Badge>
                                 </Table.Cell>
                                 <Table.Cell className="whitespace-nowrap">{item.partnerCompany}</Table.Cell>
-                                <Table.Cell className="whitespace-nowrap">{item.visaId.split('-')[0]}</Table.Cell>
+                                <Table.Cell className="whitespace-nowrap">{item.visaId}</Table.Cell>
                                 <Table.Cell className="whitespace-nowrap">{item.amount}</Table.Cell>
                                 <Table.Cell className="whitespace-nowrap">{new Date(item.date).toLocaleDateString()}</Table.Cell>
                                 <Table.Cell className="px-4">
@@ -94,7 +96,7 @@ export const CommissionsView: React.FC<CommissionsViewProps> = ({ commissions, c
                     </Table.Body>
                 </Table>
             </div>
-            <PaginationPageMinimalCenter page={1} total={10} className="px-4 py-3 md:px-6 md:pt-3 md:pb-4" />
+            <PaginationPageMinimalCenter page={page} total={totalPages} className="px-4 py-3 md:px-6 md:pt-3 md:pb-4" />
         </TableCard.Root>
     );
 };
