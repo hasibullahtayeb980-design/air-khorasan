@@ -10,17 +10,31 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Customer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\ObjectMapper\ObjectMapperInterface;
+use App\DTOs\CustomerDTO;
 
 final class CustomerController extends AbstractController
 {
     #[Route('/api/customers', methods: ['GET'])]
-    public function index(Request $request, EntityManagerInterface $em): JsonResponse
+    public function index(Request $request, EntityManagerInterface $em, ObjectMapperInterface $objectMapper): JsonResponse
     {
         $page = $request->query->getInt('page', 1);
         $limit = $request->query->getInt('limit', 10);
 
         $customers = $em->getRepository(Customer::class)->findPaginated($page, $limit);
-        return $this->json($customers);
+        $customersDTOCollection = [];
+
+        foreach ($customers['items'] as $customer) {
+            $customerDTO = $objectMapper->map($customer, CustomerDTO::class);
+            $customersDTOCollection[] = $customerDTO;
+        }
+
+        return $this->json([
+            'items' => $customersDTOCollection,
+            'total' => $customers['total'],
+            'page' => $page,
+            'pages' => $customers['pages']
+        ]);
     }
 
     #[Route('/api/customers/{id}', methods: ['GET'])]
