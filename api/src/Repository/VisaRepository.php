@@ -28,6 +28,7 @@ class VisaRepository extends ServiceEntityRepository
 
         // Set pagination in query
         $queryBuilder = $this->createQueryBuilder('a')
+            ->orderBy('a.applicationDate', 'DESC')
             ->setMaxResults($limit)
             ->setFirstResult($offset);
 

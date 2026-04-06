@@ -28,6 +28,7 @@ class TicketRepository extends ServiceEntityRepository
 
         // Set pagination in query
         $queryBuilder = $this->createQueryBuilder('a')
+            ->orderBy('a.createdAt', 'DESC')
             ->setMaxResults($limit)
             ->setFirstResult($offset);
 

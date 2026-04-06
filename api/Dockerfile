@@ -1,35 +1,25 @@
 FROM php:8.5-fpm
 
-# system deps + required libs for Symfony + doctrine
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    git \
-    zip \
-    unzip \
-    libzip-dev \
-    libicu-dev \
-    libxml2-dev \
-    zlib1g-dev \
-    libpng-dev \
-    libonig-dev \
-    curl \
-    && docker-php-ext-install -j$(nproc) pdo pdo_mysql zip intl opcache \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y zip git-all curl
+RUN docker-php-ext-install pdo pdo_mysql intl xsl gd pdo_pgsql zip
+
+ENV COMPOSER_ALLOW_SUPERUSER=1
 
 # Install Composer (using official Composer image to avoid extra steps)
-COPY --from=composer /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.9 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www
 
 # Install PHP dependencies before copying all source (cache layer)
 COPY composer.json composer.lock ./
-RUN composer install --no-interaction --prefer-dist --optimize-autoloader --no-scripts --no-dev --ignore-platform-reqs
+RUN composer install --no-interaction --prefer-dist --no-scripts --no-dev
 
 # Copy app sources
 COPY . ./
 
-# Prepare cache log dirs for Symfony
-RUN mkdir -p var/cache var/log && chown -R www-data:www-data var/cache var/log
-RUN chown -R www-data:www-data public
+RUN curl -sS https://get.symfony.com/cli/installer | bash
+RUN mv /root/.symfony5/bin/symfony /usr/local/bin/symfony
+RUN symfony server:ca:install && symfony book:check-requirements
 
 EXPOSE 9000
 CMD ["php-fpm"]

@@ -28,6 +28,7 @@ class CommissionRepository extends ServiceEntityRepository
 
         // Set pagination in query
         $queryBuilder = $this->createQueryBuilder('a')
+            ->orderBy('a.date', 'DESC')
             ->setMaxResults($limit)
             ->setFirstResult($offset);
 
