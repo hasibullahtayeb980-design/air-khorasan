@@ -2,8 +2,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Formik } from "formik";
 import type React from "react";
 import * as yup from "yup";
-import { NewCustomerModalView } from "./NewCustomerModalView2";
-import type { Customer } from "@/services/AKClient";
+import { NewCustomerModalView } from "./NewCustomerModalView";
+import type { Customer, CustomerInput } from "@/services/AKClient";
+import { akClient } from "@/services";
+import { QUERY_CUSTOMERS_KEY } from "@/services/queries";
 
 const newCustomerValidationSchema = yup.object().shape({
   fullName: yup
@@ -33,7 +35,6 @@ interface NewCustomerModalProps {
     onSuccess: () => void;
 }
 
-type CustomerInput = Omit<Customer, "id" | "createdAt">
 type CustomerPartialFormInput = Omit<CustomerInput, "passportNumber" | "tazkiraNumber" | "avatarImageUrl">;
 
 export interface CustomerFormInput extends CustomerPartialFormInput {
@@ -42,51 +43,51 @@ export interface CustomerFormInput extends CustomerPartialFormInput {
 }
 
 export const NewCustomerModal: React.FC<NewCustomerModalProps> = ({ visible, onCancel, onSuccess}) => {
-    const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
+
+  const createCustomerMutation = useMutation({
+    mutationFn: (input: CustomerInput) => akClient.createCustomer(input),
+  });
 
   const handleSubmit = async (
     values: CustomerFormInput
   ) => {
     try {
-        const input: CustomerInput = {
-            fullName: values.fullName,
-            phone: values.phone,
-            email: values.email,
-            passportNumber: Number(values.passportNumber),
-            tazkiraNumber: Number(values.tazkiraNumber),
-            avatarImageUrl: "https://cdn-icons-png.flaticon.com/128/149/149071.png"
-        };
+      const input: CustomerInput = {
+        fullName: values.fullName,
+        phone: values.phone,
+        email: values.email,
+        passportNumber: Number(values.passportNumber),
+        tazkiraNumber: Number(values.tazkiraNumber),
+        avatarImageUrl: "https://cdn-icons-png.flaticon.com/128/149/149071.png"
+      };
 
-        /* const customer = await createCustomerMutation.mutateAsync(
-            input
-        );
+      const customer = await createCustomerMutation.mutateAsync(
+        input
+      );
 
-        console.log("New customer added with ID:", customer?.id);*/
+      console.log("New customer added with ID:", customer?.id);
 
-        //addCustomer(customer);
-        onSuccess();
+      addCustomer(customer);
+      onSuccess();
     } catch (error) {
         console.error("Error creating customer:", error);
     }
   };
 
-  /*const addCustomer = (customer: Customer) => {
+  const addCustomer = (customer: Customer) => {
     queryClient.setQueryData(
-      [QUERY_USER_QUOTES_KEY],
-      (data: InfiniteData<QuotesResponse>) => {
+      [QUERY_CUSTOMERS_KEY, 1],
+      (data: any) => {
+        data.items.splice(-1);
+        data.items.unshift(customer);
+
         return {
           ...data,
-          pages: [
-            {
-              ...data.pages[0],
-              quotes: [quote, ...data.pages[0].quotes],
-            },
-            ...data.pages.slice(1),
-          ],
-        };
+        }
       }
     );
-  };*/
+  };
 
   return (
     <Formik

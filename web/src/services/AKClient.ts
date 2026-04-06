@@ -143,6 +143,8 @@ export interface Commission {
   date: string;
 }
 
+export type CustomerInput = Omit<Customer, "id" | "createdAt">
+
 interface DashboardResponse {
   new_customers: {
     month_year: string;
@@ -214,6 +216,11 @@ export class AKClient {
     return response;
   };
 
+  createCustomer = async (input: CustomerInput): Promise<Customer> => {
+    const endpoint = `customers`;
+    return this.post(endpoint, input);
+  };
+
   private processDashboardResponse = (response: DashboardResponse): Dashboard => ({
     newCustomers: response.new_customers.map((item: any) => ({
         monthYear: `${item.month_year}-01T00:00:00`,
@@ -244,6 +251,18 @@ export class AKClient {
 
   private get = async<Type> (endpoint: string): Promise<Type> => {
     return this.request(endpoint, HttpMethod.GET);
+  };
+
+  private post = async (endpoint: string, body?: any): Promise<any> => {
+    return this.request(endpoint, HttpMethod.POST, body);
+  };
+
+  private patch = async (endpoint: string, body?: any): Promise<any> => {
+    return this.request(endpoint, HttpMethod.PATCH, body);
+  };
+
+  private delete = async (endpoint: string): Promise<any> => {
+    return this.request(endpoint, HttpMethod.DELETE);
   };
 
   private request = async (

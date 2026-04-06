@@ -17,19 +17,34 @@ interface NewCustomerModalViewProps {
   errors: FormikErrors<CustomerFormInput>;
 }
 
-export const NewCustomerModalView: React.FC<NewCustomerModalViewProps> = ({ visible, onCancel }) => {
+export const NewCustomerModalView: React.FC<NewCustomerModalViewProps> = ({
+  onCancel,
+  onSubmit,
+  visible,
+  isPending,
+  handleChange,
+  handleBlur,
+  values,
+  errors,
+}) => {
   return (
     <Modal
       title="Add Customer"
       description="Add a new customer to your database."
       icon={Flag05}
       onCancel={onCancel}
+      visible={visible}
     >
       <div data-input-wrapper="true" data-input-size="md" className="group flex h-max w-full flex-col items-start justify-start gap-1.5 sm:col-span-2" data-rac="">
         <Input
           isRequired
           label="Full Name"
           placeholder="What is the full name of the customer?"
+          onChange={handleChange("fullName")}
+          onBlur={handleBlur("fullName")}
+          value={values.fullName}
+          isInvalid={Boolean(errors.fullName)}
+          hint={errors.fullName}
         />
       </div>
 
@@ -38,6 +53,11 @@ export const NewCustomerModalView: React.FC<NewCustomerModalViewProps> = ({ visi
         icon={Phone}
         label="Phone"
         placeholder="Customer's phone number"
+        onChange={handleChange("phone")}
+        onBlur={handleBlur("phone")}
+        value={values.phone}
+        isInvalid={Boolean(errors.phone)}
+        hint={errors.phone}
       />
 
       <Input
@@ -45,6 +65,11 @@ export const NewCustomerModalView: React.FC<NewCustomerModalViewProps> = ({ visi
         icon={Mail01}
         label="Email"
         placeholder="example@gmail.com"
+        onChange={handleChange("email")}
+        onBlur={handleBlur("email")}
+        value={values.email}
+        isInvalid={Boolean(errors.email)}
+        hint={errors.email}
       />
 
       <Input
@@ -52,6 +77,11 @@ export const NewCustomerModalView: React.FC<NewCustomerModalViewProps> = ({ visi
         icon={Passport}
         label="Passport Number"
         placeholder="Enter passport number"
+        onChange={handleChange("passportNumber")}
+        onBlur={handleBlur("passportNumber")}
+        value={values.passportNumber}
+        isInvalid={Boolean(errors.passportNumber)}
+        hint={errors.passportNumber}
       />
 
       <Input
@@ -59,10 +89,23 @@ export const NewCustomerModalView: React.FC<NewCustomerModalViewProps> = ({ visi
         icon={CreditCard02}
         label="Tazkira Number"
         placeholder="Enter tazkira number"
+        onChange={handleChange("tazkiraNumber")}
+        onBlur={handleBlur("tazkiraNumber")}
+        value={values.tazkiraNumber}
+        isInvalid={Boolean(errors.tazkiraNumber)}
+        hint={errors.tazkiraNumber}
       />
 
       <Button onClick={onCancel} color="secondary" size="md">Cancel</Button>
-      <Button color="primary" size="md">Add Customer</Button>
+
+      <Button
+        disabled={isPending}
+        onClick={onSubmit}
+        color="primary"
+        size="md"
+      >
+        Add Customer
+      </Button>
 
       <div className="h-5 w-full"></div>
     </Modal>

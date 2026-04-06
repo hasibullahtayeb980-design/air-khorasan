@@ -63,13 +63,17 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
     const onNewCustomerFormCancelClick = () => {
         setNewCustomerFormVisible(false);
     }
+
+    const onNewCustomerFormSuccess = () => {
+        setNewCustomerFormVisible(false);
+    }
  
     return (
         <div>
             {newCustomerFormVisible && (
                 <NewCustomerModal
                     onCancel={onNewCustomerFormCancelClick}
-                    onSuccess={() => null}
+                    onSuccess={onNewCustomerFormSuccess}
                     visible={newCustomerFormVisible}
                 />
             )}
