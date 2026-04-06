@@ -21,6 +21,16 @@ composer install
 
 Open `.env` file within the `api` directory and edit the `DATABASE_URL` with your database credentials.
 
+Execute the database migrations:
+```
+symfony console doctrine:migrations:migrate
+```
+
+Now execute the following command to seed the database with fake data:
+```
+symfony console doctrine:fixtures:load
+```
+
 Then simply run the following command to run a development server for the REST API backend:
 ```
 symfony serve
