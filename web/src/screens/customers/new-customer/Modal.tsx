@@ -2,16 +2,27 @@ import { Button } from "@/components/base/buttons/button";
 import { Input } from "@/components/base/input/input";
 import { FeaturedIcon } from "@/components/foundations/featured-icon/featured-icon";
 import { CheckCircle, Flag01, Flag05, UserPlus01, X } from "@untitledui/icons";
-import type { ReactNode } from "react";
+import type { ReactNode, SVGProps } from "react";
 import type React from "react";
 
+interface Props extends SVGProps<SVGSVGElement> {
+    color?: string;
+    size?: number;
+}
+
 interface ModalProps {
+  title: string;
+  description: string;
   onCancel: () => void;
+  icon: React.FC<Props>;
   children: ReactNode;
 }
 
 export const Modal: React.FC<ModalProps> = ({
+  title,
+  description,
   onCancel,
+  icon,
   children,
 }) => {
     return (
@@ -23,7 +34,7 @@ export const Modal: React.FC<ModalProps> = ({
                   <div className="relative w-max max-sm:hidden">
                       <div className="relative flex shrink-0 items-center justify-center *:data-icon:size-5 bg-primary shadow-xs-skeuomorphic ring-1 ring-primary ring-inset size-10 rounded-lg text-fg-secondary">
                           <FeaturedIcon
-                            icon={Flag05}
+                            icon={icon}
                             color="gray"
                             theme="modern"
                             size="md"
@@ -44,45 +55,19 @@ export const Modal: React.FC<ModalProps> = ({
 
                 <div className="px-4 sm:px-6 z-10 flex flex-col gap-0.5">
                   <h2 slot="title" className="text-md font-semibold text-primary">
-                    Add customer
+                    {title}
                   </h2>
 
                   <p className="text-sm text-tertiary">
-                    Add a new customer to your database.
+                    {description}
                   </p>
 
                   <div className="h-5 w-full"></div>
                 </div>
 
                 <div role="group" aria-roledescription="slide" className="min-w-0 shrink-0 grow-0 basis-full grid w-full grid-cols-1 items-start justify-start gap-4 px-4 sm:grid-cols-[280px_1fr] sm:px-6">
-                  <div data-input-wrapper="true" data-input-size="md" className="group flex h-max w-full flex-col items-start justify-start gap-1.5 sm:col-span-2" data-rac="">
-                    <Input
-                      isRequired
-                      label="Full Name"
-                      hint="This is a hint text to help user."
-                      placeholder="What is the full name of the customer?"
-                      tooltip="This is a tooltip"
-                    />
-                  </div>
-
-                  <Input
-                    isRequired
-                    label="Full Name"
-                    hint="This is a hint text to help user."
-                    placeholder="What is the full name of the customer?"
-                    tooltip="This is a tooltip"
-                  />
-
-                  <Input
-                    isRequired
-                    label="Full Name"
-                    hint="This is a hint text to help user."
-                    placeholder="What is the full name of the customer?"
-                    tooltip="This is a tooltip"
-                  />
+                  {children}
                 </div>
-
-                {children}
               </div>
             </section>
           </div>
