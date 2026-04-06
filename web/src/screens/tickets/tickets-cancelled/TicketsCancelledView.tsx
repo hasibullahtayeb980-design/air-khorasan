@@ -47,7 +47,7 @@ export const TicketsCancelledView: React.FC<TicketsViewProps> = ({ ticketsCancel
     }, [sortDescriptor, page]);
 
     return (
-        <TableCard.Root className="h-screen flex flex-col">
+        <TableCard.Root className="dark-mode h-screen flex flex-col">
             <TableCard.Header
                 title="Tickets Cancelled"
                 badge={totalTicketsCancelled}

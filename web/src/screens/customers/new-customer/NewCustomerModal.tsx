@@ -115,7 +115,7 @@ export const NewCustomerModal: React.FC<NewCustomerModalProps> = ({ visible, onC
             visible={visible}
             onCancel={onCancel}
             onSubmit={() => handleSubmit()}
-            isPending={false}
+            isPending={createCustomerMutation.isPending}
             handleChange={handleChange}
             handleBlur={handleBlur}
             values={values}

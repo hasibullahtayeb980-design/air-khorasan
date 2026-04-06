@@ -100,6 +100,7 @@ export const NewCustomerModalView: React.FC<NewCustomerModalViewProps> = ({
 
       <Button
         disabled={isPending}
+        isLoading={isPending}
         onClick={onSubmit}
         color="primary"
         size="md"

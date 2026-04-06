@@ -47,7 +47,7 @@ export const VisaProcessingView: React.FC<VisaProcessingViewProps> = ({ visas, t
     }, [sortDescriptor, page]);
 
     return (
-        <TableCard.Root className="h-screen flex flex-col">
+        <TableCard.Root className="dark-mode h-screen flex flex-col">
             <TableCard.Header
                 title="Visa Processing"
                 badge={totalVisas}

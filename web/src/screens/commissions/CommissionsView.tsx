@@ -46,7 +46,7 @@ export const CommissionsView: React.FC<CommissionsViewProps> = ({ commissions, t
     }, [sortDescriptor, page]);
 
     return (
-        <TableCard.Root className="h-screen flex flex-col">
+        <TableCard.Root className="dark-mode h-screen flex flex-col">
             <TableCard.Header
                 title="Commissions"
                 badge={totalCommissions}

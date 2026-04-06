@@ -37,7 +37,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
     }));
  
     return (
-        <main>
+        <main className="dark-mode">
             <div className="flex flex-row items-center justify-between px-8">
                 <h1 className="text-xl font-semibold text-primary">Dashboard</h1>
                 <div className="flex flex-col gap-2">
