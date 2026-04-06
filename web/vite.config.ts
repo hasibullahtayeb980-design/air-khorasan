@@ -14,4 +14,10 @@ export default defineConfig({
       '@': resolve(__dirname, './src'),
     },
   },
+  server: {
+    port: 8080,
+    strictPort: true,
+    host: true,
+    origin: "http://0.0.0.0:8080",
+  },
 })

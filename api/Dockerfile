@@ -1,25 +1,67 @@
-FROM php:8.5-fpm
+FROM ubuntu:latest
 
-RUN apt-get update && apt-get install -y zip git-all curl
-RUN docker-php-ext-install pdo pdo_mysql intl xsl gd pdo_pgsql zip
+# Set non-interactive mode for apt
+ARG DEBIAN_FRONTEND=noninteractive
 
+# Update and install required packages in a single RUN command
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y \
+        apt-utils \
+        locales \
+        software-properties-common \
+        nginx \
+        curl \
+        git
+
+RUN add-apt-repository ppa:ondrej/php
+RUN apt-get update && \
+    apt-get install -y \
+    php8.4 \
+    php8.4-fpm \
+    php8.4-xml \
+    php8.4-mbstring \
+    php8.4-curl \
+    php8.4-gmp \
+    php8.4-gd \
+    php8.4-sqlite3 \
+    php8.4-pdo-mysql \
+    php8.4-zip \
+    php8.4-bcmath
+
+RUN apt-get clean
+
+# Set the locale
+RUN locale-gen en_US.UTF-8
+ENV LC_ALL en_US.UTF-8
+
+# Set working directory
+WORKDIR /var/www/air-khorasan/api
+
+# Copy application files
+COPY . .
+
+# Install Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Install PHP dependencies
 ENV COMPOSER_ALLOW_SUPERUSER=1
+RUN composer install && \
+    bin/console cache:clear && \
+    bin/console doctrine:schema:drop --force && \
+    bin/console doctrine:schema:create \
+    bin/console doctrine:fixtures:load
 
-# Install Composer (using official Composer image to avoid extra steps)
-COPY --from=composer:2.9 /usr/bin/composer /usr/bin/composer
+# Configure Nginx
+RUN rm /etc/nginx/sites-enabled/default && \
+    cp nginx/vhost.conf /etc/nginx/sites-available/ && \
+    ln -s /etc/nginx/sites-available/vhost.conf /etc/nginx/sites-enabled/vhost.conf
 
-WORKDIR /var/www
+# Set permissions
+RUN chmod -R 777 var/
 
-# Install PHP dependencies before copying all source (cache layer)
-COPY composer.json composer.lock ./
-RUN composer install --no-interaction --prefer-dist --no-scripts --no-dev
+# Define default command
+CMD service php8.4-fpm start && nginx -g 'daemon off;'
 
-# Copy app sources
-COPY . ./
-
-RUN curl -sS https://get.symfony.com/cli/installer | bash
-RUN mv /root/.symfony5/bin/symfony /usr/local/bin/symfony
-RUN symfony server:ca:install && symfony book:check-requirements
-
-EXPOSE 9000
-CMD ["php-fpm"]
+# Expose ports
+EXPOSE 80

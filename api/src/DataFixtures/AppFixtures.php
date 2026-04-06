@@ -30,7 +30,7 @@ class AppFixtures extends Fixture
             $customer->setPassportNumber($faker->numberBetween(1000000, 9999999));
             $customer->setTazkiraNumber($faker->numberBetween(1000000, 9999999));
             $customer->setAvatarImageUrl("https://mockmind-api.uifaces.co/content/human/{$faker->numberBetween(0, 200)}.jpg");
-            $customer->setCreatedAt(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-12 months', 'now')));
+            $customer->setCreatedAt(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-12 months', '-1 month')));
             $manager->persist($customer);
         }
 
@@ -74,7 +74,7 @@ class AppFixtures extends Fixture
         for ($i = 0; $i < $faker->numberBetween(300, 500); $i++) {
             $fee = $faker->numberBetween(100, 1000);
             $companyCost = $faker->numberBetween(10, 50);
-            
+
             $visa = new Visa();
             $visa->setCustomer($customers[array_rand($customers)]);
             $visa->setCountry($faker->country);

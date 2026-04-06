@@ -1,12 +1,13 @@
 services:
-  nginx:
-    image: nginx:1.19-alpine
-    container_name: ak-nginx
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    container_name: ak-web
     ports:
-      - "8000:80"
+      - "${WEB_PORT:-8080}:8080"
     volumes:
-      - ./api/nginx:/etc/nginx/conf.d
-      - ./api:/var/www
+      - ./web:/var/www/air-khorasan/web
     depends_on:
       - api
       - database
@@ -16,23 +17,23 @@ services:
       dockerfile: Dockerfile
     container_name: ak-api
     ports:
-      - "9000:9000"
+      - "${API_PORT:-8000}:80"
     volumes:
-      - ./api:/var/www
+      - ./api:/var/www/air-khorasan/api
     depends_on:
       - database
   database:
     image: mysql:8.0
     container_name: ak-mysql
     ports:
-      - "3306:3306"
+      - "${MYSQL_PORT:-3306}:3306"
     volumes:
       - mysql-db:/var/lib/mysql
     environment:
-      MYSQL_DATABASE: air-khorasan
-      MYSQL_USER: khorasan
-      MYSQL_PASSWORD: secret
-      MYSQL_ROOT_PASSWORD: rootsecret
+      MYSQL_DATABASE: ${MYSQL_DB:-air-khorasan}
+      MYSQL_USER: ${MYSQL_USER:-khorasan}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-secret}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootsecret}
 
 volumes:
   mysql-db:
