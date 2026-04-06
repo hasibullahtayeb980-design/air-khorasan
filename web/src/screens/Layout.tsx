@@ -77,9 +77,9 @@ export const Layout = () => {
     }
 
     return (
-        <div className='flex flex-col bg-primary lg:flex-row'>
+        <div className='flex flex-col lg:flex-row'>
             <SidebarNavigationSectionDividers items={navItems} />
-            <main className="dark-mode min-w-0 flex-1 bg-primary pt-8 pb-12">
+            <main className="min-w-0 flex-1 pt-8 pb-12">
                 <div className="flex flex-col gap-8">
                     <Outlet />
                 </div>

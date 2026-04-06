@@ -2,7 +2,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Formik } from "formik";
 import type React from "react";
 import * as yup from "yup";
-import { NewCustomerModalView } from "./NewCustomerModalView";
+import { NewCustomerModalView } from "./NewCustomerModalView2";
+import type { Customer } from "@/services/AKClient";
 
 const newCustomerValidationSchema = yup.object().shape({
   fullName: yup
@@ -26,50 +27,28 @@ const newCustomerValidationSchema = yup.object().shape({
     .integer(),
 });
 
-export interface NewCustomerFormInput {
-    fullName: string;
-    phone: string;
-    email: string;
-    passportNumber: string;
-    tazkiraNumber: string;
-}
-
 interface NewCustomerModalProps {
     visible: boolean;
     onCancel: () => void;
     onSuccess: () => void;
 }
 
-interface CreateCustomerInput {
-    fullName: string;
-    phone: string;
-    email: string;
-    passportNumber: number;
-    tazkiraNumber: number;
-    avatarImageUrl: string;
-}
+type CustomerInput = Omit<Customer, "id" | "createdAt">
+type CustomerPartialFormInput = Omit<CustomerInput, "passportNumber" | "tazkiraNumber" | "avatarImageUrl">;
 
-interface Customer extends CreateCustomerInput {
-  id: string;
-}
-
-const createCustomer = async (input: CreateCustomerInput): Promise<Customer | null> => {
-  return null;
+export interface CustomerFormInput extends CustomerPartialFormInput {
+  passportNumber: string;
+  tazkiraNumber: string;
 }
 
 export const NewCustomerModal: React.FC<NewCustomerModalProps> = ({ visible, onCancel, onSuccess}) => {
     const queryClient = useQueryClient();
 
-  const createCustomerMutation = useMutation({
-    mutationFn: async (input: CreateCustomerInput) =>
-      createCustomer(input),
-  });
-
   const handleSubmit = async (
-    values: NewCustomerFormInput
+    values: CustomerFormInput
   ) => {
     try {
-        const input: CreateCustomerInput = {
+        const input: CustomerInput = {
             fullName: values.fullName,
             phone: values.phone,
             email: values.email,
@@ -78,11 +57,11 @@ export const NewCustomerModal: React.FC<NewCustomerModalProps> = ({ visible, onC
             avatarImageUrl: "https://cdn-icons-png.flaticon.com/128/149/149071.png"
         };
 
-        const customer = await createCustomerMutation.mutateAsync(
+        /* const customer = await createCustomerMutation.mutateAsync(
             input
         );
 
-        console.log("New customer added with ID:", customer?.id);
+        console.log("New customer added with ID:", customer?.id);*/
 
         //addCustomer(customer);
         onSuccess();
@@ -135,7 +114,7 @@ export const NewCustomerModal: React.FC<NewCustomerModalProps> = ({ visible, onC
             visible={visible}
             onCancel={onCancel}
             onSubmit={() => handleSubmit()}
-            isPending={createCustomerMutation.isPending}
+            isPending={false}
             handleChange={handleChange}
             handleBlur={handleBlur}
             values={values}

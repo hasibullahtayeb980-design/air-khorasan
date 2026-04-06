@@ -74,7 +74,7 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
                 />
             )}
             
-            <TableCard.Root>
+            <TableCard.Root className="dark-mode">
                 <TableCard.Header
                     title="Customers"
                     badge={`${totalCustomers}`}
