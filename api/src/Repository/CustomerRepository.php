@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\DTOs\PaginationDTO;
 use App\Entity\Customer;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -13,9 +14,6 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
  */
 class CustomerRepository extends ServiceEntityRepository
 {
-    private int $defaultLimit = 10;
-    private int $maxLimit = 50;
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Customer::class);
@@ -30,29 +28,13 @@ class CustomerRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findPaginated(int $page = 1, ?int $limit = null): array
+    public function findPaginated(int $page = 1, ?int $limit = null): PaginationDTO
     {
-        $limit = $limit ?? $this->defaultLimit;
-        $limit = min($limit, $this->maxLimit);
-        $offset = ($page - 1) * $limit;
-
-        // Set pagination in query
         $queryBuilder = $this->createQueryBuilder('a')
-            ->orderBy('a.createdAt', 'DESC')
-            ->setMaxResults($limit)
-            ->setFirstResult($offset);
+            ->orderBy('a.createdAt', 'DESC');
 
-        // Get total results and paginated results
-        $paginator = new Paginator($queryBuilder);
-        $totalResults = count($paginator);
-
-        return [
-            'items' => iterator_to_array($paginator),
-            'total' => $totalResults,
-            'page' => $page,
-            'limit' => $limit,
-            'pages' => ceil($totalResults / $limit),
-        ];
+        $pagination = new Pagination($queryBuilder);
+        return $pagination->findPaginated($page, $limit);
     }
 
     //    /**

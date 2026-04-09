@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\ObjectMapper\ObjectMapperInterface;
 use App\DTOs\CustomerDTO;
+use App\DTOs\PaginationDTO;
 
 final class CustomerController extends AbstractController
 {
@@ -24,22 +25,23 @@ final class CustomerController extends AbstractController
         $customers = $em->getRepository(Customer::class)->findPaginated($page, $limit);
         $customersDTOCollection = [];
 
-        foreach ($customers['items'] as $customer) {
+        foreach ($customers->items as $customer) {
             $customerDTO = $objectMapper->map($customer, CustomerDTO::class);
             $customersDTOCollection[] = $customerDTO;
         }
 
-        return $this->json([
-            'items' => $customersDTOCollection,
-            'total' => $customers['total'],
-            'page' => $page,
-            'pages' => $customers['pages']
-        ]);
+        $paginationDTO = new PaginationDTO();
+        $paginationDTO->items = $customersDTOCollection;
+        $paginationDTO->totalItems = $customers->totalItems;
+        $paginationDTO->page = $page;
+        $paginationDTO->totalPages = $customers->totalPages;
+
+        return $this->json($paginationDTO);
     }
 
     #[Route('/api/customers/{id}', methods: ['GET'])]
     public function show(Customer $customer): JsonResponse
-    {      
+    {
         return $this->json($customer);
     }
 

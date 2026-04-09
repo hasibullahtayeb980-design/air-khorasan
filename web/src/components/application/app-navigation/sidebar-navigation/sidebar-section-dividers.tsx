@@ -22,7 +22,7 @@ export const SidebarNavigationSectionDividers = ({ activeUrl, items, displayAcco
                     "--width": `${MAIN_SIDEBAR_WIDTH}px`,
                 } as React.CSSProperties
             }
-            className="dark-mode flex h-full w-full max-w-full flex-col justify-between overflow-auto border-secondary bg-primary pt-4 shadow-xs md:border-r lg:w-(--width) lg:pt-5"
+            className="dark-mode flex h-full w-full max-w-full flex-col justify-between overflow-auto border-secondary bg-primary pt-4 shadow-xs md:border-l lg:w-(--width) lg:pt-5"
         >
             <div className="flex flex-col gap-5 px-4 lg:px-5">
                 <UntitledLogo className="h-8" />
@@ -37,6 +37,8 @@ export const SidebarNavigationSectionDividers = ({ activeUrl, items, displayAcco
                 </div>
         </aside>
     );
+
+    const dir = "rtl";
  
     return (
         <>
@@ -44,14 +46,17 @@ export const SidebarNavigationSectionDividers = ({ activeUrl, items, displayAcco
             <MobileNavigationHeader>{content}</MobileNavigationHeader>
  
             {/* Desktop sidebar navigation */}
-            <div className="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:flex">{content}</div>
+            <div className="hidden lg:fixed lg:inset-y-0 lg:right-0 lg:flex">{content}</div>
  
             {/* Placeholder to take up physical space because the real sidebar has `fixed` position. */}
             <div
-                style={{
+                style={
+                  (dir !== "rtl") ? {
                     paddingLeft: MAIN_SIDEBAR_WIDTH + 0, // Add 4px to account for the padding in the sidebar wrapper
-                }}
-                className="invisible hidden lg:sticky lg:top-0 lg:bottom-0 lg:left-0 lg:block"
+                  } 
+                  : { paddingRight: MAIN_SIDEBAR_WIDTH + 0 }
+                }
+                className="invisible hidden lg:sticky lg:top-0 lg:bottom-0 lg:right-0 lg:block"
             />
         </>
     );
