@@ -7,6 +7,12 @@ import { useBreakpoint } from "@/hooks/use-breakpoint";
 import { cx } from "@/utils/cx";
 import type { PaginationRootProps } from "./pagination-base";
 import { Pagination } from "./pagination-base";
+import { i18n, Translation } from "@/i18n";
+import { LocaleDirection } from "@/i18n/types";
+
+const localeDir: LocaleDirection = Translation.dir;
+const iconPrevious = localeDir === LocaleDirection.LeftToRight ? ArrowLeft : ArrowRight;
+const iconNext = localeDir === LocaleDirection.LeftToRight ? ArrowRight : ArrowLeft;
 
 interface PaginationProps extends Partial<Omit<PaginationRootProps, "children">> {
     /** Whether the pagination buttons are rounded. */
@@ -43,11 +49,17 @@ interface MobilePaginationProps {
 }
 
 const MobilePagination = ({ page = 1, total = 10, className, onPageChange }: MobilePaginationProps) => {
+    const localeDir: LocaleDirection = Translation.dir;
+    const iconPrevious = localeDir === LocaleDirection.LeftToRight ? ArrowLeft : ArrowRight;
+    const iconNext = localeDir === LocaleDirection.LeftToRight ? ArrowRight : ArrowLeft;
+
+    console.log(localeDir);
+
     return (
         <nav aria-label="Pagination" className={cx("flex items-center justify-between md:hidden", className)}>
             <Button
                 aria-label="Go to previous page"
-                iconLeading={ArrowLeft}
+                iconLeading={iconPrevious}
                 color="secondary"
                 size="sm"
                 onClick={() => onPageChange?.(Math.max(0, page - 1))}
@@ -59,7 +71,7 @@ const MobilePagination = ({ page = 1, total = 10, className, onPageChange }: Mob
 
             <Button
                 aria-label="Go to next page"
-                iconLeading={ArrowRight}
+                iconLeading={iconNext}
                 color="secondary"
                 size="sm"
                 onClick={() => onPageChange?.(Math.min(total, page + 1))}
@@ -80,14 +92,14 @@ export const PaginationPageDefault = ({ rounded, page = 1, total = 10, className
         >
             <div className="hidden flex-1 justify-start md:flex">
                 <Pagination.PrevTrigger asChild>
-                    <Button iconLeading={ArrowLeft} color="link-gray" size="sm">
+                    <Button iconLeading={iconPrevious} color="link-gray" size="sm">
                         {isDesktop ? "Previous" : undefined}
                     </Button>
                 </Pagination.PrevTrigger>
             </div>
 
             <Pagination.PrevTrigger asChild className="md:hidden">
-                <Button iconLeading={ArrowLeft} color="secondary" size="sm">
+                <Button iconLeading={iconPrevious} color="secondary" size="sm">
                     {isDesktop ? "Previous" : undefined}
                 </Button>
             </Pagination.PrevTrigger>
@@ -116,13 +128,13 @@ export const PaginationPageDefault = ({ rounded, page = 1, total = 10, className
 
             <div className="hidden flex-1 justify-end md:flex">
                 <Pagination.NextTrigger asChild>
-                    <Button iconTrailing={ArrowRight} color="link-gray" size="sm">
+                    <Button iconTrailing={iconNext} color="link-gray" size="sm">
                         {isDesktop ? "Next" : undefined}
                     </Button>
                 </Pagination.NextTrigger>
             </div>
             <Pagination.NextTrigger asChild className="md:hidden">
-                <Button iconTrailing={ArrowRight} color="secondary" size="sm">
+                <Button iconTrailing={iconNext} color="secondary" size="sm">
                     {isDesktop ? "Next" : undefined}
                 </Button>
             </Pagination.NextTrigger>
@@ -142,7 +154,7 @@ export const PaginationPageMinimalCenter = ({ rounded, page = 1, total = 10, cla
         >
             <div className="flex flex-1 justify-start">
                 <Pagination.PrevTrigger asChild>
-                    <Button iconLeading={ArrowLeft} color="secondary" size="sm">
+                    <Button iconLeading={iconPrevious} color="secondary" size="sm">
                         {isDesktop ? "Previous" : undefined}
                     </Button>
                 </Pagination.PrevTrigger>
@@ -172,7 +184,7 @@ export const PaginationPageMinimalCenter = ({ rounded, page = 1, total = 10, cla
 
             <div className="flex flex-1 justify-end">
                 <Pagination.NextTrigger asChild>
-                    <Button iconTrailing={ArrowRight} color="secondary" size="sm">
+                    <Button iconTrailing={iconNext} color="secondary" size="sm">
                         {isDesktop ? "Next" : undefined}
                     </Button>
                 </Pagination.NextTrigger>
