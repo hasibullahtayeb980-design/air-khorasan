@@ -1,0 +1,45 @@
+export const defaultTranslations = {
+  review: {
+    empty: 'No review available yet.',
+    completed: 'Your daily review has been completed.',
+  },
+  settings: {
+    title: 'Settings',
+    reviews: 'Reviews',
+    reviewTime: 'Review Time',
+    modifyEmail: 'Modify your email',
+    modifyName: 'Modify your name',
+    notifications: 'Notifications',
+    pushNotifications: 'Push Notifications',
+    emailNotifications: 'Email Notifications',
+    modalSubmitButtonLabel: 'Done',
+    modifyEmailModal: {
+      inputEmailTitle: 'Your Email Address',
+      inputEmailPlaceholder: 'Enter your email...',
+      validation: 'Must be a valid email',
+    },
+    modifyNameModal: {
+      inputNameTitle: 'Your Name',
+      inputNamePlaceholder: 'Enter your name...',
+    },
+  },
+  quotes: {
+    title: 'Quotes',
+    empty: 'Your quotes will be displayed here.',
+    newQuote: {
+      title: 'New Quote',
+      inputQuoteTitle: 'Title',
+      inputQuoteTitlePlaceholder: 'Enter title of the quote here...',
+      inputQuoteContent: 'Content',
+      inputQuoteContentPlaceholder: 'Type/paste your quote here...',
+      footerDescription: 'Once you have added a few quotes we will send you a push notification or email where you can review a selection of your quotes every day.\n\nYou can modify what time that you would like to receive the notification in the Settings Tab.',
+      settingsTab: 'Settings Tab',
+      addButtonLabel: 'Add',
+      validationTitle: 'Title is required',
+      validationContent: 'Quote text is required',
+    },
+  },
+  networkError: 'Network error. Please try again later.',
+  welcome: 'Welcome, %{name}',
+  welcomeWithoutName: 'Welcome',
+};
