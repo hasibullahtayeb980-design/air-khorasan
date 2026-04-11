@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { Edit01, Trash01 } from "@untitledui/icons";
+import { CreditCardPlus, Edit01, Trash01, UserPlus01 } from "@untitledui/icons";
 import type { SortDescriptor } from "react-aria-components";
 import { PaginationPageMinimalCenter } from "@/components/application/pagination/pagination";
 import { Table, TableCard } from "@/components/application/table/table";
@@ -9,6 +9,9 @@ import { ButtonUtility } from "@/components/base/buttons/button-utility";
 import { DropdownIconSimple } from "@/components/base/dropdown/dropdown-icon-simple";
 import type { Ticket } from "@/services/AKClient";
 import { TicketStatus } from "@/services/AKClient";
+import { Button } from "@/components/base/buttons/button";
+import { LocaleDirection } from "@/i18n/types";
+import { getLocaleDirection } from "@/utils/utils";
 
 interface TicketsViewProps {
     totalTickets: number;
@@ -53,15 +56,26 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
         });
     }, [sortDescriptor, page]);
 
+    const dir: LocaleDirection = getLocaleDirection();
+
     return (
         <TableCard.Root className="dark-mode h-screen flex flex-col">
             <TableCard.Header
                 title="Tickets"
                 badge={totalTickets}
                 contentTrailing={
-                    <div className="absolute top-5 right-4 md:right-6">
-                        <DropdownIconSimple />
-                    </div>
+                        <div className="flex flex-row items-center">
+                            <div className="flex items-center gap-3">
+                                <Button onClick={() => null} size="sm" iconLeading={CreditCardPlus}>
+                                    New Ticket
+                                </Button>
+                            </div>
+                            <div
+                              className={`flex items-center m${dir === LocaleDirection.RightToLeft ? 'r' : 'l'}-4 md:m${dir === LocaleDirection.RightToLeft ? 'r' : 'l'}-6`}
+                            >
+                                <DropdownIconSimple />
+                            </div>
+                        </div>
                 }
             />
             <div className="flex-1 overflow-y-auto">

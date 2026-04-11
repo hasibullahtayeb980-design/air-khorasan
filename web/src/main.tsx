@@ -5,6 +5,8 @@ import { RouteProvider } from '@/providers/route-provider';
 import { ThemeProvider } from '@/providers/theme-provider';
 import '@/styles/globals.css';
 import { App } from './App';
+import { LocaleDirection } from './i18n/types';
+import { getLocaleDirection } from './utils/utils';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
@@ -17,3 +19,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         </BrowserRouter>
     </React.StrictMode>
 );
+
+const localeDirection = getLocaleDirection();
+
+if (localeDirection === LocaleDirection.RightToLeft) {
+  document.getElementsByTagName('html')[0].setAttribute("dir", "rtl");
+}

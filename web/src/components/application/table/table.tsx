@@ -24,6 +24,8 @@ import { Checkbox } from "@/components/base/checkbox/checkbox";
 import { Dropdown } from "@/components/base/dropdown/dropdown";
 import { Tooltip, TooltipTrigger } from "@/components/base/tooltip/tooltip";
 import { cx } from "@/utils/cx";
+import { getLocaleDirection } from "@/utils/utils";
+import { LocaleDirection } from "@/i18n/types";
 
 export const TableRowActionsDropdown = () => (
     <Dropdown.Root>
@@ -129,6 +131,7 @@ const TableHeader = <T extends object>({ columns, children, bordered = true, cla
     const { selectionBehavior, selectionMode } = useTableOptions();
 
     const size = sizeProp ?? context.size;
+    const localeDirection = getLocaleDirection();
 
     return (
         <AriaTableHeader
@@ -147,7 +150,7 @@ const TableHeader = <T extends object>({ columns, children, bordered = true, cla
             }
         >
             {selectionBehavior === "toggle" && (
-                <AriaColumn className={cx("relative py-2 pl-0 pr-4", size === "sm" ? "w-9 md:pl-5" : "w-11 md:pl-6")}>
+                <AriaColumn className={cx(`relative py-2 p${localeDirection === LocaleDirection.RightToLeft ? 'l' : 'r'}-0 p${localeDirection === LocaleDirection.RightToLeft ? 'r' : 'l'}-4`, size === "sm" ? "w-9 md:pl-5" : "w-11 md:pl-6")}>
                     {selectionMode === "multiple" && (
                         <div className="flex items-start">
                             <Checkbox slot="selection" size="md" />
@@ -221,6 +224,7 @@ const TableRow = <T extends object>({ columns, children, className, highlightSel
     const { selectionBehavior } = useTableOptions();
 
     const size = sizeProp ?? context.size;
+    const localeDirection = getLocaleDirection();
 
     return (
         <AriaRow
@@ -239,7 +243,7 @@ const TableRow = <T extends object>({ columns, children, className, highlightSel
             }
         >
             {selectionBehavior === "toggle" && (
-                <AriaCell className={cx("relative py-2 pl-0 pr-4", size === "sm" ? "md:pl-5" : "md:pl-6")}>
+                <AriaCell className={cx(`relative py-2 p${localeDirection === LocaleDirection.RightToLeft ? 'l' : 'r'}-0 p${localeDirection === LocaleDirection.RightToLeft ? 'r' : 'l'}-4`, size === "sm" ? "md:pl-5" : "md:pl-6")}>
                     <div className="flex items-end">
                         <Checkbox slot="selection" size="md" />
                     </div>

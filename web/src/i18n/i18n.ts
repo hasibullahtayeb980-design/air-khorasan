@@ -9,7 +9,7 @@ export const i18n = new I18n({
   },
   fa: {
     ...defaultTranslations,
-    dir: LocaleDirection.RightToLeft,
+    dir: "rtl",
     /*review: {
       ...defaultTranslations.review,
       welcome: "ようこそ %{name}",

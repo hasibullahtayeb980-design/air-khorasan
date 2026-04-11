@@ -9,8 +9,9 @@ import type { PaginationRootProps } from "./pagination-base";
 import { Pagination } from "./pagination-base";
 import { i18n, Translation } from "@/i18n";
 import { LocaleDirection } from "@/i18n/types";
+import { getLocaleDirection } from "@/utils/utils";
 
-const localeDir: LocaleDirection = Translation.dir;
+const localeDir: LocaleDirection = getLocaleDirection();
 const iconPrevious = localeDir === LocaleDirection.LeftToRight ? ArrowLeft : ArrowRight;
 const iconNext = localeDir === LocaleDirection.LeftToRight ? ArrowRight : ArrowLeft;
 
@@ -49,7 +50,7 @@ interface MobilePaginationProps {
 }
 
 const MobilePagination = ({ page = 1, total = 10, className, onPageChange }: MobilePaginationProps) => {
-    const localeDir: LocaleDirection = Translation.dir;
+    const localeDir: LocaleDirection = getLocaleDirection();
     const iconPrevious = localeDir === LocaleDirection.LeftToRight ? ArrowLeft : ArrowRight;
     const iconNext = localeDir === LocaleDirection.LeftToRight ? ArrowRight : ArrowLeft;
 

@@ -28,9 +28,3 @@ const getTranslationKeys = (translations: Translations): Translations => {
 };
 
 export const Translation = getTranslationKeys(defaultTranslations);
-
-export const getWelcomeTranslation = (name: string | undefined) => {
-  return name
-    ? i18n.t(Translation.welcome, { name })
-    : i18n.t(Translation.welcomeWithoutName);
-};

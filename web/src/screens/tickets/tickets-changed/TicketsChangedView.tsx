@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { Edit01, Trash01 } from "@untitledui/icons";
+import { CreditCardEdit, Edit01, Trash01 } from "@untitledui/icons";
 import type { SortDescriptor } from "react-aria-components";
 import { PaginationPageMinimalCenter } from "@/components/application/pagination/pagination";
 import { Table, TableCard } from "@/components/application/table/table";
@@ -8,6 +8,9 @@ import { BadgeWithDot } from "@/components/base/badges/badges";
 import { ButtonUtility } from "@/components/base/buttons/button-utility";
 import { DropdownIconSimple } from "@/components/base/dropdown/dropdown-icon-simple";
 import { TicketChangeType, type TicketChange } from "@/services/AKClient";
+import { Button } from "@/components/base/buttons/button";
+import { LocaleDirection } from "@/i18n/types";
+import { getLocaleDirection } from "@/utils/utils";
 
 interface TicketsViewProps {
   totalTicketsChanged: number;
@@ -46,15 +49,26 @@ export const TicketsChangedView: React.FC<TicketsViewProps> = ({ ticketsChanged,
         });
     }, [sortDescriptor, page]);
 
+    const dir: LocaleDirection = getLocaleDirection();
+
     return (
         <TableCard.Root className="dark-mode h-screen flex flex-col">
             <TableCard.Header
                 title="Tickets Changed"
                 badge={totalTicketsChanged}
                 contentTrailing={
-                    <div className="absolute top-5 right-4 md:right-6">
-                        <DropdownIconSimple />
-                    </div>
+                        <div className="flex flex-row items-center">
+                            <div className="flex items-center gap-3">
+                                <Button onClick={() => null} size="sm" iconLeading={CreditCardEdit}>
+                                    New Ticket Change
+                                </Button>
+                            </div>
+                            <div
+                              className={`flex items-center m${dir === LocaleDirection.RightToLeft ? 'r' : 'l'}-4 md:m${dir === LocaleDirection.RightToLeft ? 'r' : 'l'}-6`}
+                            >
+                                <DropdownIconSimple />
+                            </div>
+                        </div>
                 }
             />
             <div className="flex-1 overflow-y-auto">

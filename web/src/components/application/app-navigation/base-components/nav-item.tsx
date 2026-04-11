@@ -4,6 +4,8 @@ import { Link as AriaLink } from "react-aria-components";
 import { Badge } from "@/components/base/badges/badges";
 import { cx, sortCx } from "@/utils/cx";
 import { NavLink } from "react-router";
+import { getLocaleDirection } from "@/utils/utils";
+import { LocaleDirection } from "@/i18n/types";
 
 export const styles = sortCx({
     root: "group relative flex max-h-9 w-full cursor-pointer items-center rounded-md bg-primary outline-focus-ring transition duration-100 ease-linear select-none hover:bg-primary_hover focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2",
@@ -34,11 +36,13 @@ interface NavItemBaseProps {
 }
 
 export const NavItemBase = ({ current, type, badge, href, icon: Icon, children, truncate = true, onClick }: NavItemBaseProps) => {
+    const localeDirection = getLocaleDirection();
+
     const iconElement = Icon && (
         <Icon
             aria-hidden="true"
             className={cx(
-                "ml-2 size-5 shrink-0 text-fg-quaternary transition-inherit-all group-hover/item:text-fg-quaternary_hover",
+                `m${localeDirection === LocaleDirection.RightToLeft ? 'l' : 'r'}-2 size-5 shrink-0 text-fg-quaternary transition-inherit-all group-hover/item:text-fg-quaternary_hover`,
                 current && "text-fg-quaternary_hover",
             )}
         />
