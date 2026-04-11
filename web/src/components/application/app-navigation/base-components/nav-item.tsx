@@ -42,7 +42,7 @@ export const NavItemBase = ({ current, type, badge, href, icon: Icon, children, 
         <Icon
             aria-hidden="true"
             className={cx(
-                `m${localeDirection === LocaleDirection.RightToLeft ? 'l' : 'r'}-2 size-5 shrink-0 text-fg-quaternary transition-inherit-all group-hover/item:text-fg-quaternary_hover`,
+                `size-5 shrink-0 text-fg-quaternary transition-inherit-all group-hover/item:text-fg-quaternary_hover`,
                 current && "text-fg-quaternary_hover",
             )}
         />
@@ -60,7 +60,7 @@ export const NavItemBase = ({ current, type, badge, href, icon: Icon, children, 
     const labelElement = (
         <span
             className={cx(
-                "flex-1 text-sm font-semibold text-secondary transition-inherit-all group-hover/item:text-secondary_hover",
+                "flex-1 mx-2 text-sm font-semibold text-secondary transition-inherit-all group-hover/item:text-secondary_hover",
                 truncate && "truncate",
                 current && "text-secondary_hover",
             )}
