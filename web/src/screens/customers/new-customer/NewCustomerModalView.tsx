@@ -5,6 +5,7 @@ import { Input } from "@/components/base/input/input";
 import type { CustomerFormInput } from "./NewCustomerModal";
 import { Modal } from "./Modal";
 import { Button } from "@/components/base/buttons/button";
+import { i18n, Translation } from "@/i18n";
 
 interface NewCustomerModalViewProps {
   onCancel: () => void;
@@ -29,8 +30,8 @@ export const NewCustomerModalView: React.FC<NewCustomerModalViewProps> = ({
 }) => {
   return (
     <Modal
-      title="Add Customer"
-      description="Add a new customer to your database."
+      title={i18n.t(Translation.customers.addCustomer.title)}
+      description={i18n.t(Translation.customers.addCustomer.description)}
       icon={Flag05}
       onCancel={onCancel}
       visible={visible}
@@ -38,8 +39,8 @@ export const NewCustomerModalView: React.FC<NewCustomerModalViewProps> = ({
       <div data-input-wrapper="true" data-input-size="md" className="group flex h-max w-full flex-col items-start justify-start gap-1.5 sm:col-span-2" data-rac="">
         <Input
           isRequired
-          label="Full Name"
-          placeholder="What is the full name of the customer?"
+          label={i18n.t(Translation.customers.addCustomer.inputFullNameLabel)}
+          placeholder={i18n.t(Translation.customers.addCustomer.inputFullNamePlaceholder)}
           onChange={handleChange("fullName")}
           onBlur={handleBlur("fullName")}
           value={values.fullName}
@@ -51,8 +52,8 @@ export const NewCustomerModalView: React.FC<NewCustomerModalViewProps> = ({
       <Input
         isRequired
         icon={Phone}
-        label="Phone"
-        placeholder="Customer's phone number"
+        label={i18n.t(Translation.customers.addCustomer.inputPhoneLabel)}
+        placeholder={i18n.t(Translation.customers.addCustomer.inputPhonePlaceholder)}
         onChange={handleChange("phone")}
         onBlur={handleBlur("phone")}
         value={values.phone}
@@ -63,8 +64,8 @@ export const NewCustomerModalView: React.FC<NewCustomerModalViewProps> = ({
       <Input
         isRequired
         icon={Mail01}
-        label="Email"
-        placeholder="example@gmail.com"
+        label={i18n.t(Translation.customers.addCustomer.inputEmailLabel)}
+        placeholder={i18n.t(Translation.customers.addCustomer.inputEmailPlaceholder)}
         onChange={handleChange("email")}
         onBlur={handleBlur("email")}
         value={values.email}
@@ -75,8 +76,8 @@ export const NewCustomerModalView: React.FC<NewCustomerModalViewProps> = ({
       <Input
         isRequired
         icon={Passport}
-        label="Passport Number"
-        placeholder="Enter passport number"
+        label={i18n.t(Translation.customers.addCustomer.inputPassportNumberLabel)}
+        placeholder={i18n.t(Translation.customers.addCustomer.inputPassportNumberPlaceholder)}
         onChange={handleChange("passportNumber")}
         onBlur={handleBlur("passportNumber")}
         value={values.passportNumber}
@@ -87,8 +88,8 @@ export const NewCustomerModalView: React.FC<NewCustomerModalViewProps> = ({
       <Input
         isRequired
         icon={CreditCard02}
-        label="Tazkira Number"
-        placeholder="Enter tazkira number"
+        label={i18n.t(Translation.customers.addCustomer.inputTazkiraNumberLabel)}
+        placeholder={i18n.t(Translation.customers.addCustomer.inputTazkiraNumberPlaceholder)}
         onChange={handleChange("tazkiraNumber")}
         onBlur={handleBlur("tazkiraNumber")}
         value={values.tazkiraNumber}
@@ -96,7 +97,7 @@ export const NewCustomerModalView: React.FC<NewCustomerModalViewProps> = ({
         hint={errors.tazkiraNumber}
       />
 
-      <Button onClick={onCancel} color="secondary" size="md">Cancel</Button>
+      <Button onClick={onCancel} color="secondary" size="md">{i18n.t(Translation.customers.addCustomer.buttonCancelLabel)}</Button>
 
       <Button
         disabled={isPending}
@@ -105,7 +106,7 @@ export const NewCustomerModalView: React.FC<NewCustomerModalViewProps> = ({
         color="primary"
         size="md"
       >
-        Add Customer
+        {i18n.t(Translation.customers.addCustomer.buttonSubmitLabel)}
       </Button>
 
       <div className="h-5 w-full"></div>
