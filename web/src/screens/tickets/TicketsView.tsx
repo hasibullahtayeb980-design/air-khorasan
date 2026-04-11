@@ -12,6 +12,7 @@ import { TicketStatus } from "@/services/AKClient";
 import { Button } from "@/components/base/buttons/button";
 import { LocaleDirection } from "@/i18n/types";
 import { getLocaleDirection } from "@/utils/utils";
+import { i18n, Translation } from "@/i18n";
 
 interface TicketsViewProps {
     totalTickets: number;
@@ -61,13 +62,13 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
     return (
         <TableCard.Root className="dark-mode h-screen flex flex-col">
             <TableCard.Header
-                title="Tickets"
+                title={i18n.t(Translation.tickets.title)}
                 badge={totalTickets}
                 contentTrailing={
                         <div className="flex flex-row items-center">
                             <div className="flex items-center gap-3">
                                 <Button onClick={() => null} size="sm" iconLeading={CreditCardPlus}>
-                                    New Ticket
+                                    {i18n.t(Translation.tickets.buttonNewTicketLabel)}
                                 </Button>
                             </div>
                             <div
@@ -81,15 +82,15 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
             <div className="flex-1 overflow-y-auto">
                 <Table aria-label="Tickets" selectionMode="multiple" sortDescriptor={sortDescriptor} onSortChange={setSortDescriptor}>
                     <Table.Header>
-                        <Table.Head id="id" label="Ticket ID" isRowHeader allowsSorting className="w-full max-w-1/4" />
-                        <Table.Head id="customer" label="Customer" allowsSorting />
-                        <Table.Head id="airline" label="Airline" allowsSorting tooltip="This is a tooltip" />
-                        <Table.Head id="from-city" label="Departure City" allowsSorting tooltip="This is a tooltip" />
-                        <Table.Head id="to-city" label="Destination City" allowsSorting tooltip="This is a tooltip" />
-                        <Table.Head id="departure-date" label="Departure Date" allowsSorting tooltip="This is a tooltip" />
-                        <Table.Head id="return-date" label="Return Date" allowsSorting tooltip="This is a tooltip" />
-                        <Table.Head id="price" label="Price" allowsSorting tooltip="This is a tooltip" />
-                        <Table.Head id="created_at" label="Created At" allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="id" label={i18n.t(Translation.tickets.tableHeaderTicketIdLabel)} isRowHeader allowsSorting className="w-full max-w-1/4" />
+                        <Table.Head id="customer" label={i18n.t(Translation.tickets.tableHeaderCustomerLabel)} allowsSorting />
+                        <Table.Head id="airline" label={i18n.t(Translation.tickets.tableHeaderAirlineLabel)} allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="from-city" label={i18n.t(Translation.tickets.tableHeaderDepartureCityLabel)} allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="to-city" label={i18n.t(Translation.tickets.tableHeaderDestinationCityLabel)} allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="departure-date" label={i18n.t(Translation.tickets.tableHeaderDepartureDateLabel)} allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="return-date" label={i18n.t(Translation.tickets.tableHeaderReturnDateLabel)} allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="price" label={i18n.t(Translation.tickets.tableHeaderPriceLabel)} allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="created_at" label={i18n.t(Translation.tickets.tableHeaderCreatedAtLabel)} allowsSorting tooltip="This is a tooltip" />
                         <Table.Head id="actions" />
                     </Table.Header>
     

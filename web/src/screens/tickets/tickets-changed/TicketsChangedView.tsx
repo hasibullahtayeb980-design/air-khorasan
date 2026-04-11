@@ -11,6 +11,7 @@ import { TicketChangeType, type TicketChange } from "@/services/AKClient";
 import { Button } from "@/components/base/buttons/button";
 import { LocaleDirection } from "@/i18n/types";
 import { getLocaleDirection } from "@/utils/utils";
+import { i18n, Translation } from "@/i18n";
 
 interface TicketsViewProps {
   totalTicketsChanged: number;
@@ -54,13 +55,13 @@ export const TicketsChangedView: React.FC<TicketsViewProps> = ({ ticketsChanged,
     return (
         <TableCard.Root className="dark-mode h-screen flex flex-col">
             <TableCard.Header
-                title="Tickets Changed"
+                title={i18n.t(Translation.ticketsChanged.title)}
                 badge={totalTicketsChanged}
                 contentTrailing={
                         <div className="flex flex-row items-center">
                             <div className="flex items-center gap-3">
                                 <Button onClick={() => null} size="sm" iconLeading={CreditCardEdit}>
-                                    New Ticket Change
+                                    {i18n.t(Translation.ticketsChanged.buttonNewTicketChangeLabel)}
                                 </Button>
                             </div>
                             <div
@@ -74,13 +75,13 @@ export const TicketsChangedView: React.FC<TicketsViewProps> = ({ ticketsChanged,
             <div className="flex-1 overflow-y-auto">
                 <Table aria-label="Tickets" selectionMode="multiple" sortDescriptor={sortDescriptor} onSortChange={setSortDescriptor}>
                     <Table.Header>
-                        <Table.Head id="id" label="Ticket ID" isRowHeader allowsSorting className="w-full max-w-1/4" />
-                        <Table.Head id="customer" label="Customer" allowsSorting />
-                        <Table.Head id="changeType" label="Change Type" allowsSorting tooltip="This is a tooltip" />
-                        <Table.Head id="oldDate" label="Old Date" allowsSorting tooltip="This is a tooltip" />
-                        <Table.Head id="newDate" label="New Date" allowsSorting tooltip="This is a tooltip" />
-                        <Table.Head id="fee" label="Fee" allowsSorting tooltip="This is a tooltip" />
-                        <Table.Head id="createdAt" label="Created At" allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="id" label={i18n.t(Translation.tickets.tableHeaderTicketIdLabel)} isRowHeader allowsSorting className="w-full max-w-1/4" />
+                        <Table.Head id="customer" label={i18n.t(Translation.tickets.tableHeaderCustomerLabel)} allowsSorting />
+                        <Table.Head id="changeType" label={i18n.t(Translation.ticketsChanged.tableHeaderChangeTypeLabel)} allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="oldDate" label={i18n.t(Translation.ticketsChanged.tableHeaderOldDateLabel)} allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="newDate" label={i18n.t(Translation.ticketsChanged.tableHeaderNewDateLabel)} allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="fee" label={i18n.t(Translation.ticketsChanged.tableHeaderFeeLabel)} allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="createdAt" label={i18n.t(Translation.tickets.tableHeaderCreatedAtLabel)} allowsSorting tooltip="This is a tooltip" />
                         <Table.Head id="actions" />
                     </Table.Header>
     
@@ -101,15 +102,15 @@ export const TicketsChangedView: React.FC<TicketsViewProps> = ({ ticketsChanged,
                                         </div>
                                     </div>
                                 </Table.Cell>
-                                <Table.Cell className="whitespace-nowrap">{item.changeType === TicketChangeType.DateChange ? "Date Change" : "Extension"}</Table.Cell>
+                                <Table.Cell className="whitespace-nowrap">{item.changeType === TicketChangeType.DateChange ? i18n.t(Translation.ticketsChanged.changeTypeDateChangeLabel) : i18n.t(Translation.ticketsChanged.changeTypeExtensionLabel)}</Table.Cell>
                                 <Table.Cell className="whitespace-nowrap">{new Date(item.oldDate).toLocaleDateString()}</Table.Cell>
                                 <Table.Cell className="whitespace-nowrap">{new Date(item.newDate).toLocaleDateString()}</Table.Cell>
                                 <Table.Cell className="whitespace-nowrap">$ {item.fee}</Table.Cell>
                                 <Table.Cell className="whitespace-nowrap">{new Date(item.createdAt).toLocaleDateString()}</Table.Cell>
                                 <Table.Cell className="px-4">
                                     <div className="flex justify-end gap-0.5">
-                                        <ButtonUtility size="xs" color="tertiary" tooltip="Delete" icon={Trash01} />
-                                        <ButtonUtility size="xs" color="tertiary" tooltip="Edit" icon={Edit01} />
+                                        <ButtonUtility size="xs" color="tertiary" tooltip={i18n.t(Translation.buttonDeleteLabel)} icon={Trash01} />
+                                        <ButtonUtility size="xs" color="tertiary" tooltip={i18n.t(Translation.buttonEditLabel)} icon={Edit01} />
                                     </div>
                                 </Table.Cell>
                             </Table.Row>

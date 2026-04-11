@@ -11,6 +11,7 @@ import type { TicketCancelled } from "@/services/AKClient";
 import { Button } from "@/components/base/buttons/button";
 import { LocaleDirection } from "@/i18n/types";
 import { getLocaleDirection } from "@/utils/utils";
+import { i18n, Translation } from "@/i18n";
 
 interface TicketsViewProps {
   totalTicketsCancelled: number;
@@ -54,13 +55,13 @@ export const TicketsCancelledView: React.FC<TicketsViewProps> = ({ ticketsCancel
     return (
         <TableCard.Root className="dark-mode h-screen flex flex-col">
             <TableCard.Header
-                title="Tickets Cancelled"
+                title={i18n.t(Translation.ticketsCancelled.title)}
                 badge={totalTicketsCancelled}
                 contentTrailing={
                         <div className="flex flex-row items-center">
                             <div className="flex items-center gap-3">
                                 <Button onClick={() => null} size="sm" iconLeading={SlashCircle01}>
-                                    New Ticket Cancellation
+                                    {i18n.t(Translation.ticketsCancelled.buttonNewTicketCancellationLabel)}
                                 </Button>
                             </div>
                             <div
@@ -74,11 +75,11 @@ export const TicketsCancelledView: React.FC<TicketsViewProps> = ({ ticketsCancel
             <div className="flex-1 overflow-y-auto">
                 <Table aria-label="Tickets" selectionMode="multiple" sortDescriptor={sortDescriptor} onSortChange={setSortDescriptor}>
                     <Table.Header>
-                        <Table.Head id="id" label="Ticket ID" isRowHeader allowsSorting className="w-full max-w-1/4" />
-                        <Table.Head id="customer" label="Customer" allowsSorting />
-                        <Table.Head id="cancellationDate" label="Cancellation Date" allowsSorting tooltip="This is a tooltip" />
-                        <Table.Head id="refundAmount" label="Refund Amount" allowsSorting tooltip="This is a tooltip" />
-                        <Table.Head id="penalty" label="Penalty" allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="id" label={i18n.t(Translation.tickets.tableHeaderTicketIdLabel)} isRowHeader allowsSorting className="w-full max-w-1/4" />
+                        <Table.Head id="customer" label={i18n.t(Translation.tickets.tableHeaderCustomerLabel)} allowsSorting />
+                        <Table.Head id="cancellationDate" label={i18n.t(Translation.ticketsCancelled.tableHeaderCancellationDateLabel)} allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="refundAmount" label={i18n.t(Translation.ticketsCancelled.tableHeaderRefundAmountLabel)} allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="penalty" label={i18n.t(Translation.ticketsCancelled.tableHeaderPenaltyLabel)} allowsSorting tooltip="This is a tooltip" />
                         <Table.Head id="actions" />
                     </Table.Header>
     
@@ -104,8 +105,8 @@ export const TicketsCancelledView: React.FC<TicketsViewProps> = ({ ticketsCancel
                                 <Table.Cell className="whitespace-nowrap">$ {item.penalty}</Table.Cell>
                                 <Table.Cell className="px-4">
                                     <div className="flex justify-end gap-0.5">
-                                        <ButtonUtility size="xs" color="tertiary" tooltip="Delete" icon={Trash01} />
-                                        <ButtonUtility size="xs" color="tertiary" tooltip="Edit" icon={Edit01} />
+                                        <ButtonUtility size="xs" color="tertiary" tooltip={i18n.t(Translation.buttonDeleteLabel)} icon={Trash01} />
+                                        <ButtonUtility size="xs" color="tertiary" tooltip={i18n.t(Translation.buttonEditLabel)} icon={Edit01} />
                                     </div>
                                 </Table.Cell>
                             </Table.Row>

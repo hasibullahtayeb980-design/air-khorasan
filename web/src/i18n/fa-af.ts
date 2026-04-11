@@ -60,6 +60,7 @@ export const fa_AF = {
     tableHeaderCreatedAtLabel: 'تاریخ ایجاد',
   },
   ticketsChanged: {
+    title: 'تکت‌های تغییر یافته',
     buttonNewTicketChangeLabel: 'تغییر جدید تکت',
     tableHeaderChangeTypeLabel: 'نوع تغییر',
     tableHeaderOldDateLabel: 'تاریخ قبلی',
@@ -69,13 +70,16 @@ export const fa_AF = {
     changeTypeDateChangeLabel: 'تغییر تاریخ',
   },
   ticketsCancelled: {
+    title: 'تکت‌های لغو شده',
     buttonNewTicketCancellationLabel: 'لغو جدید تکت',
     tableHeaderCancellationDateLabel: 'تاریخ لغو',
     tableHeaderRefundAmountLabel: 'مبلغ بازگشت',
     tableHeaderPenaltyLabel: 'جریمه',
   },
   visaProcessing: {
+    title: 'پروسس ویزه',
     buttonNewVisaProcessingEntryLabel: 'ورودی جدید پروسس ویزه',
+    tableHeaderVisaProcessingIdLabel: 'شناسه پروسس ویز',
     tableHeaderCountryLabel: 'کشور',
     tableHeaderVisaTypeLabel: 'نوع ویزه',
     tableHeaderApplicationDateLabel: 'تاریخ درخواست',
@@ -87,6 +91,7 @@ export const fa_AF = {
     visaTypeStudyLabel: 'تحصیلی',
   },
   expenses: {
+    title: 'مصارف',
     buttonAddNewExpenseLabel: 'افزودن مصرف جدید',
     tableHeaderExpenseIdLabel: 'شناسه مصرف',
     tableHeaderTitelLabel: 'عنوان',
@@ -100,6 +105,7 @@ export const fa_AF = {
     categoryOtherLabel: 'سایر',
   },
   commissions: {
+    title: 'کمیشن‌ها',
     buttonNewCommissionLabel: 'کمیشن جدید',
     tableHeaderComissionIdLabel: 'شناسه کمیشن',
     tableHeaderPartnerCompanyLabel: 'شرکت همکار',

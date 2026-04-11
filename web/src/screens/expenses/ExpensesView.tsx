@@ -10,6 +10,7 @@ import { ExpenseCategory, type Expense } from "@/services/AKClient";
 import { Button } from "@/components/base/buttons/button";
 import { getLocaleDirection } from "@/utils/utils";
 import { LocaleDirection } from "@/i18n/types";
+import { i18n, Translation } from "@/i18n";
 
 interface ExpensesViewProps {
     expenses: Expense[];
@@ -53,13 +54,13 @@ export const ExpensesView: React.FC<ExpensesViewProps> = ({ expenses, totalExpen
     return (
         <TableCard.Root className="dark-mode h-screen flex flex-col">
             <TableCard.Header
-                title="Expenses"
+                title={i18n.t(Translation.expenses.title)}
                 badge={totalExpenses}
                 contentTrailing={
                         <div className="flex flex-row items-center">
                             <div className="flex items-center gap-3">
                                 <Button onClick={() => null} size="sm" iconLeading={CurrencyDollarCircle}>
-                                    Add New Expense
+                                    {i18n.t(Translation.expenses.buttonAddNewExpenseLabel)}
                                 </Button>
                             </div>
                             <div
@@ -73,12 +74,12 @@ export const ExpensesView: React.FC<ExpensesViewProps> = ({ expenses, totalExpen
             <div className="flex-1 overflow-y-auto">
                 <Table aria-label="Expenses" selectionMode="multiple" sortDescriptor={sortDescriptor} onSortChange={setSortDescriptor}>
                     <Table.Header>
-                        <Table.Head id="id" label="Expense ID" isRowHeader allowsSorting className="w-full max-w-1/4" />
-                        <Table.Head id="title" label="Title" allowsSorting />
-                        <Table.Head id="amount" label="Amount" allowsSorting tooltip="This is a tooltip" />
-                        <Table.Head id="category" label="Category" allowsSorting />
-                        <Table.Head id="date" label="Date" allowsSorting tooltip="This is a tooltip" />
-                        <Table.Head id="description" label="Description" allowsSorting />
+                        <Table.Head id="id" label={i18n.t(Translation.expenses.tableHeaderExpenseIdLabel)} isRowHeader allowsSorting className="w-full max-w-1/4" />
+                        <Table.Head id="title" label={i18n.t(Translation.expenses.tableHeaderTitelLabel)} allowsSorting />
+                        <Table.Head id="amount" label={i18n.t(Translation.expenses.tableHeaderAmountLabel)} allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="category" label={i18n.t(Translation.expenses.tableHeaderCategoryLabel)} allowsSorting />
+                        <Table.Head id="date" label={i18n.t(Translation.expenses.tableHeaderDateLabel)} allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="description" label={i18n.t(Translation.expenses.tableHeaderDescriptionLabel)} allowsSorting />
                         <Table.Head id="actions" />
                     </Table.Header>
     
@@ -92,13 +93,13 @@ export const ExpensesView: React.FC<ExpensesViewProps> = ({ expenses, totalExpen
                                 </Table.Cell>
                                 <Table.Cell className="whitespace-nowrap">{item.title}</Table.Cell>
                                 <Table.Cell className="whitespace-nowrap">{item.amount}</Table.Cell>
-                                <Table.Cell className="whitespace-nowrap">{item.category === ExpenseCategory.Rent ? "Rent" : item.category === ExpenseCategory.Salary ? "Salary" : item.category === ExpenseCategory.Internet ? "Internet" : "Other"}</Table.Cell>
+                                <Table.Cell className="whitespace-nowrap">{item.category === ExpenseCategory.Rent ? i18n.t(Translation.expenses.categoryRentLabel) : item.category === ExpenseCategory.Salary ? i18n.t(Translation.expenses.categorySalaryLabel) : item.category === ExpenseCategory.Internet ? i18n.t(Translation.expenses.categoryInternetLabel) : i18n.t(Translation.expenses.categoryOtherLabel)}</Table.Cell>
                                 <Table.Cell className="whitespace-nowrap">{new Date(item.date).toLocaleDateString()}</Table.Cell>
                                 <Table.Cell className="whitespace-nowrap">{item.description}</Table.Cell>
                                 <Table.Cell className="px-4">
                                     <div className="flex justify-end gap-0.5">
-                                        <ButtonUtility size="xs" color="tertiary" tooltip="Delete" icon={Trash01} />
-                                        <ButtonUtility size="xs" color="tertiary" tooltip="Edit" icon={Edit01} />
+                                        <ButtonUtility size="xs" color="tertiary" tooltip={i18n.t(Translation.buttonDeleteLabel)} icon={Trash01} />
+                                        <ButtonUtility size="xs" color="tertiary" tooltip={i18n.t(Translation.buttonEditLabel)} icon={Edit01} />
                                     </div>
                                 </Table.Cell>
                             </Table.Row>

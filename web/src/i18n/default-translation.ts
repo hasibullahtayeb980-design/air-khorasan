@@ -62,6 +62,7 @@ export const defaultTranslations = {
     tableHeaderCreatedAtLabel: 'Created Date',
   },
   ticketsChanged: {
+    title: 'Tickets Changed',
     buttonNewTicketChangeLabel: 'New Ticket Change',
     tableHeaderChangeTypeLabel: 'Change Type',
     tableHeaderOldDateLabel: 'Old Date',
@@ -71,13 +72,16 @@ export const defaultTranslations = {
     changeTypeDateChangeLabel: 'Date Change',
   },
   ticketsCancelled: {
+    title: 'Tickets Cancelled',
     buttonNewTicketCancellationLabel: 'New Ticket Cancellation',
     tableHeaderCancellationDateLabel: 'Cancellation Date',
     tableHeaderRefundAmountLabel: 'Refund Amount',
     tableHeaderPenaltyLabel: 'Penalty',
   },
   visaProcessing: {
+    title: 'Visa Processing',
     buttonNewVisaProcessingEntryLabel: 'New Visa Processing Entry',
+    tableHeaderVisaProcessingIdLabel: 'Visa Processing ID',
     tableHeaderCountryLabel: 'Country',
     tableHeaderVisaTypeLabel: 'Visa Type',
     tableHeaderApplicationDateLabel: 'Application Date',
@@ -89,6 +93,7 @@ export const defaultTranslations = {
     visaTypeStudyLabel: 'Study',
   },
   expenses: {
+    title: 'Expenses',
     buttonAddNewExpenseLabel: 'Add New Expense',
     tableHeaderExpenseIdLabel: 'Expense ID',
     tableHeaderTitelLabel: 'Titel',
@@ -102,6 +107,7 @@ export const defaultTranslations = {
     categoryOtherLabel: 'Other',
   },
   commissions: {
+    title: 'Commissions',
     buttonNewCommissionLabel: 'New Commission',
     tableHeaderComissionIdLabel: 'Commission ID',
     tableHeaderPartnerCompanyLabel: 'Partner Company',

@@ -81,6 +81,9 @@ const MobilePagination = ({ page = 1, total = 10, className, onPageChange }: Mob
     );
 };
 
+const labelPrevious = i18n.t(Translation.paginationButtonPreviousLabel);
+const labelNext = i18n.t(Translation.paginationButtonNextLabel);
+
 export const PaginationPageDefault = ({ rounded, page = 1, total = 10, className, ...props }: PaginationProps) => {
     const isDesktop = useBreakpoint("md");
 
@@ -94,14 +97,14 @@ export const PaginationPageDefault = ({ rounded, page = 1, total = 10, className
             <div className="hidden flex-1 justify-start md:flex">
                 <Pagination.PrevTrigger asChild>
                     <Button iconLeading={iconPrevious} color="link-gray" size="sm">
-                        {isDesktop ? "Previous" : undefined}
+                        {isDesktop ? labelPrevious : undefined}
                     </Button>
                 </Pagination.PrevTrigger>
             </div>
 
             <Pagination.PrevTrigger asChild className="md:hidden">
                 <Button iconLeading={iconPrevious} color="secondary" size="sm">
-                    {isDesktop ? "Previous" : undefined}
+                    {isDesktop ? labelPrevious : undefined}
                 </Button>
             </Pagination.PrevTrigger>
 
@@ -130,13 +133,13 @@ export const PaginationPageDefault = ({ rounded, page = 1, total = 10, className
             <div className="hidden flex-1 justify-end md:flex">
                 <Pagination.NextTrigger asChild>
                     <Button iconTrailing={iconNext} color="link-gray" size="sm">
-                        {isDesktop ? "Next" : undefined}
+                        {isDesktop ? labelNext : undefined}
                     </Button>
                 </Pagination.NextTrigger>
             </div>
             <Pagination.NextTrigger asChild className="md:hidden">
                 <Button iconTrailing={iconNext} color="secondary" size="sm">
-                    {isDesktop ? "Next" : undefined}
+                    {isDesktop ? labelNext : undefined}
                 </Button>
             </Pagination.NextTrigger>
         </Pagination.Root>
@@ -156,7 +159,7 @@ export const PaginationPageMinimalCenter = ({ rounded, page = 1, total = 10, cla
             <div className="flex flex-1 justify-start">
                 <Pagination.PrevTrigger asChild>
                     <Button iconLeading={iconPrevious} color="secondary" size="sm">
-                        {isDesktop ? "Previous" : undefined}
+                        {isDesktop ? labelPrevious : undefined}
                     </Button>
                 </Pagination.PrevTrigger>
             </div>
@@ -186,7 +189,7 @@ export const PaginationPageMinimalCenter = ({ rounded, page = 1, total = 10, cla
             <div className="flex flex-1 justify-end">
                 <Pagination.NextTrigger asChild>
                     <Button iconTrailing={iconNext} color="secondary" size="sm">
-                        {isDesktop ? "Next" : undefined}
+                        {isDesktop ? labelNext : undefined}
                     </Button>
                 </Pagination.NextTrigger>
             </div>
@@ -207,7 +210,7 @@ export const PaginationCardDefault = ({ rounded, page = 1, total = 10, ...props 
             <div className="flex flex-1 justify-start">
                 <Pagination.PrevTrigger asChild>
                     <Button iconLeading={ArrowLeft} color="secondary" size="sm">
-                        {isDesktop ? "Previous" : undefined}
+                        {isDesktop ? labelPrevious : undefined}
                     </Button>
                 </Pagination.PrevTrigger>
             </div>
@@ -237,7 +240,7 @@ export const PaginationCardDefault = ({ rounded, page = 1, total = 10, ...props 
             <div className="flex flex-1 justify-end">
                 <Pagination.NextTrigger asChild>
                     <Button iconTrailing={ArrowRight} color="secondary" size="sm">
-                        {isDesktop ? "Next" : undefined}
+                        {isDesktop ? labelNext : undefined}
                     </Button>
                 </Pagination.NextTrigger>
             </div>
@@ -278,7 +281,7 @@ export const PaginationCardMinimal = ({
             <nav aria-label="Pagination" className={cx("hidden items-center gap-3 md:flex", align === "center" && "justify-between")}>
                 <div className={cx(align === "center" && "flex flex-1 justify-start")}>
                     <Button isDisabled={page === 1} color="secondary" size="sm" onClick={() => onPageChange?.(Math.max(0, page - 1))}>
-                        Previous
+                        {labelPrevious}
                     </Button>
                 </div>
 
@@ -313,7 +316,7 @@ export const PaginationCardMinimal = ({
                 </div>
                 <div className={cx(align === "center" && "flex flex-1 justify-end")}>
                     <Button isDisabled={page === total} color="secondary" size="sm" onClick={() => onPageChange?.(Math.min(total, page + 1))}>
-                        Next
+                        {labelNext}
                     </Button>
                 </div>
             </nav>
@@ -343,7 +346,7 @@ export const PaginationButtonGroup = ({ align = "left", page = 1, total = 10, ..
                     {({ pages }) => (
                         <ButtonGroup size="sm">
                             <Pagination.PrevTrigger asChild>
-                                <ButtonGroupItem iconLeading={ArrowLeft}>{isDesktop ? "Previous" : undefined}</ButtonGroupItem>
+                                <ButtonGroupItem iconLeading={ArrowLeft}>{isDesktop ? labelPrevious : undefined}</ButtonGroupItem>
                             </Pagination.PrevTrigger>
 
                             {pages.map((page, index) =>
@@ -363,7 +366,7 @@ export const PaginationButtonGroup = ({ align = "left", page = 1, total = 10, ..
                             )}
 
                             <Pagination.NextTrigger asChild>
-                                <ButtonGroupItem iconTrailing={ArrowRight}>{isDesktop ? "Next" : undefined}</ButtonGroupItem>
+                                <ButtonGroupItem iconTrailing={ArrowRight}>{isDesktop ? labelNext : undefined}</ButtonGroupItem>
                             </Pagination.NextTrigger>
                         </ButtonGroup>
                     )}

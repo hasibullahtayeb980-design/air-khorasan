@@ -11,6 +11,7 @@ import { VisaStatus, VisaType, type Visa } from "@/services/AKClient";
 import { Button } from "@/components/base/buttons/button";
 import { getLocaleDirection } from "@/utils/utils";
 import { LocaleDirection } from "@/i18n/types";
+import { i18n, Translation } from "@/i18n";
 
 interface VisaProcessingViewProps {
   visas: Visa[];
@@ -54,13 +55,13 @@ export const VisaProcessingView: React.FC<VisaProcessingViewProps> = ({ visas, t
     return (
         <TableCard.Root className="dark-mode h-screen flex flex-col">
             <TableCard.Header
-                title="Visa Processing"
+                title={i18n.t(Translation.visaProcessing.title)}
                 badge={totalVisas}
                 contentTrailing={
                         <div className="flex flex-row items-center">
                             <div className="flex items-center gap-3">
                                 <Button onClick={() => null} size="sm" iconLeading={FilePlus02}>
-                                    New Visa Processing Entry
+                                    {i18n.t(Translation.visaProcessing.buttonNewVisaProcessingEntryLabel)}
                                 </Button>
                             </div>
                             <div
@@ -74,14 +75,14 @@ export const VisaProcessingView: React.FC<VisaProcessingViewProps> = ({ visas, t
             <div className="flex-1 overflow-y-auto">
                 <Table aria-label="Visa Processing" selectionMode="multiple" sortDescriptor={sortDescriptor} onSortChange={setSortDescriptor}>
                     <Table.Header>
-                        <Table.Head id="id" label="Visa Processing ID" isRowHeader allowsSorting className="w-full max-w-1/4" />
-                        <Table.Head id="customer" label="Customer" allowsSorting />
-                        <Table.Head id="country" label="Country" allowsSorting tooltip="This is a tooltip" />
-                        <Table.Head id="visaType" label="Visa Type" allowsSorting tooltip="This is a tooltip" />
-                        <Table.Head id="applicationDate" label="Application Date" allowsSorting tooltip="This is a tooltip" />
-                        <Table.Head id="fee" label="Fee" allowsSorting tooltip="This is a tooltip" />
-                        <Table.Head id="companyCost" label="Company Cost" allowsSorting tooltip="This is a tooltip" />
-                        <Table.Head id="profit" label="Profit" allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="id" label={i18n.t(Translation.visaProcessing.tableHeaderVisaProcessingIdLabel)} isRowHeader allowsSorting className="w-full max-w-1/4" />
+                        <Table.Head id="customer" label={i18n.t(Translation.tickets.tableHeaderCustomerLabel)} allowsSorting />
+                        <Table.Head id="country" label={i18n.t(Translation.visaProcessing.tableHeaderCountryLabel)} allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="visaType" label={i18n.t(Translation.visaProcessing.tableHeaderVisaTypeLabel)} allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="applicationDate" label={i18n.t(Translation.visaProcessing.tableHeaderApplicationDateLabel)} allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="fee" label={i18n.t(Translation.visaProcessing.tableHeaderFeeLabel)} allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="companyCost" label={i18n.t(Translation.visaProcessing.tableHeaderCompanyCostLabel)} allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="profit" label={i18n.t(Translation.visaProcessing.tableHeaderProfitLabel)} allowsSorting tooltip="This is a tooltip" />
                         <Table.Head id="actions" />
                     </Table.Header>
     
@@ -103,15 +104,15 @@ export const VisaProcessingView: React.FC<VisaProcessingViewProps> = ({ visas, t
                                     </div>
                                 </Table.Cell>
                                 <Table.Cell className="whitespace-nowrap">{item.country}</Table.Cell>
-                                <Table.Cell className="whitespace-nowrap">{item.visaType === VisaType.Tourist ? "Tourist" : item.visaType === VisaType.Business ? "Business" : "Study"}</Table.Cell>
+                                <Table.Cell className="whitespace-nowrap">{item.visaType === VisaType.Tourist ? i18n.t(Translation.visaProcessing.visaTypeTouristLabel) : item.visaType === VisaType.Business ? i18n.t(Translation.visaProcessing.visaTypeBusinessLabel) : i18n.t(Translation.visaProcessing.visaTypeStudyLabel)}</Table.Cell>
                                 <Table.Cell className="whitespace-nowrap">{new Date(item.applicationDate).toLocaleDateString()}</Table.Cell>
                                 <Table.Cell className="whitespace-nowrap">{item.fee}</Table.Cell>
                                 <Table.Cell className="whitespace-nowrap">{item.companyCost}</Table.Cell>
                                 <Table.Cell className="whitespace-nowrap">{item.profit}</Table.Cell>
                                 <Table.Cell className="px-4">
                                     <div className="flex justify-end gap-0.5">
-                                        <ButtonUtility size="xs" color="tertiary" tooltip="Delete" icon={Trash01} />
-                                        <ButtonUtility size="xs" color="tertiary" tooltip="Edit" icon={Edit01} />
+                                        <ButtonUtility size="xs" color="tertiary" tooltip={i18n.t(Translation.buttonDeleteLabel)} icon={Trash01} />
+                                        <ButtonUtility size="xs" color="tertiary" tooltip={i18n.t(Translation.buttonEditLabel)} icon={Edit01} />
                                     </div>
                                 </Table.Cell>
                             </Table.Row>

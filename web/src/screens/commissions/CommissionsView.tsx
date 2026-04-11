@@ -10,6 +10,7 @@ import type { Commission } from "@/services/AKClient";
 import { Button } from "@/components/base/buttons/button";
 import { getLocaleDirection } from "@/utils/utils";
 import { LocaleDirection } from "@/i18n/types";
+import { i18n, Translation } from "@/i18n";
 
 interface CommissionsViewProps {
     commissions: Commission[];
@@ -53,13 +54,13 @@ export const CommissionsView: React.FC<CommissionsViewProps> = ({ commissions, t
     return (
         <TableCard.Root className="dark-mode h-screen flex flex-col">
             <TableCard.Header
-                title="Commissions"
+                title={i18n.t(Translation.commissions.title)}
                 badge={totalCommissions}
                 contentTrailing={
                         <div className="flex flex-row items-center">
                             <div className="flex items-center gap-3">
                                 <Button onClick={() => null} size="sm" iconLeading={MessagePlusCircle}>
-                                    New Commission
+                                    {i18n.t(Translation.commissions.buttonNewCommissionLabel)}
                                 </Button>
                             </div>
                             <div
@@ -73,11 +74,11 @@ export const CommissionsView: React.FC<CommissionsViewProps> = ({ commissions, t
             <div className="flex-1 overflow-y-auto">
                 <Table aria-label="Commissions" selectionMode="multiple" sortDescriptor={sortDescriptor} onSortChange={setSortDescriptor}>
                     <Table.Header>
-                        <Table.Head id="id" label="Commission ID" isRowHeader allowsSorting className="w-full max-w-1/4" />
-                        <Table.Head id="partnerCompany" label="Partner Company" allowsSorting />
-                        <Table.Head id="visaId" label="Visa ID" allowsSorting tooltip="This is a tooltip" />
-                        <Table.Head id="amount" label="Amount" allowsSorting tooltip="This is a tooltip" />
-                        <Table.Head id="date" label="Date" allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="id" label={i18n.t(Translation.commissions.tableHeaderComissionIdLabel)} isRowHeader allowsSorting className="w-full max-w-1/4" />
+                        <Table.Head id="partnerCompany" label={i18n.t(Translation.commissions.tableHeaderPartnerCompanyLabel)} allowsSorting />
+                        <Table.Head id="visaId" label={i18n.t(Translation.commissions.tableHeaderVisaIdLabel)} allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="amount" label={i18n.t(Translation.commissions.tableHeaderAmountLabel)} allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="date" label={i18n.t(Translation.commissions.tableHeaderDateLabel)} allowsSorting tooltip="This is a tooltip" />
                         <Table.Head id="actions" />
                     </Table.Header>
     
@@ -95,8 +96,8 @@ export const CommissionsView: React.FC<CommissionsViewProps> = ({ commissions, t
                                 <Table.Cell className="whitespace-nowrap">{new Date(item.date).toLocaleDateString()}</Table.Cell>
                                 <Table.Cell className="px-4">
                                     <div className="flex justify-end gap-0.5">
-                                        <ButtonUtility size="xs" color="tertiary" tooltip="Delete" icon={Trash01} />
-                                        <ButtonUtility size="xs" color="tertiary" tooltip="Edit" icon={Edit01} />
+                                        <ButtonUtility size="xs" color="tertiary" tooltip={i18n.t(Translation.buttonDeleteLabel)} icon={Trash01} />
+                                        <ButtonUtility size="xs" color="tertiary" tooltip={i18n.t(Translation.buttonEditLabel)} icon={Edit01} />
                                     </div>
                                 </Table.Cell>
                             </Table.Row>
