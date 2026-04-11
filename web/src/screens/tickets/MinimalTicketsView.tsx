@@ -5,6 +5,7 @@ import { Avatar } from "@/components/base/avatar/avatar";
 import { BadgeWithDot } from "@/components/base/badges/badges";
 import type { LatestTicketCancellationInterface, LatestTicketChangeInterface } from "../dashboard/DashboardView";
 import { TicketStatus } from "@/services/AKClient";
+import { i18n, Translation } from "@/i18n";
 
 interface MinimalTicketsViewProps {
     title: string;
@@ -47,8 +48,8 @@ export const MinimalTicketsView: React.FC<MinimalTicketsViewProps> = ({ tickets,
             <div className="flex-1 overflow-y-auto">
                 <Table aria-label="Tickets" sortDescriptor={sortDescriptor} onSortChange={setSortDescriptor}>
                     <Table.Header>
-                        <Table.Head id="id" label="Ticket ID" isRowHeader allowsSorting className="w-full max-w-1/4" />
-                        <Table.Head id="customer" label="Customer" allowsSorting />
+                        <Table.Head id="id" label={i18n.t(Translation.tickets.tableHeaderTicketIdLabel)} isRowHeader allowsSorting className="w-full max-w-1/4" />
+                        <Table.Head id="customer" label={i18n.t(Translation.tickets.tableHeaderCustomerLabel)} allowsSorting />
                     </Table.Header>
     
                     <Table.Body items={sortedItems}>

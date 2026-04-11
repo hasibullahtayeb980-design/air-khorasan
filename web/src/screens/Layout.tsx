@@ -1,5 +1,7 @@
 import type { NavItemDividerType, NavItemType } from '@/components/application/app-navigation/config';
 import { SidebarNavigationSectionDividers } from '@/components/application/app-navigation/sidebar-navigation/sidebar-section-dividers';
+import { Translation } from '@/i18n';
+import { i18n } from '@/i18n/i18n';
 import { akClient } from '@/services';
 import { QUERY_DASHBOARD_KEY } from '@/services/queries';
 import { useQuery } from '@tanstack/react-query';
@@ -13,40 +15,40 @@ const getNavItems = (
     totalTicketCancellations: number) => {
     const navItems: (NavItemType | NavItemDividerType)[] = [
         {
-            label: "Dashboard",
+            label: i18n.t(Translation.navigation.buttonDashboardLabel),
             href: "/",
             icon: BarChartSquare02,
         },
         {
-            label: "Customers",
+            label: i18n.t(Translation.navigation.buttonCustomersLabel),
             href: "/customers",
             icon: Users01,
             badge: totalCustomers,
         },
         { divider: true },
         {
-            label: "Tickets",
+            label: i18n.t(Translation.navigation.tickets.buttonIndexLabel),
             icon: CreditCard02,
             href: "/tickets",
             items: [
-                { label: "View all", badge: totalTickets, href: "/tickets/view-all" },
-                { label: "Changed", badge: totalTicketChanges, href: "/tickets/changed" },
-                { label: "Cancellations", badge: totalTicketCancellations, href: "/tickets/cancelled" },
+                { label: i18n.t(Translation.navigation.tickets.buttonViewAllLabel), badge: totalTickets, href: "/tickets/view-all" },
+                { label: i18n.t(Translation.navigation.tickets.buttonChangedLabel), badge: totalTicketChanges, href: "/tickets/changed" },
+                { label: i18n.t(Translation.navigation.tickets.buttonCancellationsLabel), badge: totalTicketCancellations, href: "/tickets/cancelled" },
             ],
         },
         { divider: true },
         {
-            label: "Visa Processing",
+            label: i18n.t(Translation.navigation.buttonVisaProcessingLabel),
             href: "/visa-processing",
             icon: FileCheck02,
         },
         {
-            label: "Expenses",
+            label: i18n.t(Translation.navigation.buttonExpensesLabel),
             href: "/expenses",
             icon: CurrencyDollarCircle,
         },
         {
-            label: "Commissions",
+            label: i18n.t(Translation.navigation.buttonCommissionsLabel),
             href: "/commissions",
             icon: MessageChatCircle,
         },

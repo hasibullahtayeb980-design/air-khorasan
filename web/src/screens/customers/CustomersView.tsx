@@ -10,6 +10,9 @@ import { DropdownIconSimple } from "@/components/base/dropdown/dropdown-icon-sim
 import { Button } from "@/components/base/buttons/button";
 import { NewCustomerModal } from "./new-customer/NewCustomerModal";
 import type { Customer } from "@/services/AKClient";
+import { LocaleDirection } from "@/i18n/types";
+import { i18n, Translation } from "@/i18n";
+import { getLocaleDirection } from "@/utils/utils";
 
 interface CustomersViewProps {
     totalCustomers: number;
@@ -67,6 +70,8 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
     const onNewCustomerFormSuccess = () => {
         setNewCustomerFormVisible(false);
     }
+
+    const dir: LocaleDirection = getLocaleDirection();
  
     return (
         <div>
@@ -80,17 +85,19 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
             
             <TableCard.Root className="dark-mode">
                 <TableCard.Header
-                    title="Customers"
+                    title={i18n.t(Translation.customers.title)}
                     badge={`${totalCustomers}`}
                     contentTrailing={
-                        <div>
-                            <div className="absolute top-5 right-4 md:right-6">
-                                <DropdownIconSimple />
-                            </div>
+                        <div className="flex flex-row items-center">
                             <div className="flex items-center gap-3">
                                 <Button onClick={displayNewCustomerForm} size="sm" iconLeading={UserPlus01}>
-                                    Add Customer
+                                    {i18n.t(Translation.customers.buttonAddCustomerLabel)}
                                 </Button>
+                            </div>
+                            <div
+                              className={`flex items-center m${dir === LocaleDirection.RightToLeft ? 'r' : 'l'}-4 md:m${dir === LocaleDirection.RightToLeft ? 'r' : 'l'}-6`}
+                            >
+                                <DropdownIconSimple />
                             </div>
                         </div>
                     }
@@ -99,11 +106,11 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
                 <div className="flex-1 overflow-y-auto">
                     <Table aria-label="Customers" selectionMode="multiple" sortDescriptor={sortDescriptor} onSortChange={setSortDescriptor}>
                         <Table.Header>
-                            <Table.Head id="full_name" label="Full Name" isRowHeader allowsSorting className="w-full max-w-1/4" />
-                            <Table.Head id="phone" label="Phone" allowsSorting />
-                            <Table.Head id="email" label="Email address" allowsSorting className="md:hidden xl:table-cell" />
-                            <Table.Head id="passport_number" label="Passport Number" allowsSorting tooltip="This is a tooltip" />
-                            <Table.Head id="tazkira_number" label="Tazkira Number" />
+                            <Table.Head id="full_name" label={i18n.t(Translation.customers.tableHeaderfullNameLabel)} isRowHeader allowsSorting className="w-full max-w-1/4" />
+                            <Table.Head id="phone" label={i18n.t(Translation.customers.tableHeaderPhoneLabel)} allowsSorting />
+                            <Table.Head id="email" label={i18n.t(Translation.customers.tableHeaderEmailLabel)} allowsSorting className="md:hidden xl:table-cell" />
+                            <Table.Head id="passport_number" label={i18n.t(Translation.customers.tableHeaderPassportNumberLabel)} allowsSorting tooltip="This is a tooltip" />
+                            <Table.Head id="tazkira_number" label={i18n.t(Translation.customers.tableHeaderTazkiraNumberLabel)} />
                             <Table.Head id="actions" />
                         </Table.Header>
         
@@ -135,8 +142,8 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
                                     </Table.Cell>
                                     <Table.Cell className="px-4">
                                         <div className="flex justify-end gap-0.5">
-                                            <ButtonUtility size="xs" color="tertiary" tooltip="Delete" icon={Trash01} />
-                                            <ButtonUtility size="xs" color="tertiary" tooltip="Edit" icon={Edit01} />
+                                            <ButtonUtility size="xs" color="tertiary" tooltip={i18n.t(Translation.buttonDeleteLabel)} icon={Trash01} />
+                                            <ButtonUtility size="xs" color="tertiary" tooltip={i18n.t(Translation.buttonEditLabel)} icon={Edit01} />
                                         </div>
                                     </Table.Cell>
                                 </Table.Row>

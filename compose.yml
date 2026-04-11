@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
     container_name: ak-web
     ports:
-      - "${WEB_PORT:-8080}:8080"
+      - "${WEB_PORT:-5173}:5173"
     volumes:
       - ./web:/var/www/air-khorasan/web
     depends_on:

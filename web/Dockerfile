@@ -36,7 +36,7 @@ WORKDIR /var/www/air-khorasan/web
 # Copy application files
 COPY . .
 
-EXPOSE 8080
+EXPOSE 5173
 
 # Install Node.js dependencies
 RUN npm install

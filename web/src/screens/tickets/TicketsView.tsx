@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { Edit01, Trash01 } from "@untitledui/icons";
+import { CreditCardPlus, Edit01, Trash01, UserPlus01 } from "@untitledui/icons";
 import type { SortDescriptor } from "react-aria-components";
 import { PaginationPageMinimalCenter } from "@/components/application/pagination/pagination";
 import { Table, TableCard } from "@/components/application/table/table";
@@ -9,6 +9,10 @@ import { ButtonUtility } from "@/components/base/buttons/button-utility";
 import { DropdownIconSimple } from "@/components/base/dropdown/dropdown-icon-simple";
 import type { Ticket } from "@/services/AKClient";
 import { TicketStatus } from "@/services/AKClient";
+import { Button } from "@/components/base/buttons/button";
+import { LocaleDirection } from "@/i18n/types";
+import { getLocaleDirection } from "@/utils/utils";
+import { i18n, Translation } from "@/i18n";
 
 interface TicketsViewProps {
     totalTickets: number;
@@ -53,29 +57,40 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
         });
     }, [sortDescriptor, page]);
 
+    const dir: LocaleDirection = getLocaleDirection();
+
     return (
         <TableCard.Root className="dark-mode h-screen flex flex-col">
             <TableCard.Header
-                title="Tickets"
+                title={i18n.t(Translation.tickets.title)}
                 badge={totalTickets}
                 contentTrailing={
-                    <div className="absolute top-5 right-4 md:right-6">
-                        <DropdownIconSimple />
-                    </div>
+                        <div className="flex flex-row items-center">
+                            <div className="flex items-center gap-3">
+                                <Button onClick={() => null} size="sm" iconLeading={CreditCardPlus}>
+                                    {i18n.t(Translation.tickets.buttonNewTicketLabel)}
+                                </Button>
+                            </div>
+                            <div
+                              className={`flex items-center m${dir === LocaleDirection.RightToLeft ? 'r' : 'l'}-4 md:m${dir === LocaleDirection.RightToLeft ? 'r' : 'l'}-6`}
+                            >
+                                <DropdownIconSimple />
+                            </div>
+                        </div>
                 }
             />
             <div className="flex-1 overflow-y-auto">
                 <Table aria-label="Tickets" selectionMode="multiple" sortDescriptor={sortDescriptor} onSortChange={setSortDescriptor}>
                     <Table.Header>
-                        <Table.Head id="id" label="Ticket ID" isRowHeader allowsSorting className="w-full max-w-1/4" />
-                        <Table.Head id="customer" label="Customer" allowsSorting />
-                        <Table.Head id="airline" label="Airline" allowsSorting tooltip="This is a tooltip" />
-                        <Table.Head id="from-city" label="Departure City" allowsSorting tooltip="This is a tooltip" />
-                        <Table.Head id="to-city" label="Destination City" allowsSorting tooltip="This is a tooltip" />
-                        <Table.Head id="departure-date" label="Departure Date" allowsSorting tooltip="This is a tooltip" />
-                        <Table.Head id="return-date" label="Return Date" allowsSorting tooltip="This is a tooltip" />
-                        <Table.Head id="price" label="Price" allowsSorting tooltip="This is a tooltip" />
-                        <Table.Head id="created_at" label="Created At" allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="id" label={i18n.t(Translation.tickets.tableHeaderTicketIdLabel)} isRowHeader allowsSorting className="w-full max-w-1/4" />
+                        <Table.Head id="customer" label={i18n.t(Translation.tickets.tableHeaderCustomerLabel)} allowsSorting />
+                        <Table.Head id="airline" label={i18n.t(Translation.tickets.tableHeaderAirlineLabel)} allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="from-city" label={i18n.t(Translation.tickets.tableHeaderDepartureCityLabel)} allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="to-city" label={i18n.t(Translation.tickets.tableHeaderDestinationCityLabel)} allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="departure-date" label={i18n.t(Translation.tickets.tableHeaderDepartureDateLabel)} allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="return-date" label={i18n.t(Translation.tickets.tableHeaderReturnDateLabel)} allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="price" label={i18n.t(Translation.tickets.tableHeaderPriceLabel)} allowsSorting tooltip="This is a tooltip" />
+                        <Table.Head id="created_at" label={i18n.t(Translation.tickets.tableHeaderCreatedAtLabel)} allowsSorting tooltip="This is a tooltip" />
                         <Table.Head id="actions" />
                     </Table.Header>
     

@@ -14,7 +14,7 @@ Then simply execute the following commands in the root directory of this project
 ```
 docker compose up
 ```
-It will setup all dependencies for you in Docker containers and you can then access the web application with the following URL: `http://localhost:8080/`.
+It will setup all dependencies for you in Docker containers and you can then access the web application with the following URL: `http://localhost:5173/`.
 
 ## Without Docker
 If you experience any issues with Docker then you can [setup the project without Docker here](docs/without-docker.md).
