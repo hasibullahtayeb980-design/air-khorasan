@@ -128,7 +128,7 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
                                     </Table.Cell>
                                     <Table.Cell>
                                         <BadgeWithDot size="sm" color={"success"} type="modern">
-                                            {item.phone}
+                                            <div dir="ltr">{item.phone}</div>
                                         </BadgeWithDot>
                                     </Table.Cell>
                                     <Table.Cell className="whitespace-nowrap md:hidden xl:table-cell">{item.email}</Table.Cell>

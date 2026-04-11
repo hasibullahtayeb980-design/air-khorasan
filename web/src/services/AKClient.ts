@@ -1,6 +1,6 @@
 import { RequestError } from "@/types/errors";
 
-const AK_API_URL = "http://localhost:8000/api";
+const AK_API_URL = "https://localhost:8000/api";
 
 enum HttpMethod {
   GET = "GET",

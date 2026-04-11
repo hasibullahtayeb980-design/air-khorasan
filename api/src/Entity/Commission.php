@@ -19,6 +19,7 @@ class Commission
     private ?string $partnerCompany = null;
 
     #[ORM\OneToOne(inversedBy: 'commission', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?Visa $visa = null;
 
     #[ORM\Column]
@@ -59,6 +60,11 @@ class Commission
     public function setVisa(Visa $visa): static
     {
         $this->visa = $visa;
+
+        if ($visa->getCommission() !== $this) {
+            $visa->setCommission($this);
+        }
+
         return $this;
     }
 

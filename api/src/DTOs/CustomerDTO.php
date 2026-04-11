@@ -9,8 +9,8 @@ class CustomerDTO
     public ?string $fullName = null;
     public ?string $phone = null;
     public ?string $email = null;
-    public ?int $passportNumber = null;
-    public ?int $tazkiraNumber = null;
+    public ?string $passportNumber = null;
+    public ?string $tazkiraNumber = null;
     public ?\DateTimeImmutable $createdAt = null;
     public ?string $avatarImageUrl = null;
 }

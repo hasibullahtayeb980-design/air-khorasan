@@ -38,7 +38,7 @@ class Visa
     #[ORM\Column]
     private ?int $profit = null;
 
-    #[ORM\ManyToOne(inversedBy: 'visa', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(mappedBy: 'visa', cascade: ['persist', 'remove'])]
     private ?Commission $commission = null;
 
     public function getId(): ?int

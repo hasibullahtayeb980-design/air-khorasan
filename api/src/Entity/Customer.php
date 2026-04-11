@@ -25,11 +25,11 @@ class Customer
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
-    #[ORM\Column(name: 'passport_number')]
-    private ?int $passportNumber = null;
+    #[ORM\Column(name: 'passport_number', type: 'string', length: 20)]
+    private ?string $passportNumber = null;
 
-    #[ORM\Column(name: 'tazkira_number')]
-    private ?int $tazkiraNumber = null;
+    #[ORM\Column(name: 'tazkira_number', type: 'string', length: 20)]
+    private ?string $tazkiraNumber = null;
 
     #[ORM\Column(name: 'created_at')]
     private ?\DateTimeImmutable $createdAt = null;
@@ -105,24 +105,24 @@ class Customer
         return $this;
     }
 
-    public function getPassportNumber(): ?int
+    public function getPassportNumber(): ?string
     {
         return $this->passportNumber;
     }
 
-    public function setPassportNumber(int $passportNumber): static
+    public function setPassportNumber(string $passportNumber): static
     {
         $this->passportNumber = $passportNumber;
 
         return $this;
     }
 
-    public function getTazkiraNumber(): ?int
+    public function getTazkiraNumber(): ?string
     {
         return $this->tazkiraNumber;
     }
 
-    public function setTazkiraNumber(int $tazkiraNumber): static
+    public function setTazkiraNumber(string $tazkiraNumber): static
     {
         $this->tazkiraNumber = $tazkiraNumber;
 
