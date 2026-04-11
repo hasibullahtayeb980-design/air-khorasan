@@ -4,6 +4,7 @@ import { useBreakpoint } from "@/hooks/use-breakpoint";
 import { cx } from "@/utils/cx";
 import { MinimalTicketsView } from "../tickets/MinimalTicketsView";
 import { TicketStatus, type TicketCancelled, type TicketChange } from "@/services/AKClient";
+import { i18n, Translation } from "@/i18n";
 
 interface NewCustomersInterface {
   monthYear: string;
@@ -39,9 +40,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
     return (
         <main className="dark-mode">
             <div className="flex flex-row items-center justify-between px-8">
-                <h1 className="text-xl font-semibold text-primary">Dashboard</h1>
+                <h1 className="text-xl font-semibold text-primary">{i18n.t(Translation.dashboard.title)}</h1>
                 <div className="flex flex-col gap-2">
-                    <dt className="text-sm font-medium text-tertiary">Total customers</dt>
+                    <dt className="text-sm font-medium text-tertiary">{i18n.t(Translation.dashboard.totalCustomers)}</dt>
                     <dd className="flex items-start gap-2">
                         <span className="text-display-sm font-semibold text-primary">{totalCustomers}</span>
                         <div className="flex items-center gap-1">
@@ -81,7 +82,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                         >
                             {isDesktop && (
                                 <Label fill="currentColor" className="text-xs! font-medium max-lg:hidden" position="bottom">
-                                    Month
+                                    {i18n.t(Translation.dashboard.diagramMonthLabel)}
                                 </Label>
                             )}
                         </XAxis>
@@ -94,7 +95,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                             tickFormatter={(value) => Number(value).toLocaleString()}
                         >
                             <Label
-                                value="New customers"
+                                value={i18n.t(Translation.dashboard.diagramNewCustomersLabel)}
                                 fill="currentColor"
                                 className="text-xs! font-medium"
                                 style={{ textAnchor: "middle" }}
@@ -132,12 +133,12 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             <div className="flex flex-col w-full md:flex-row mt-8">
                 <MinimalTicketsView
                     tickets={latestTicketChanges}
-                    title="Recently Changed Tickets"
+                    title={i18n.t(Translation.dashboard.recentlyChangedTicketsTitel)}
                     ticketsStatus={TicketStatus.Changed}
                 />
                 <MinimalTicketsView
                     tickets={latestTicketCancellations}
-                    title="Recently Cancelled Tickets"
+                    title={i18n.t(Translation.dashboard.recentlyCancelledTicketsTitel)}
                     ticketsStatus={TicketStatus.Cancelled}
                 />
             </div>
