@@ -2,6 +2,7 @@
 
 namespace App\Controller\AirKhorasanAPI;
 
+use App\DTOs\MonthlyNewCustomerDTO;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
@@ -25,7 +26,7 @@ final class DashboardController extends AbstractController
         SerializerInterface    $serializer,
         ObjectMapperInterface  $objectMapper): JsonResponse
     {
-        $monthlyNewCustomers = $em->getRepository(Customer::class)->findMonthlyNewCustomers();
+        $monthlyNewCustomers = $this->getMonthlyNewCustomers($em);
 
         $latestTicketChangeDTOCollection = $this->getLatestTicketChangeDTOs($em, $objectMapper);
         $latestTicketCancellationDTOCollection = $this->getLatestTicketCancellationDTOs($em, $objectMapper);
@@ -46,6 +47,22 @@ final class DashboardController extends AbstractController
             'totalTicketCancellations' => $totalTicketCancellations,
             'totalTickets' => $totalTickets,
         ]);
+    }
+
+    private function getMonthlyNewCustomers(EntityManagerInterface $em): array
+    {
+        $monthlyNewCustomers = $em->getRepository(Customer::class)->findMonthlyNewCustomers();
+        $monthlyNewCustomersDTO = [];
+
+        foreach ($monthlyNewCustomers as $monthlyNewCustomerEntry) {
+            $monthlyNewCustomerDTO = new MonthlyNewCustomerDTO();
+            $monthlyNewCustomerDTO->monthYear = $monthlyNewCustomerEntry['month_year'];
+            $monthlyNewCustomerDTO->count = $monthlyNewCustomerEntry['new_customers'];
+
+            $monthlyNewCustomersDTO[] = $monthlyNewCustomerDTO;
+        }
+
+        return $monthlyNewCustomersDTO;
     }
 
     private function getLatestTicketChangeDTOs(EntityManagerInterface $em, ObjectMapperInterface $objectMapper): array
@@ -87,8 +104,8 @@ final class DashboardController extends AbstractController
     private function calculateMonthlyNewCustomersChangeInPercentage(array $monthlyNewCustomers): float
     {
         $countMonths = count($monthlyNewCustomers);
-        $thisMonth = $monthlyNewCustomers[$countMonths - 1]['new_customers'];
-        $previousMonth = $monthlyNewCustomers[$countMonths - 2]['new_customers'];
+        $thisMonth = $monthlyNewCustomers[$countMonths - 1]->count;
+        $previousMonth = $monthlyNewCustomers[$countMonths - 2]->count;
         $changeInPercentage = $previousMonth > 0 ? (($thisMonth - $previousMonth) / $previousMonth) * 100 : 0;
 
         return $changeInPercentage;
