@@ -21,15 +21,18 @@ final class TicketController extends AbstractController
     #[Route('/api/tickets', methods: ['GET'])]
     public function index(Request $request, EntityManagerInterface $em, ObjectMapperInterface $objectMapper): JsonResponse
     {
-        $status = $request->query->getInt('status', 0);
+        $statusRaw = $request->query->getInt('status', 0);
+        $status = TicketStatus::from($statusRaw);
+
         $page = $request->query->getInt('page', 1);
         $limit = $request->query->getInt('limit', 10);
 
-        if ($status === 1) {
+
+        if ($status === TicketStatus::Changed) {
             return $this->indexChanged($page, $limit, $em, $objectMapper);
         }
 
-        if ($status === 2) {
+        if ($status === TicketStatus::Cancelled) {
             return $this->indexCancelled($page, $limit, $em, $objectMapper);
         }
 

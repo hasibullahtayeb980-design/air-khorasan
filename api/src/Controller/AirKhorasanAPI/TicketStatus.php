@@ -2,9 +2,9 @@
 
 namespace App\Controller\AirKhorasanAPI;
 
-enum TicketStatus
+enum TicketStatus: int
 {
-    case Booked;
-    case Changed;
-    case Cancelled;
+    case Booked = 0;
+    case Changed = 1;
+    case Cancelled = 2;
 }
