@@ -52,6 +52,10 @@ final class DashboardController extends AbstractController
     private function getMonthlyNewCustomers(EntityManagerInterface $em): array
     {
         $monthlyNewCustomers = $em->getRepository(Customer::class)->findMonthlyNewCustomers();
+
+        // We don't want current month which is ongoing data
+        array_pop($monthlyNewCustomers);
+
         $monthlyNewCustomersDTO = [];
 
         foreach ($monthlyNewCustomers as $monthlyNewCustomerEntry) {

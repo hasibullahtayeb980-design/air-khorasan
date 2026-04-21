@@ -79,9 +79,9 @@ export interface TicketCancelled {
 }
 
 interface Dashboard {
-  newCustomers: {
+  monthlyNewCustomers: {
     monthYear: string,
-    newCustomers: number,
+    count: number,
   }[];
   latestTicketChanges: TicketChange[];
   latestTicketCancellations: TicketCancelled[];
@@ -145,26 +145,12 @@ export interface Commission {
 
 export type CustomerInput = Omit<Customer, "id" | "createdAt">
 
-interface DashboardResponse {
-  new_customers: {
-    month_year: string;
-    new_customers: number;
-  }[];
-  latest_ticket_changes: TicketChange[],
-  latest_ticket_cancellations: TicketCancelled[],
-  total_customers: number,
-  change_in_percentage: number,
-  total_tickets: number,
-  total_ticket_changes: number,
-  total_ticket_cancellations: number,
-}
-
 export class AKClient {
   fetchDashboard = async (): Promise<Dashboard> => {
     const endpoint = `dashboard`;
-    const response = await this.get<DashboardResponse>(endpoint);
+    const response = await this.get<Dashboard>(endpoint);
 
-    return this.processDashboardResponse(response);
+    return response;
   };
 
   fetchCustomers = async (page?: number | null): Promise<PaginatedResponse<Customer> | null> => {
@@ -220,20 +206,6 @@ export class AKClient {
     const endpoint = `customers`;
     return this.post(endpoint, input);
   };
-
-  private processDashboardResponse = (response: DashboardResponse): Dashboard => ({
-    newCustomers: response.new_customers.map((item: any) => ({
-        monthYear: `${item.month_year}-01T00:00:00`,
-        newCustomers: item.new_customers,
-    })),
-    latestTicketChanges: response.latest_ticket_changes,
-    latestTicketCancellations: response.latest_ticket_cancellations,
-    totalCustomers: response.total_customers,
-    changeInPercentage: response.change_in_percentage,
-    totalTickets: response.total_tickets,
-    totalTicketChanges: response.total_ticket_changes,
-    totalTicketCancellations: response.total_ticket_cancellations,
-  });
 
   private fetchPaginated = async<Type>(
     endpoint: string,
