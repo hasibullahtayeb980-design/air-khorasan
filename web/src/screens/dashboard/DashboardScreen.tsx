@@ -20,7 +20,7 @@ export const DashboardScreen = () => {
 
     return (
       <DashboardView
-        newCustomers={data?.newCustomers || []}
+        newCustomers={data?.monthlyNewCustomers || []}
         latestTicketChanges={data?.latestTicketChanges || []}
         latestTicketCancellations={data?.latestTicketCancellations || []}
         totalCustomers={data?.totalCustomers || 0}

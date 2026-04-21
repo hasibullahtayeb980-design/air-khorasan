@@ -10,6 +10,7 @@ use Symfony\Component\ObjectMapper\ObjectMapperInterface;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Commission;
 use App\DTOs\CommissionDTO;
+use App\DTOs\PaginationDTO;
 
 final class CommissionController extends AbstractController
 {
@@ -22,18 +23,19 @@ final class CommissionController extends AbstractController
         $commissionsDTOCollection = [];
         $commissions = $em->getRepository(Commission::class)->findPaginated($page, $limit);
 
-        foreach ($commissions['items'] as $commission) {
+        foreach ($commissions->items as $commission) {
             $commissionDTO = $objectMapper->map($commission, CommissionDTO::class);
             $commissionDTO->visaId = $commission->getVisa()?->getId();
 
             $commissionsDTOCollection[] = $commissionDTO;
         }
 
-        return $this->json([
-            'items' => $commissionsDTOCollection,
-            'total' => $commissions['total'],
-            'page' => $page,
-            'pages' => $commissions['pages']
-        ]);
+        $paginationDTO = new PaginationDTO();
+        $paginationDTO->items = $commissionsDTOCollection;
+        $paginationDTO->totalItems = $commissions->totalItems;
+        $paginationDTO->page = $page;
+        $paginationDTO->totalPages = $commissions->totalPages;
+
+        return $this->json($paginationDTO);
     }
 }

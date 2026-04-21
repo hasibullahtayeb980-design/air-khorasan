@@ -10,6 +10,7 @@ use Symfony\Component\ObjectMapper\ObjectMapperInterface;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Visa;
 use App\DTOs\VisaDTO;
+use App\DTOs\PaginationDTO;
 
 final class VisaController extends AbstractController
 {
@@ -22,7 +23,7 @@ final class VisaController extends AbstractController
         $visasDTOCollection = [];
         $visas = $em->getRepository(Visa::class)->findPaginated($page, $limit);
 
-        foreach ($visas['items'] as $visa) {
+        foreach ($visas->items as $visa) {
             $visaDTO = $objectMapper->map($visa, VisaDTO::class);
             $visaDTO->commissionId = $visa->getCommission()?->getId();
             $visaDTO->customerId = $visa->getCustomer()->getId();
@@ -32,11 +33,12 @@ final class VisaController extends AbstractController
             $visasDTOCollection[] = $visaDTO;
         }
 
-        return $this->json([
-            'items' => $visasDTOCollection,
-            'total' => $visas['total'],
-            'page' => $page,
-            'pages' => $visas['pages']
-        ]);
+        $paginationDTO = new PaginationDTO();
+        $paginationDTO->items = $visasDTOCollection;
+        $paginationDTO->totalItems = $visas->totalItems;
+        $paginationDTO->page = $page;
+        $paginationDTO->totalPages = $visas->totalPages;
+
+        return $this->json($paginationDTO);
     }
 }

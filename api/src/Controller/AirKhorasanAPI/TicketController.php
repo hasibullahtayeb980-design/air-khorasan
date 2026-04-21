@@ -2,6 +2,7 @@
 
 namespace App\Controller\AirKhorasanAPI;
 
+use App\DTOs\PaginationDTO;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
@@ -20,77 +21,90 @@ final class TicketController extends AbstractController
     #[Route('/api/tickets', methods: ['GET'])]
     public function index(Request $request, EntityManagerInterface $em, ObjectMapperInterface $objectMapper): JsonResponse
     {
-        $status = $request->query->getInt('status', 0);
+        $statusRaw = $request->query->getInt('status', 0);
+        $status = TicketStatus::from($statusRaw);
+
         $page = $request->query->getInt('page', 1);
         $limit = $request->query->getInt('limit', 10);
 
-        if ($status === 1) {
+
+        if ($status === TicketStatus::Changed) {
             return $this->indexChanged($page, $limit, $em, $objectMapper);
-        } else if ($status === 2) {
+        }
+
+        if ($status === TicketStatus::Cancelled) {
             return $this->indexCancelled($page, $limit, $em, $objectMapper);
         }
 
-        $ticketsDTOCollection = [];
-        $tickets = $em->getRepository(Ticket::class)->findPaginated($page, $limit);
+        return $this->indexAll($page, $limit, $em, $objectMapper);
+    }
 
-        foreach ($tickets['items'] as $ticket) {
+    private function indexAll($page, $limit, EntityManagerInterface $em, ObjectMapperInterface $objectMapper): JsonResponse
+    {
+        $ticketsDTOCollection = [];
+        $ticketsPaginated = $em->getRepository(Ticket::class)->findPaginated($page, $limit);
+
+        foreach ($ticketsPaginated->items as $ticket) {
             $ticketDTO = $objectMapper->map($ticket, TicketDTO::class);
             $ticketDTO->customerId = $ticket->getCustomer()->getId();
             $ticketDTO->customerFullName = $ticket->getCustomer()->getFullName();
             $ticketDTO->customerAvatarImageUrl = $ticket->getCustomer()->getAvatarImageUrl();
-            
+
             $ticketsDTOCollection[] = $ticketDTO;
         }
 
-        return $this->json([
-            'items' => $ticketsDTOCollection,
-            'total' => $tickets['total'],
-            'page' => $page,
-            'pages' => $tickets['pages']
-        ]);
+        $paginationDTO = new PaginationDTO();
+        $paginationDTO->items = $ticketsDTOCollection;
+        $paginationDTO->totalItems = $ticketsPaginated->totalItems;
+        $paginationDTO->page = $page;
+        $paginationDTO->totalPages = $ticketsPaginated->totalPages;
+
+        return $this->json($paginationDTO);
     }
 
     private function indexChanged($page, $limit, EntityManagerInterface $em, ObjectMapperInterface $objectMapper): JsonResponse
     {
         $ticketsChangedDTOCollection = [];
-        $ticketsChanged = $em->getRepository(TicketChange::class)->findPaginated($page, $limit);
+        $ticketsChangedPaginated = $em->getRepository(TicketChange::class)->findPaginated($page, $limit);
 
-        foreach ($ticketsChanged['items'] as $ticketChange) {
+        foreach ($ticketsChangedPaginated->items as $ticketChange) {
             $ticketChangeDTO = $objectMapper->map($ticketChange, TicketChangeDTO::class);
             $ticketChangeDTO->customerId = $ticketChange->getTicket()->getCustomer()->getId();
             $ticketChangeDTO->customerFullName = $ticketChange->getTicket()->getCustomer()->getFullName();
             $ticketChangeDTO->customerAvatarImageUrl = $ticketChange->getTicket()->getCustomer()->getAvatarImageUrl();
-            
+
             $ticketsChangedDTOCollection[] = $ticketChangeDTO;
         }
 
-        return $this->json([
-            'items' => $ticketsChangedDTOCollection,
-            'total' => $ticketsChanged['total'],
-            'page' => $page,
-            'pages' => $ticketsChanged['pages']
-        ]);
+        $paginationDTO = new PaginationDTO();
+        $paginationDTO->items = $ticketsChangedDTOCollection;
+        $paginationDTO->totalItems = $ticketsChangedPaginated->totalItems;
+        $paginationDTO->page = $page;
+        $paginationDTO->totalPages = $ticketsChangedPaginated->totalPages;
+
+        return $this->json($paginationDTO);
     }
 
     private function indexCancelled($page, $limit, EntityManagerInterface $em, ObjectMapperInterface $objectMapper): JsonResponse
     {
         $ticketsCancelledDTOCollection = [];
-        $ticketsCancelled = $em->getRepository(TicketCancellation::class)->findPaginated($page, $limit);
+        $ticketsCancelledPaginated = $em->getRepository(TicketCancellation::class)->findPaginated($page, $limit);
 
-        foreach ($ticketsCancelled['items'] as $ticketCancellation) {
+        foreach ($ticketsCancelledPaginated->items as $ticketCancellation) {
             $ticketCancellationDTO = $objectMapper->map($ticketCancellation, TicketCancellationDTO::class);
             $ticketCancellationDTO->customerId = $ticketCancellation->getTicket()->getCustomer()->getId();
             $ticketCancellationDTO->customerFullName = $ticketCancellation->getTicket()->getCustomer()->getFullName();
             $ticketCancellationDTO->customerAvatarImageUrl = $ticketCancellation->getTicket()->getCustomer()->getAvatarImageUrl();
-            
+
             $ticketsCancelledDTOCollection[] = $ticketCancellationDTO;
         }
 
-        return $this->json([
-            'items' => $ticketsCancelledDTOCollection,
-            'total' => $ticketsCancelled['total'],
-            'page' => $page,
-            'pages' => $ticketsCancelled['pages']
-        ]);
+        $paginationDTO = new PaginationDTO();
+        $paginationDTO->items = $ticketsCancelledDTOCollection;
+        $paginationDTO->totalItems = $ticketsCancelledPaginated->totalItems;
+        $paginationDTO->page = $page;
+        $paginationDTO->totalPages = $ticketsCancelledPaginated->totalPages;
+
+        return $this->json($paginationDTO);
     }
 }

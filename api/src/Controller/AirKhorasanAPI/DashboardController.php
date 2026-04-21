@@ -2,6 +2,7 @@
 
 namespace App\Controller\AirKhorasanAPI;
 
+use App\DTOs\MonthlyNewCustomerDTO;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
@@ -21,17 +22,57 @@ final class DashboardController extends AbstractController
 {
     #[Route('/api/dashboard', methods: ['GET'])]
     public function index(
-        EntityManagerInterface $em, 
-        SerializerInterface $serializer, 
-        ObjectMapperInterface $objectMapper): JsonResponse
+        EntityManagerInterface $em,
+        SerializerInterface    $serializer,
+        ObjectMapperInterface  $objectMapper): JsonResponse
     {
-        $newCustomers = $em->getRepository(Customer::class)->findNewCustomers();
-        
-        $latestTicketChanges = $em->getRepository(TicketChange::class)->findLatest();
-        $latestTicketCancellations = $em->getRepository(TicketCancellation::class)->findLatest();
+        $monthlyNewCustomers = $this->getMonthlyNewCustomers($em);
 
-        $latestTicketChangeDTOCollection = [];
-        $latestTicketCancellationDTOCollection = [];
+        $latestTicketChangeDTOCollection = $this->getLatestTicketChangeDTOs($em, $objectMapper);
+        $latestTicketCancellationDTOCollection = $this->getLatestTicketCancellationDTOs($em, $objectMapper);
+        $changeInPercentage = $this->calculateMonthlyNewCustomersChangeInPercentage($monthlyNewCustomers);
+
+        $totalCustomers = $em->getRepository(Customer::class)->count([]);
+        $totalTickets = $em->getRepository(Ticket::class)->count([]);
+        $totalTicketChanges = $em->getRepository(TicketChange::class)->count([]);
+        $totalTicketCancellations = $em->getRepository(TicketCancellation::class)->count([]);
+
+        return $this->json([
+            'monthlyNewCustomers' => $monthlyNewCustomers,
+            'totalCustomers' => $totalCustomers,
+            'changeInPercentage' => $changeInPercentage,
+            'latestTicketChanges' => $latestTicketChangeDTOCollection,
+            'latestTicketCancellations' => $latestTicketCancellationDTOCollection,
+            'totalTicketChanges' => $totalTicketChanges,
+            'totalTicketCancellations' => $totalTicketCancellations,
+            'totalTickets' => $totalTickets,
+        ]);
+    }
+
+    private function getMonthlyNewCustomers(EntityManagerInterface $em): array
+    {
+        $monthlyNewCustomers = $em->getRepository(Customer::class)->findMonthlyNewCustomers();
+
+        // We don't want current month which is ongoing data
+        array_pop($monthlyNewCustomers);
+
+        $monthlyNewCustomersDTO = [];
+
+        foreach ($monthlyNewCustomers as $monthlyNewCustomerEntry) {
+            $monthlyNewCustomerDTO = new MonthlyNewCustomerDTO();
+            $monthlyNewCustomerDTO->monthYear = $monthlyNewCustomerEntry['month_year'];
+            $monthlyNewCustomerDTO->count = $monthlyNewCustomerEntry['new_customers'];
+
+            $monthlyNewCustomersDTO[] = $monthlyNewCustomerDTO;
+        }
+
+        return $monthlyNewCustomersDTO;
+    }
+
+    private function getLatestTicketChangeDTOs(EntityManagerInterface $em, ObjectMapperInterface $objectMapper): array
+    {
+        $latestTicketChanges = $em->getRepository(TicketChange::class)->findLatest();
+        $latestTicketChangeDTOs = [];
 
         foreach ($latestTicketChanges as $ticketChange) {
             $ticketChangeDTO = $objectMapper->map($ticketChange, TicketChangeDTO::class);
@@ -40,8 +81,16 @@ final class DashboardController extends AbstractController
             $ticketChangeDTO->customerFullName = $ticketChange->getTicket()->getCustomer()->getFullName();
             $ticketChangeDTO->customerAvatarImageUrl = $ticketChange->getTicket()->getCustomer()->getAvatarImageUrl();
 
-            $latestTicketChangeDTOCollection[] = $ticketChangeDTO;
+            $latestTicketChangeDTOs[] = $ticketChangeDTO;
         }
+
+        return $latestTicketChangeDTOs;
+    }
+
+    private function getLatestTicketCancellationDTOs(EntityManagerInterface $em, ObjectMapperInterface $objectMapper): array
+    {
+        $latestTicketCancellations = $em->getRepository(TicketCancellation::class)->findLatest();
+        $latestTicketCancellationDTOs = [];
 
         foreach ($latestTicketCancellations as $ticketCancellation) {
             $cancellationDTO = $objectMapper->map($ticketCancellation, TicketCancellationDTO::class);
@@ -50,28 +99,19 @@ final class DashboardController extends AbstractController
             $cancellationDTO->customerFullName = $ticketCancellation->getTicket()->getCustomer()->getFullName();
             $cancellationDTO->customerAvatarImageUrl = $ticketCancellation->getTicket()->getCustomer()->getAvatarImageUrl();
 
-            $latestTicketCancellationDTOCollection[] = $cancellationDTO;
+            $latestTicketCancellationDTOs[] = $cancellationDTO;
         }
 
-        $countMonths = count($newCustomers);
-        $thisMonth = $newCustomers[$countMonths - 1]['new_customers'];
-        $previousMonth = $newCustomers[$countMonths - 2]['new_customers'];
+        return $latestTicketCancellationDTOs;
+    }
+
+    private function calculateMonthlyNewCustomersChangeInPercentage(array $monthlyNewCustomers): float
+    {
+        $countMonths = count($monthlyNewCustomers);
+        $thisMonth = $monthlyNewCustomers[$countMonths - 1]->count;
+        $previousMonth = $monthlyNewCustomers[$countMonths - 2]->count;
         $changeInPercentage = $previousMonth > 0 ? (($thisMonth - $previousMonth) / $previousMonth) * 100 : 0;
 
-        $totalCustomers = $em->getRepository(Customer::class)->count([]);
-        $totalTickets = $em->getRepository(Ticket::class)->count([]);
-        $totalTicketChanges = $em->getRepository(TicketChange::class)->count([]);
-        $totalTicketCancellations = $em->getRepository(TicketCancellation::class)->count([]);
-
-        return $this->json([
-            'new_customers' => $newCustomers,
-            'total_customers' => $totalCustomers,
-            'change_in_percentage' => $changeInPercentage,
-            'latest_ticket_changes' => $latestTicketChangeDTOCollection,
-            'latest_ticket_cancellations' => $latestTicketCancellationDTOCollection,
-            'total_ticket_changes' => $totalTicketChanges,
-            'total_ticket_cancellations' => $totalTicketCancellations,
-            'total_tickets' => $totalTickets,
-        ]);
+        return $changeInPercentage;
     }
 }

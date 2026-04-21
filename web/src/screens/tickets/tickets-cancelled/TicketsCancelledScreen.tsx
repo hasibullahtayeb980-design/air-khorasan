@@ -35,9 +35,9 @@ export const TicketsCancelledScreen = () => {
   return (
     <TicketsCancelledView
       ticketsCancelled={data?.items || []}
-      totalTicketsCancelled={data?.total || 0}
+      totalTicketsCancelled={data?.totalItems || 0}
       page={page}
-      totalPages={data?.pages || 1}
+      totalPages={data?.totalPages || 1}
       onPageChange={handlePageChange}
     />
   );

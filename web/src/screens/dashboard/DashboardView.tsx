@@ -8,7 +8,7 @@ import { i18n, Translation } from "@/i18n";
 
 interface NewCustomersInterface {
   monthYear: string;
-  newCustomers: number;
+  count: number;
 }
 
 interface DashboardViewProps {
@@ -29,12 +29,12 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
     const isDesktop = useBreakpoint("lg");
  
     const colors: Record<string, string> = {
-        newCustomers: "text-utility-brand-600",
+      newCustomers: "text-utility-brand-600",
     };
 
     const newCustomersData = newCustomers.map((item) => ({
-        date: new Date(item.monthYear),
-        newCustomers: item.newCustomers,
+      date: new Date(item.monthYear),
+      count: item.count,
     }));
  
     return (
@@ -116,7 +116,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                         <Area
                             isAnimationActive={false}
                             className={cx(colors["newCustomers"], "[&_.recharts-area-area]:translate-y-1.5 [&_.recharts-area-area]:[clip-path:inset(0_0_6px_0)]")}
-                            dataKey="newCustomers"
+                            dataKey="count"
                             name="New customers"
                             type="monotone"
                             stroke="currentColor"

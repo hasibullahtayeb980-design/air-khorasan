@@ -37,8 +37,8 @@ export const CustomersScreen = () => {
     <CustomersView
       customers={data?.items || []}
       page={page}
-      totalPages={data?.pages || 1}
-      totalCustomers={data?.total || 0}
+      totalPages={data?.totalPages || 1}
+      totalCustomers={data?.totalItems || 0}
       onPageChange={handlePageChange}
     />
   );

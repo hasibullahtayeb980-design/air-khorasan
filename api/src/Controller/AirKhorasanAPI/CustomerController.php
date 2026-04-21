@@ -64,7 +64,7 @@ final class CustomerController extends AbstractController
         $updatedCustomer = $serializer->deserialize($content, Customer::class, 'json', ['object_to_populate' => $customer]);
 
         $em->flush();
-        return $this->json($customer);
+        return $this->json($updatedCustomer);
     }
 
     #[Route('/api/customers/{id}', methods: ['DELETE'])]

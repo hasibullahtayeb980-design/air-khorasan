@@ -36,9 +36,9 @@ export const TicketsScreen = () => {
   return (
     <TicketsView
       tickets={data?.items || []}
-      totalTickets={data?.total || 0}
+      totalTickets={data?.totalItems || 0}
       page={page}
-      totalPages={data?.pages || 1}
+      totalPages={data?.totalPages || 1}
       onPageChange={handlePageChange}
     />
   );
