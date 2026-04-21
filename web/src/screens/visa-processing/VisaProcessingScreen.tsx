@@ -36,9 +36,9 @@ export const VisaProcessingScreen = () => {
     return (
         <VisaProcessingView
             visas={data?.items || []}
-            totalVisas={data?.total || 0}
+            totalVisas={data?.totalItems || 0}
             page={page}
-            totalPages={data?.pages || 1}
+            totalPages={data?.totalPages || 1}
             onPageChange={handlePageChange}
         />
     );
