@@ -36,9 +36,9 @@ export const CommissionsScreen = () => {
     return (
         <CommissionsView
             commissions={data?.items || []}
-            totalCommissions={data?.total || 0}
+            totalCommissions={data?.totalItems || 0}
             page={page}
-            totalPages={data?.pages || 1}
+            totalPages={data?.totalPages || 1}
             onPageChange={handlePageChange}
         />
     );
