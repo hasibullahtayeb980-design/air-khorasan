@@ -12,8 +12,8 @@ enum HttpMethod {
 export interface PaginatedResponse<Type> {
   items: Type[];
   page: number;
-  pages: number;
-  total: number;
+  totalPages: number;
+  totalItems: number;
 }
 
 export interface Customer {

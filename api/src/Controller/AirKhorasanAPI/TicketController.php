@@ -25,15 +25,19 @@ final class TicketController extends AbstractController
         $page = $request->query->getInt('page', 1);
         $limit = $request->query->getInt('limit', 10);
 
-
-        if ($status == TicketStatus::Changed) {
+        if ($status === 1) {
             return $this->indexChanged($page, $limit, $em, $objectMapper);
         }
 
-        if ($status == TicketStatus::Cancelled) {
+        if ($status === 2) {
             return $this->indexCancelled($page, $limit, $em, $objectMapper);
         }
 
+        return $this->indexAll($page, $limit, $em, $objectMapper);
+    }
+
+    private function indexAll($page, $limit, EntityManagerInterface $em, ObjectMapperInterface $objectMapper): JsonResponse
+    {
         $ticketsDTOCollection = [];
         $ticketsPaginated = $em->getRepository(Ticket::class)->findPaginated($page, $limit);
 
