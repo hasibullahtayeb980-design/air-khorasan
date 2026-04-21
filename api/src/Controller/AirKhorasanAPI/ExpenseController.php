@@ -8,6 +8,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Expense;
+use App\DTOs\PaginationDTO;
 
 final class ExpenseController extends AbstractController
 {
@@ -18,6 +19,13 @@ final class ExpenseController extends AbstractController
         $limit = $request->query->getInt('limit', 10);
 
         $expenses = $em->getRepository(Expense::class)->findPaginated($page, $limit);
-        return $this->json($expenses);
+
+        $paginationDTO = new PaginationDTO();
+        $paginationDTO->items = $expenses->items;
+        $paginationDTO->totalItems = $expenses->totalItems;
+        $paginationDTO->page = $page;
+        $paginationDTO->totalPages = $expenses->totalPages;
+
+        return $this->json($paginationDTO);
     }
 }

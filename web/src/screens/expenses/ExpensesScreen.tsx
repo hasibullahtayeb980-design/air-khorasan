@@ -36,9 +36,9 @@ export const ExpensesScreen = () => {
     return (
         <ExpensesView
             expenses={data?.items || []}
-            totalExpenses={data?.total || 0}
+            totalExpenses={data?.totalItems || 0}
             page={page}
-            totalPages={data?.pages || 1}
+            totalPages={data?.totalPages || 1}
             onPageChange={handlePageChange}
         />
     );
